@@ -1,0 +1,253 @@
+---
+const technologies = [
+  { name: "React", icon: "/react.svg", color: "#61DAFB" },
+  { name: "Next.js", icon: "/nextdotjs.svg", color: "#000000" },
+  { name: "Astro", icon: "/astro.svg", color: "#FF5A03" },
+  { name: "Svelte", icon: "/svelte.svg", color: "#FF3E00" },
+  { name: "TypeScript", icon: "/typescript.svg", color: "#3178C6" },
+  { name: "Python", icon: "/python.svg", color: "#3776AB" },
+  { name: "Rust", icon: "/rust.svg", color: "#DEA584" },
+  { name: "C++", icon: "/cplusplus.svg", color: "#00599C" },
+  { name: "Three.js", icon: "/threedotjs.svg", color: "#000000" },
+  { name: "GSAP", icon: "/gsap.svg", color: "#88CE02" },
+  { name: "PostgreSQL", icon: "/postgresql.svg", color: "#336791" },
+  { name: "Google Cloud", icon: "/googlecloud.svg", color: "#4285F4" },
+];
+---
+
+<section class="tech-section">
+  <h2 class="section-title">The Tech Stack</h2>
+  <div class="grid-wrapper">
+    <div class="grid">
+      <div class="grid-row">
+        {
+          technologies.slice(0, 3).map((tech) => (
+            <div class="grid-item" data-color={tech.color}>
+              <img src={tech.icon} alt={tech.name} class="tech-icon" />
+              <span class="tech-name">{tech.name}</span>
+            </div>
+          ))
+        }
+      </div>
+      <div class="grid-row">
+        {
+          technologies.slice(3, 8).map((tech) => (
+            <div class="grid-item" data-color={tech.color}>
+              <img src={tech.icon} alt={tech.name} class="tech-icon" />
+              <span class="tech-name">{tech.name}</span>
+            </div>
+          ))
+        }
+      </div>
+      <div class="grid-row">
+        {
+          technologies.slice(8).map((tech) => (
+            <div class="grid-item" data-color={tech.color}>
+              <img src={tech.icon} alt={tech.name} class="tech-icon" />
+              <span class="tech-name">{tech.name}</span>
+            </div>
+          ))
+        }
+      </div>
+      <div class="highlight"></div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .tech-section {
+    background-color: #1a1a1a;
+  }
+</style>
+
+<style>
+  .tech-section {
+    position: relative;
+    width: 100%;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0rem;
+  }
+
+  .section-title {
+    color: #fff;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+  }
+
+  .grid-wrapper {
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .grid {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .grid-row {
+    display: flex;
+    flex: 1;
+  }
+
+  .grid-item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+  }
+
+  .grid-item:last-child {
+    border-right: none;
+  }
+
+  .grid-row:not(:last-child) .grid-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .tech-icon,
+  .tech-name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .tech-icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    filter: invert(1);
+    transition:
+      filter 0.25s ease,
+      opacity 0.25s ease;
+    opacity: 1;
+  }
+
+  .grid-item:hover .tech-icon {
+    filter: invert(0);
+    opacity: 0;
+  }
+
+  .tech-name {
+    margin-top: 0;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    transition:
+      color 0.25s ease,
+      opacity 0.25s ease;
+    opacity: 0;
+  }
+
+  .grid-item:hover .tech-name {
+    opacity: 1;
+  }
+
+  .highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: white;
+    pointer-events: none;
+    transition:
+      transform 0.25s ease,
+      width 0.25s ease,
+      height 0.25s ease,
+      background-color 0.25s ease;
+    opacity: 1;
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    .grid-row {
+      flex-direction: column;
+    }
+
+    .grid-item {
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 2rem;
+    }
+
+    .grid-row:not(:last-child) .grid-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .highlight {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const grid = document.querySelector(".tech-section .grid");
+  const highlight = document.querySelector(".tech-section .highlight");
+  const firstItem = document.querySelector(".tech-section .grid-item");
+
+  const moveToElement = (element: Element) => {
+    if (element && highlight && grid) {
+      const rect = element.getBoundingClientRect();
+      const gridRect = grid.getBoundingClientRect();
+
+      (highlight as HTMLElement).style.transform = `translate(${
+        rect.left - gridRect.left
+      }px, ${rect.top - gridRect.top}px)`;
+      (highlight as HTMLElement).style.width = `${rect.width}px`;
+      (highlight as HTMLElement).style.height = `${rect.height}px`;
+      (highlight as HTMLElement).style.backgroundColor =
+        (element as HTMLElement).dataset.color || "white";
+    }
+  };
+
+  const moveHighlight = (e: Event) => {
+    const mouseEvent = e as MouseEvent;
+    const hoveredElement = document.elementFromPoint(
+      mouseEvent.clientX,
+      mouseEvent.clientY,
+    );
+
+    if (hoveredElement && hoveredElement.classList.contains("grid-item")) {
+      moveToElement(hoveredElement);
+    } else if (
+      hoveredElement &&
+      hoveredElement.parentElement &&
+      hoveredElement.parentElement.classList.contains("grid-item")
+    ) {
+      moveToElement(hoveredElement.parentElement);
+    } else if (
+      hoveredElement &&
+      hoveredElement.parentElement &&
+      hoveredElement.parentElement.parentElement &&
+      hoveredElement.parentElement.parentElement.classList.contains("grid-item")
+    ) {
+      moveToElement(hoveredElement.parentElement.parentElement);
+    }
+  };
+
+  if (firstItem) {
+    moveToElement(firstItem);
+  }
+
+  if (grid) {
+    grid.addEventListener("mousemove", moveHighlight);
+  }
+</script>
