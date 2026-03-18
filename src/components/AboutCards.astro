@@ -1,0 +1,249 @@
+<section class="intro">
+  <h1 class="header">EXPERIENCED IN</h1>
+</section>
+
+<section class="cards">
+  <div class="card" id="card-1">
+    <div class="card-inner">
+      <div class="card-content">
+        <h1>Brand Foundation</h1>
+        <p>
+          The heart of your company’s story. It shapes your vision, values, and
+          voice, ensuring a clear and powerful impact in every interaction.
+        </p>
+      </div>
+      <div class="card-img">
+        <img src="./assets/card-1.jpeg" alt="Brand Foundation" />
+      </div>
+    </div>
+  </div>
+  <div class="card" id="card-2">
+    <div class="card-inner">
+      <div class="card-content">
+        <h1>Design Identity</h1>
+        <p>
+          Your brand's visual fingerprint. It crafts a distinctive look that
+          sparks recognition and builds emotional connections with your
+          audience.
+        </p>
+      </div>
+      <div class="card-img">
+        <img src="./assets/card-2.jpeg" alt="Design Identity" />
+      </div>
+    </div>
+  </div>
+  <div class="card" id="card-3">
+    <div class="card-inner">
+      <div class="card-content">
+        <h1>Digital Presence</h1>
+        <p>
+          Our web solutions combine cutting-edge design and seamless
+          functionality to create experiences that captivate and inspire your
+          audience.
+        </p>
+      </div>
+      <div class="card-img">
+        <img src="./assets/card-3.jpeg" alt="Digital Presence" />
+      </div>
+    </div>
+  </div>
+  <div class="card" id="card-4">
+    <div class="card-inner">
+      <div class="card-content">
+        <h1>Product Design</h1>
+        <p>
+          We craft user-first products that are both functional and visually
+          appealing, delivering solutions that leave a lasting impression.
+        </p>
+      </div>
+      <div class="card-img">
+        <img src="./assets/card-4.jpeg" alt="Experience Design" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="outro">
+  <h1>Let’s build a brand that leaves a mark.</h1>
+</section>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Haffer TRIAL";
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  h1 {
+    font-size: 4rem;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 2.5em;
+  }
+
+  .header {
+    font-size: 5rem;
+  }
+
+  p {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  .hero,
+  .intro,
+  .outro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 80vh;
+    padding-top: 5rem;
+    padding-left: 2rem;
+  }
+
+  .hero {
+    padding: 0;
+  }
+
+  .intro,
+  .outro {
+    background-color: #fff;
+  }
+
+  .intro h1,
+  .outro h1 {
+    margin-bottom: 0;
+  }
+
+  .intro {
+  }
+
+  .card {
+    position: relative;
+  }
+
+  .card-inner {
+    position: relative;
+    will-change: transform;
+    width: 100%;
+    height: 100%;
+    padding: 2em;
+    display: flex;
+    gap: 4em;
+  }
+
+  .card-content {
+    flex: 3;
+  }
+
+  .card-img {
+    flex: 1;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.75em;
+    overflow: hidden;
+  }
+
+  #card-1 .card-inner {
+    background-color: #c3abff;
+  }
+
+  #card-2 .card-inner {
+    background-color: #ffffff;
+  }
+
+  #card-3 .card-inner {
+    background-color: #fed35b;
+  }
+
+  #card-4 .card-inner {
+    background-color: #1e1e1e;
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    h1 {
+      margin-bottom: 4rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+    .card-inner {
+      flex-direction: column;
+    }
+
+    .card-img {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // @ts-ignore
+  import { gsap } from "gsap";
+  // @ts-ignore
+  import ScrollTrigger from "gsap/ScrollTrigger";
+  // @ts-ignore
+  import Lenis from "lenis";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    gsap.registerPlugin(ScrollTrigger);
+    const lenis = new Lenis();
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time: number) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    const cards = gsap.utils.toArray(".card");
+
+    ScrollTrigger.create({
+      trigger: cards[0],
+      start: "top 75%",
+      endTrigger: cards[cards.length - 1],
+      end: "top 30%",
+      pin: ".intro",
+      pinSpacing: false,
+    });
+
+    cards.forEach((card: HTMLElement, index: number) => {
+      const isLastCard = index === cards.length - 1;
+      const cardInner = card.querySelector(".card-inner");
+
+      if (!isLastCard) {
+        ScrollTrigger.create({
+          trigger: card,
+          start: "top 25%",
+          endTrigger: ".outro",
+          end: "top 65%",
+          pin: true,
+          pinSpacing: false,
+        });
+
+        gsap.to(cardInner, {
+          y: `-${(cards.length - index) * 14}vh`,
+          ease: "none",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 25%",
+            endTrigger: ".outro",
+            end: "top 65%",
+            scrub: true,
+          },
+        });
+      }
+    });
+  });
+</script>
