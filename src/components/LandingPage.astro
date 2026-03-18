@@ -1,0 +1,419 @@
+<div class="landing-page">
+  <div class="hero-img">
+    <img src="/hero.jpeg" alt="" />
+  </div>
+  <div class="container">
+    <div class="cols">
+      <div class="col col-left">
+        <div class="copy">
+          <div class="header">Dilukshan N</div>
+          <div class="sub-header">CS & SE Undergrad from Sri Lanka</div>
+          <div class="info">
+            Fullstack Developer & AI Engineer passionate about building scalable
+            web applications and intelligent systems.
+          </div>
+        </div>
+      </div>
+      <div class="col col-right">
+        <div class="header">
+          Building <br />
+          the <br />
+          future <br />
+          with code
+        </div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-items">
+        <div class="nav-item">
+          <a href="#">about</a>
+        </div>
+        <div class="nav-item">
+          <a href="#">projects</a>
+        </div>
+      </div>
+      <div class="nav-items">
+        <div class="nav-item">
+          <a href="#" id="logo">Dilukshan N &copy;</a>
+        </div>
+      </div>
+      <div class="nav-items">
+        <div class="nav-item">
+          <a href="#">skills</a>
+        </div>
+        <div class="nav-item">
+          <a href="#">contact</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div class="loader-text-wrapper block">
+    <h1 class="loader-text">Dilukshan</h1>
+  </div>
+  <div class="revealer"></div>
+  <div class="pre-loader block">
+    <div class="loader-wrapper">
+      <div class="loader"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .landing-page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .landing-page .container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .landing-page .hero-img {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .landing-page .hero-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .landing-page nav {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: #ebe2d5;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+  }
+
+  .landing-page .nav-items {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .landing-page .nav-items:first-child {
+    margin-right: auto;
+  }
+
+  .landing-page .nav-items:last-child {
+    margin-left: auto;
+  }
+
+  .landing-page .nav-items .nav-item {
+    padding: 2em;
+  }
+
+  .landing-page .nav-items .nav-item a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #000;
+  }
+
+  .landing-page .nav-items .nav-item a#logo {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+
+  .landing-page .cols {
+    width: 100%;
+    display: flex;
+  }
+
+  .landing-page .col {
+    width: 50%;
+    height: 100vh;
+  }
+
+  .landing-page .col-right {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 80px;
+    color: #e2da17;
+    text-transform: uppercase;
+    border: none;
+    padding: 3em 2em 2em 2em;
+  }
+
+  .landing-page .col-right .header {
+    position: absolute;
+  }
+
+  .landing-page .col-left {
+    position: relative;
+    left: 0%;
+    background: #ebe2d5;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4em 2em 2em 2em;
+  }
+
+  .landing-page .copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+  }
+
+  .landing-page .copy > * {
+    position: relative;
+  }
+
+  .landing-page .col-left .header {
+    text-transform: uppercase;
+    font-size: 24px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 0.2em 0.4em;
+    margin: 1em 0;
+  }
+
+  .landing-page .sub-header {
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .landing-page .img-wrapper {
+    width: 300px;
+    height: 300px;
+    background: #b7a791;
+    margin: 2em 0;
+  }
+
+  .landing-page .img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .landing-page .info {
+    font-size: 16px;
+    text-align: center;
+    color: rgb(60, 60, 60);
+    margin-bottom: 4em;
+  }
+
+  .landing-page .footer {
+    display: flex;
+  }
+
+  .landing-page .footer-item {
+    padding: 0 1em;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .landing-page {
+      height: 100%;
+      overflow: auto;
+    }
+
+    .landing-page .container {
+      height: 100%;
+      overflow: auto;
+    }
+
+    .landing-page .hero-img {
+      top: 100vh;
+    }
+
+    .landing-page .cols {
+      flex-direction: column;
+    }
+
+    .landing-page .col {
+      width: 100%;
+    }
+
+    .landing-page .nav-items:first-child,
+    .landing-page .nav-items:last-child {
+      display: none;
+    }
+  }
+
+  .landing-page .block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .landing-page .loader-text-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000;
+  }
+
+  .landing-page .loader-text {
+    font-size: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+    color: #fff;
+  }
+
+  .landing-page .loader-text .letter {
+    display: inline-block;
+    line-height: 1em;
+  }
+
+  .landing-page .revealer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #988871;
+  }
+
+  .landing-page .pre-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+  }
+
+  .landing-page .loader-wrapper {
+    position: relative;
+    width: 10px;
+    height: 140px;
+    background: rgb(240, 240, 240);
+    border-radius: 4px;
+    overflow: hidden;
+    transform: rotate(45deg);
+  }
+
+  .landing-page .loader {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(251, 0, 255);
+    background: linear-gradient(
+      180deg,
+      rgba(251, 0, 255, 1) 0%,
+      rgba(253, 29, 29, 1) 100%
+    );
+  }
+</style>
+
+<script>
+  // @ts-ignore
+  import anime from "animejs";
+  // @ts-ignore
+  import { gsap } from "gsap";
+
+  const textWrapper = document.querySelector(".landing-page .loader-text");
+  if (textWrapper) {
+    textWrapper.innerHTML =
+      textWrapper.textContent?.replace(
+        /\S/g,
+        "<span class='letter'>$&</span>",
+      ) || "";
+
+    anime.timeline().add({
+      targets: ".landing-page .loader-text .letter",
+      translateX: [40, 0],
+      translateZ: 0,
+      opacity: [0, 1],
+      easing: "easeOutExpo",
+      duration: 1200,
+      delay: (i: number) => 2400 + 30 * i,
+    });
+  }
+
+  gsap.from(".landing-page .loader-wrapper", {
+    scale: 0.8,
+    ease: "power1.inOut",
+    duration: 2,
+  });
+
+  gsap.from(".landing-page .loader", {
+    top: "100%",
+    ease: "power3.inOut",
+    duration: 2,
+  });
+
+  gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
+    scale: 1.5,
+    opacity: 0,
+    display: "none",
+    ease: "power3.inOut",
+    delay: 2,
+    duration: 1,
+  });
+
+  gsap.from(".landing-page .revealer", {
+    width: "0%",
+    ease: "power3.inOut",
+    delay: 3,
+    duration: 1,
+  });
+
+  gsap.to(".landing-page .revealer", {
+    left: "100%",
+    ease: "power3.inOut",
+    delay: 4,
+    duration: 0.8,
+  });
+
+  gsap.to(".landing-page .loader-text-wrapper", {
+    opacity: 0,
+    display: "none",
+    ease: "power3.inOut",
+    delay: 4,
+    duration: 0.2,
+  });
+
+  gsap.from(".landing-page .col-left", {
+    left: "-100%",
+    ease: "power3.inOut",
+    delay: 4.5,
+    duration: 1,
+  });
+
+  gsap.from(".landing-page .col-left .copy > div", {
+    x: "-40",
+    opacity: 0,
+    ease: "power3.inOut",
+    delay: 5,
+    duration: 1.5,
+    stagger: {
+      amount: 0.3,
+    },
+  });
+
+  gsap.from(".landing-page .col-right .header", {
+    x: "-20",
+    opacity: 0,
+    ease: "power3.inOut",
+    delay: 5.5,
+    duration: 1,
+  });
+</script>
