@@ -16,7 +16,11 @@
       <div class="grid-wrapper">
         <div class="grid">
           <div class="grid-row">
-            <div class="grid-item" data-color="#000000" data-text-color="#ffffff">
+            <div
+              class="grid-item"
+              data-color="#000000"
+              data-text-color="#ffffff"
+            >
               <img
                 src="/full-stack/nextdotjs.svg"
                 alt="Next.js"
@@ -131,7 +135,11 @@
             </div>
           </div>
           <div class="grid-row">
-            <div class="grid-item" data-color="#000000" data-text-color="#ffffff">
+            <div
+              class="grid-item"
+              data-color="#000000"
+              data-text-color="#ffffff"
+            >
               <img src="/gen-ai/kimi.svg" alt="Kimi" class="tech-icon" />
               <span class="tech-name">KIMI</span>
             </div>
@@ -226,7 +234,7 @@
 </section>
 
 <section class="outro">
-  <h1>Let’s build a brand that leaves a mark.</h1>
+  <h1>Featured Work</h1>
 </section>
 
 <style>
@@ -262,9 +270,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100vw;
+    width: 100dvw;
     height: 80vh;
-    padding-top: 5rem;
+    padding-top: 3rem;
     padding-left: 2rem;
   }
 
@@ -282,7 +290,8 @@
     margin-bottom: 0;
   }
 
-  .intro {
+  .outro {
+    height: 30vh;
   }
 
   .card {
@@ -467,11 +476,11 @@
     });
     gsap.ticker.lagSmoothing(0);
 
-    const cards = gsap.utils.toArray(".card");
+    const cards = gsap.utils.toArray<HTMLElement>(".card");
 
     ScrollTrigger.create({
       trigger: cards[0],
-      start: "top 75%",
+      start: "top 80%",
       endTrigger: cards[cards.length - 1],
       end: "top 30%",
       pin: ".intro",
