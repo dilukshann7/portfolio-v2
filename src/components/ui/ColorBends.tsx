@@ -139,6 +139,7 @@ export default function ColorBends({
   const pointerTargetRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
   const pointerCurrentRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
   const pointerSmoothRef = useRef<number>(8);
+  const visibleRef = useRef<boolean>(true);
 
   useEffect(() => {
     const container = containerRef.current!;
@@ -181,7 +182,7 @@ export default function ColorBends({
     });
     rendererRef.current = renderer;
     (renderer as any).outputColorSpace = (THREE as any).SRGBColorSpace;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
@@ -189,6 +190,14 @@ export default function ColorBends({
     container.appendChild(renderer.domElement);
 
     const clock = new THREE.Clock();
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      visibleRef.current = entry?.isIntersecting ?? true;
+    });
+    intersectionObserver.observe(container);
+    const handleVisibilityChange = () => {
+      visibleRef.current = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const handleResize = () => {
       const w = container.clientWidth || 1;
@@ -210,6 +219,10 @@ export default function ColorBends({
     const loop = () => {
       const dt = clock.getDelta();
       const elapsed = clock.elapsedTime;
+      if (!visibleRef.current) {
+        rafRef.current = requestAnimationFrame(loop);
+        return;
+      }
       material.uniforms.uTime.value = elapsed;
 
       const deg = (rotationRef.current % 360) + autoRotateRef.current * elapsed;
@@ -232,6 +245,8 @@ export default function ColorBends({
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
       else (window as Window).removeEventListener('resize', handleResize);
+      intersectionObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       geometry.dispose();
       material.dispose();
       renderer.dispose();

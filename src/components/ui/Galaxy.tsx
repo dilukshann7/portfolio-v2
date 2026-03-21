@@ -215,6 +215,7 @@ export default function Galaxy({
   const smoothMousePos = useRef({ x: 0.5, y: 0.5 });
   const targetMouseActive = useRef(0.0);
   const smoothMouseActive = useRef(0.0);
+  const visibleRef = useRef(true);
 
   useEffect(() => {
     if (!ctnDom.current) return;
@@ -281,9 +282,18 @@ export default function Galaxy({
 
     const mesh = new Mesh(gl, { geometry, program });
     let animateId: number;
+    const observer = new IntersectionObserver(([entry]) => {
+      visibleRef.current = entry?.isIntersecting ?? true;
+    });
+    observer.observe(ctn);
+    const onVisibility = () => {
+      visibleRef.current = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', onVisibility);
 
     function update(t: number) {
       animateId = requestAnimationFrame(update);
+      if (!visibleRef.current) return;
       if (!disableAnimation) {
         program.uniforms.uTime.value = t * 0.001;
         program.uniforms.uStarSpeed.value = (t * 0.001 * starSpeed) / 10.0;
@@ -330,6 +340,8 @@ export default function Galaxy({
         eventTarget.removeEventListener('mousemove', handleMouseMove as EventListener);
         eventTarget.removeEventListener('mouseleave', handleMouseLeave as EventListener);
       }
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
       ctn.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
