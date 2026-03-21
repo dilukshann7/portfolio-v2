@@ -64,7 +64,9 @@ import ColorBends from "./ui/ColorBends";
   .landing-page {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     overflow: hidden;
     background-color: #000;
   }
@@ -78,14 +80,18 @@ import ColorBends from "./ui/ColorBends";
   .landing-page .container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     overflow: hidden;
   }
 
   .landing-page .hero-img {
     position: absolute;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     inset: 0;
     overflow: hidden;
   }
@@ -102,7 +108,9 @@ import ColorBends from "./ui/ColorBends";
 
   .landing-page .col {
     width: 50%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
   }
 
   .landing-page .col-right {
@@ -330,18 +338,49 @@ import ColorBends from "./ui/ColorBends";
 
     .landing-page .col-left,
     .landing-page .col-right {
-      min-height: 100vh;
-      padding: 6rem 1.5rem 2rem 1.5rem;
+      min-height: 100svh;
+      min-height: 100dvh;
+      padding:
+        calc(env(safe-area-inset-top, 0px) + 5.75rem)
+        1.25rem
+        calc(env(safe-area-inset-bottom, 0px) + 1.5rem)
+        1.25rem;
+    }
+
+    :global(.left-glass) {
+      padding: 0;
+      background:
+        linear-gradient(180deg, rgba(18, 18, 18, 0.22), rgba(0, 0, 0, 0.1)),
+        radial-gradient(circle at top left, rgba(0, 0, 0, 0.2), transparent 38%);
+      backdrop-filter: blur(12px) saturate(120%);
+      -webkit-backdrop-filter: blur(12px) saturate(120%);
     }
 
     :global(.left-glass .copy) {
       width: 100%;
       align-items: flex-start;
-      padding-left: 1rem;
+      padding-left: 0.9rem;
+      gap: 1rem;
     }
 
     :global(.left-glass .copy::before) {
       height: min(16rem, 100%);
+    }
+
+    :global(.left-glass .header) {
+      font-size: clamp(2.6rem, 12vw, 4.4rem);
+      max-width: 9ch;
+    }
+
+    :global(.left-glass .sub-header) {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+    }
+
+    :global(.left-glass .info) {
+      max-width: 28ch;
+      font-size: 0.98rem;
+      line-height: 1.5;
     }
 
     .landing-page .col-right {
@@ -369,7 +408,9 @@ import ColorBends from "./ui/ColorBends";
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
   }
 
   .landing-page .loader-text-wrapper {
@@ -398,7 +439,9 @@ import ColorBends from "./ui/ColorBends";
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     background: #988871;
   }
 
