@@ -1,16 +1,10 @@
-<body>
-  <section class="work"></section>
-
-  <footer>
-    <p>Developed by Codegrid</p>
-    <p>All rights reserved &copy; 2025</p>
-  </footer>
-</body>
+<section class="work" id="projects"></section>
 
 <style is:global>
   body {
     font-family: "Manrope";
     color: #0f0f0f;
+    font-family: "Space Grotesk", sans-serif;
   }
 
   img {
@@ -155,44 +149,22 @@
       name: "ImagePress",
       description:
         "A powerful desktop image compression tool built with Electron",
-      img: "/work-3.jpg",
+      img: "/projects/imagepress.jpg",
       route: "/imagepress",
     },
     {
-      name: "Crimson Tool",
-      description: "Minimal object framed in red velvet",
-      img: "/work-5.jpg",
-      route: "/crimson-tool",
+      name: "LankanBook",
+      description:
+        "A platform documenting establishments in Sri Lanka that discriminate against local residents.",
+      img: "/projects/lankanbook.png",
+      route: "/lankanbook",
     },
     {
-      name: "Moonstairs",
-      description: "Architecture under quiet light",
-      img: "/work-6.jpg",
-      route: "/moonstairs",
-    },
-    {
-      name: "Backlit Figure",
-      description: "Silhouettes cut against color",
-      img: "/work-7.jpg",
-      route: "/backlit-figure",
-    },
-    {
-      name: "Palm Study",
-      description: "Natural light and textured skin",
-      img: "/work-8.jpg",
-      route: "/palm-study",
-    },
-    {
-      name: "Terra Seat",
-      description: "Earth tones in crafted design",
-      img: "/work-9.jpg",
-      route: "/terra-seat",
-    },
-    {
-      name: "Atelier Meridian",
-      description: "A living space, curated and minimal",
-      img: "/work-10.jpg",
-      route: "/atelier-meridian",
+      name: "Notesploy",
+      description:
+        "A rich note-taking app with a block-based editor, live code execution, and real-time collaboration.",
+      img: "/projects/notesploy.png",
+      route: "/notesploy",
     },
   ];
 
@@ -230,7 +202,7 @@
       return workItem;
     };
 
-    for (let i = 0; i < projects.length * 2; i += 2) {
+    for (let i = 0; i < projects.length; i += 2) {
       const row = document.createElement("div");
       row.className = "row";
 
