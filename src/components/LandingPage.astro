@@ -325,7 +325,8 @@ import ColorBends from "./ui/ColorBends";
     }
 
     .landing-page .hero-img {
-      top: 100vh;
+      top: 100dvh;
+      opacity: 0.82;
     }
 
     .landing-page .cols {
@@ -394,7 +395,7 @@ import ColorBends from "./ui/ColorBends";
 
     .landing-page .col-right .header {
       width: 100%;
-      font-size: clamp(3.8rem, 14vw, 6rem);
+      font-size: clamp(3.2rem, 14vw, 5.2rem);
       line-height: 0.9;
     }
 
@@ -474,6 +475,19 @@ import ColorBends from "./ui/ColorBends";
       rgba(253, 29, 29, 1) 100%
     );
   }
+
+  @media (max-width: 640px) {
+    .landing-page .loader-text {
+      font-size: clamp(1.75rem, 8vw, 2.5rem);
+      letter-spacing: 0.14em;
+      text-align: center;
+      padding-inline: 1rem;
+    }
+
+    .landing-page .loader-wrapper {
+      height: 108px;
+    }
+  }
 </style>
 
 <script>
@@ -494,27 +508,33 @@ import ColorBends from "./ui/ColorBends";
         "<span class='letter'>$&</span>",
       ) || "";
 
-    anime.timeline().add({
-      targets: ".landing-page .loader-text .letter",
-      translateX: [40, 0],
-      translateZ: 0,
-      opacity: [0, 1],
-      easing: "easeOutExpo",
-      duration: 1200,
-      delay: (i: number) => 2400 + 30 * i,
-    });
+    if (!prefersReducedMotion) {
+      anime.timeline().add({
+        targets: ".landing-page .loader-text .letter",
+        translateX: [isMobile ? 20 : 40, 0],
+        translateZ: 0,
+        opacity: [0, 1],
+        easing: "easeOutExpo",
+        duration: isMobile ? 700 : 1200,
+        delay: (i: number) => (isMobile ? 900 : 2400) + 24 * i,
+      });
+    }
   }
+
+  const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 1 : 2;
+  const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.35 : 3;
+  const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.85 : 4.5;
 
   gsap.from(".landing-page .loader-wrapper", {
     scale: 0.8,
     ease: "power1.inOut",
-    duration: 2,
+    duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
   });
 
   gsap.from(".landing-page .loader", {
     top: "100%",
     ease: "power3.inOut",
-    duration: 2,
+    duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
   });
 
   gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
@@ -522,47 +542,47 @@ import ColorBends from "./ui/ColorBends";
     opacity: 0,
     display: "none",
     ease: "power3.inOut",
-    delay: 2,
-    duration: 1,
+    delay: loaderDelay,
+    duration: prefersReducedMotion ? 0.15 : isMobile ? 0.5 : 1,
   });
 
   gsap.from(".landing-page .revealer", {
     width: "0%",
     ease: "power3.inOut",
-    delay: 3,
-    duration: 1,
+    delay: revealDelay,
+    duration: prefersReducedMotion ? 0.15 : isMobile ? 0.5 : 1,
   });
 
   gsap.to(".landing-page .revealer", {
     left: "100%",
     ease: "power3.inOut",
-    delay: 4,
-    duration: 0.8,
+    delay: revealDelay + (isMobile ? 0.45 : 1),
+    duration: prefersReducedMotion ? 0.15 : isMobile ? 0.45 : 0.8,
   });
 
   gsap.to(".landing-page .loader-text-wrapper", {
     opacity: 0,
     display: "none",
     ease: "power3.inOut",
-    delay: 4,
+    delay: revealDelay + (isMobile ? 0.4 : 1),
     duration: 0.2,
   });
 
   gsap.from(".landing-page .col-left", {
     left: "-100%",
     ease: "power3.inOut",
-    delay: 4.5,
-    duration: 1,
+    delay: contentDelay,
+    duration: prefersReducedMotion ? 0.2 : isMobile ? 0.7 : 1,
   });
 
   gsap.from(".landing-page .col-left .copy > div", {
     x: "-40",
     opacity: 0,
     ease: "power3.inOut",
-    delay: 5,
-    duration: 1.5,
+    delay: contentDelay + 0.2,
+    duration: prefersReducedMotion ? 0.2 : isMobile ? 0.8 : 1.5,
     stagger: {
-      amount: 0.3,
+      amount: isMobile ? 0.18 : 0.3,
     },
   });
 
@@ -570,7 +590,7 @@ import ColorBends from "./ui/ColorBends";
     x: "-20",
     opacity: 0,
     ease: "power3.inOut",
-    delay: 5.5,
-    duration: 1,
+    delay: contentDelay + 0.45,
+    duration: prefersReducedMotion ? 0.2 : isMobile ? 0.7 : 1,
   });
 </script>
