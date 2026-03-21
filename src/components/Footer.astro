@@ -1,5 +1,27 @@
+---
+import Galaxy from "./ui/Galaxy";
+---
+
 <footer>
   <div class="footer-container">
+    <div class="footer-galaxy">
+      <Galaxy
+        client:load
+        density={1}
+        glowIntensity={0.3}
+        saturation={0}
+        hueShift={140}
+        mouseRepulsion={true}
+        twinkleIntensity={0.3}
+        rotationSpeed={0.1}
+        repulsionStrength={2}
+        autoCenterRepulsion={0}
+        starSpeed={0.5}
+        speed={1}
+        transparent={true}
+        globalPointer={true}
+      />
+    </div>
     <div id="footer-canvas"></div>
 
     <div class="footer-content">
@@ -126,7 +148,7 @@
     position: relative;
     width: 100%;
     height: 75svh;
-    background-color: var(--base-400);
+    background-color: #000000;
     color: #fff;
     overflow: hidden;
   }
@@ -143,15 +165,28 @@
     will-change: transform;
   }
 
-  #footer-canvas {
+  .footer-galaxy {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.72;
     z-index: -1;
+  }
+
+  .footer-galaxy :global(.galaxy-container) {
+    width: 100%;
+    height: 100%;
+  }
+
+  #footer-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 1;
+    z-index: 1;
   }
 
   .footer-content {
@@ -161,7 +196,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    z-index: 1;
+    z-index: 2;
   }
 
   .footer-row {
@@ -206,7 +241,6 @@
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   import Lenis from "lenis";
-
   import * as THREE from "three";
   import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
@@ -221,14 +255,16 @@
     gsap.ticker.lagSmoothing(0);
 
     const footerContainer = document.querySelector(".footer-container");
-
     const mouse = { x: 0, y: 0 };
+    const container = document.getElementById("footer-canvas");
+
+    if (!container) return;
+
     window.addEventListener("mousemove", (e) => {
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     });
 
-    const container = document.getElementById("footer-canvas");
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       50,
@@ -242,8 +278,8 @@
       alpha: true,
       antialias: true,
     });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.offsetWidth, container.offsetHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
@@ -255,7 +291,7 @@
     let modelBaseRotationX = 0.5;
     let modelBaseZ = -1;
 
-    loader.load("./model.glb", (gltf) => {
+    loader.load("/model.glb", (gltf) => {
       model = gltf.scene;
 
       const box = new THREE.Box3().setFromObject(model);
@@ -283,14 +319,14 @@
         const progress = self.progress;
         const yValue = -35 * (1 - progress);
         gsap.set(footerContainer, { y: `${yValue}%` });
-
         modelBaseZ = -1 * (1 - progress);
         modelBaseRotationX = 0.5 * (1 - progress);
       },
     });
 
-    function animate() {
-      requestAnimationFrame(animate);
+    let animationFrameId;
+    const animate = () => {
+      animationFrameId = requestAnimationFrame(animate);
 
       if (model) {
         const targetRotationY = mouse.x * 0.3;
@@ -302,7 +338,7 @@
       }
 
       renderer.render(scene, camera);
-    }
+    };
     animate();
 
     window.addEventListener("resize", () => {
