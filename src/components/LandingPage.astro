@@ -1,36 +1,56 @@
 ---
 import Navigation from "./Navigation.astro";
+import ColorBends from "./ui/ColorBends";
 ---
 
 <div class="landing-page" id="home">
   <Navigation />
   <div class="hero-img">
-    <img src="/hero.jpeg" alt="" />
+    <ColorBends
+      client:load
+      colors={[]}
+      rotation={0}
+      speed={0.2}
+      scale={1}
+      frequency={1}
+      warpStrength={1}
+      mouseInfluence={1}
+      parallax={0.5}
+      noise={0.1}
+      transparent
+      autoRotate={0}
+      globalPointer
+    />
   </div>
   <div class="container">
     <div class="cols">
       <div class="col col-left">
-        <div class="copy">
-          <div class="header">Dilukshan N</div>
-          <div class="sub-header">CS & SE Undergrad from Sri Lanka</div>
-          <div class="info">
-            Fullstack Developer & AI Engineer passionate about building scalable
-            web applications and intelligent systems.
+        <div class="left-glass">
+          <div class="copy">
+            <div class="header">Dilukshan Niranjan</div>
+            <div class="sub-header">CS & SE Undergrad from Sri Lanka</div>
+            <div class="info">
+              Fullstack Developer & AI Engineer passionate about building
+              scalable web applications and intelligent systems.
+            </div>
           </div>
         </div>
       </div>
       <div class="col col-right">
-        <div class="header">
-          Building <br />
-          the <br />
-          future <br />
-          with code
+        <div class="right-copy">
+          <div class="header">
+            Building
+            <br />
+            scalable
+            <br />
+            AI systems
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="loader-text-wrapper block">
-    <h1 class="loader-text">Dilukshan</h1>
+    <h1 class="loader-text">Welcome to Dilukshan's Portfolio</h1>
   </div>
   <div class="revealer"></div>
   <div class="pre-loader block">
@@ -46,6 +66,7 @@ import Navigation from "./Navigation.astro";
     width: 100%;
     height: 100vh;
     overflow: hidden;
+    background-color: #000;
   }
 
   * {
@@ -65,12 +86,13 @@ import Navigation from "./Navigation.astro";
     position: absolute;
     width: 100%;
     height: 100vh;
+    inset: 0;
+    overflow: hidden;
   }
 
-  .landing-page .hero-img img {
+  .landing-page .hero-img :global(.color-bends-container) {
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 
   .landing-page .cols {
@@ -86,56 +108,145 @@ import Navigation from "./Navigation.astro";
   .landing-page .col-right {
     position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    text-align: center;
-    font-size: 80px;
-    color: #e2da17;
-    text-transform: uppercase;
+    text-align: left;
+    color: #f7f1e8;
     border: none;
-    padding: 3em 2em 2em 2em;
+    padding: 4.5em 4vw 3em 4vw;
+  }
+
+  .landing-page .col-right .right-copy {
+    position: relative;
+    width: min(34rem, 100%);
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .landing-page .col-right .kicker {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(247, 241, 232, 0.62);
   }
 
   .landing-page .col-right .header {
-    position: absolute;
+    width: min(8ch, 100%);
+    font-family: var(--font-melodrame);
+    font-size: clamp(5rem, 8.3vw, 9rem);
+    font-weight: 400;
+    line-height: 0.82;
+    letter-spacing: 0.012em;
+    text-transform: none;
+    text-wrap: balance;
+    color: rgba(255, 246, 238, 0.98);
+    text-shadow:
+      0 0.04em 0.12em rgba(0, 0, 0, 0.22),
+      0 0 1rem rgba(255, 255, 255, 0.04);
+  }
+
+  .landing-page .col-right .caption {
+    max-width: 24ch;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(0.98rem, 1vw, 1.08rem);
+    font-weight: 400;
+    line-height: 1.5;
+    color: rgba(247, 241, 232, 0.74);
   }
 
   .landing-page .col-left {
     position: relative;
     left: 0%;
-    background: #ebe2d5;
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  :global(.left-glass) {
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 4em 2em 2em 2em;
+    padding: 4.5em 3.5vw 3em 3.5vw;
+    background:
+      linear-gradient(180deg, rgba(37, 37, 37, 0.14), rgba(0, 0, 0, 0.08)),
+      radial-gradient(circle at top left, rgba(0, 0, 0, 0.18), transparent 32%);
+    backdrop-filter: blur(18px) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) saturate(135%);
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+      inset -1px 0 0 rgba(255, 255, 255, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      0 1.5rem 4rem rgba(0, 0, 0, 0.12);
   }
 
-  .landing-page .copy {
+  :global(.left-glass .copy) {
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    width: 60%;
+    align-items: flex-start;
+    width: min(100%, 34rem);
+    gap: 1.2rem;
+    padding-left: 1.5rem;
   }
 
-  .landing-page .copy > * {
+  :global(.left-glass .copy::before) {
+    content: "";
+    position: absolute;
+    top: 0.45rem;
+    left: 0;
+    width: 1px;
+    height: min(19rem, 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(20, 20, 20, 0.85) 0%,
+      rgba(20, 20, 20, 0.24) 45%,
+      rgba(20, 20, 20, 0) 100%
+    );
+  }
+
+  :global(.left-glass .copy > *) {
     position: relative;
   }
 
-  .landing-page .col-left .header {
+  :global(.left-glass .eyebrow) {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    font-size: 24px;
-    border: 1px solid #000;
-    border-radius: 10px;
-    padding: 0.2em 0.4em;
-    margin: 1em 0;
+    color: rgba(255, 255, 255, 0.66);
   }
 
-  .landing-page .sub-header {
+  :global(.left-glass .header) {
+    font-family: var(--font-melodrame);
+    font-size: clamp(3rem, 4.8vw, 5.2rem);
+    line-height: 0.88;
+    letter-spacing: 0.015em;
+    text-transform: none;
+    color: rgba(255, 248, 239, 0.96);
+    padding: 0;
+    margin: 0;
+    border: none;
+    max-width: 8ch;
+    text-shadow: 0 0.04em 0.16em rgba(0, 0, 0, 0.18);
+  }
+
+  :global(.left-glass .sub-header) {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-    text-align: center;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.68);
   }
 
   .landing-page .img-wrapper {
@@ -151,11 +262,37 @@ import Navigation from "./Navigation.astro";
     object-fit: cover;
   }
 
-  .landing-page .info {
-    font-size: 16px;
-    text-align: center;
-    color: rgb(60, 60, 60);
-    margin-bottom: 4em;
+  :global(.left-glass .info) {
+    max-width: 30ch;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1rem, 1.05vw, 1.12rem);
+    font-weight: 400;
+    line-height: 1.55;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 0.35rem;
+  }
+
+  :global(.left-glass .meta-row) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.55rem;
+  }
+
+  :global(.left-glass .meta-row span) {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.84);
+    padding: 0.65rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .landing-page .footer {
@@ -191,6 +328,40 @@ import Navigation from "./Navigation.astro";
       width: 100%;
     }
 
+    .landing-page .col-left,
+    .landing-page .col-right {
+      min-height: 100vh;
+      padding: 6rem 1.5rem 2rem 1.5rem;
+    }
+
+    :global(.left-glass .copy) {
+      width: 100%;
+      align-items: flex-start;
+      padding-left: 1rem;
+    }
+
+    :global(.left-glass .copy::before) {
+      height: min(16rem, 100%);
+    }
+
+    .landing-page .col-right {
+      justify-content: flex-end;
+    }
+
+    .landing-page .col-right .right-copy {
+      width: 100%;
+      gap: 0.9rem;
+    }
+
+    .landing-page .col-right .header {
+      width: 100%;
+      font-size: clamp(3.8rem, 14vw, 6rem);
+      line-height: 0.9;
+    }
+
+    .landing-page .col-right .caption {
+      max-width: 22ch;
+    }
   }
 
   .landing-page .block {
@@ -209,10 +380,11 @@ import Navigation from "./Navigation.astro";
   }
 
   .landing-page .loader-text {
-    font-size: 20px;
+    font-family: var(--font-melodrame);
+    font-size: 50px;
     font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 0.5em;
+    letter-spacing: 0.24em;
     color: #fff;
   }
 
