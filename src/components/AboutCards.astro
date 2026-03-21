@@ -594,31 +594,15 @@
       };
 
       const moveHighlight = (e: MouseEvent) => {
-        const hoveredElement = document.elementFromPoint(e.clientX, e.clientY);
-
-        if (hoveredElement && hoveredElement.classList.contains("grid-item")) {
-          moveToElement(hoveredElement);
-        } else if (
-          hoveredElement &&
-          hoveredElement.parentElement &&
-          hoveredElement.parentElement.classList.contains("grid-item")
-        ) {
-          moveToElement(hoveredElement.parentElement);
-        } else if (
-          hoveredElement &&
-          hoveredElement.parentElement &&
-          hoveredElement.parentElement.parentElement &&
-          hoveredElement.parentElement.parentElement.classList.contains(
-            "grid-item",
-          )
-        ) {
-          moveToElement(hoveredElement.parentElement.parentElement);
-        }
+        const hoveredElement = (e.target as Element | null)?.closest(".grid-item");
+        moveToElement(hoveredElement);
       };
 
       moveToElement(firstItem);
 
-      (grid as HTMLElement).addEventListener("mousemove", moveHighlight);
+      (grid as HTMLElement).addEventListener("mousemove", moveHighlight, {
+        passive: true,
+      });
     });
   });
 </script>
