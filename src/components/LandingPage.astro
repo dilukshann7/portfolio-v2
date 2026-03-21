@@ -482,6 +482,10 @@ import ColorBends from "./ui/ColorBends";
   // @ts-ignore
   import { gsap } from "gsap";
 
+  const isMobile = window.matchMedia("(max-width: 900px)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
   const textWrapper = document.querySelector(".landing-page .loader-text");
   if (textWrapper) {
     textWrapper.innerHTML =

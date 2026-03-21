@@ -263,6 +263,10 @@ import Galaxy from "./ui/Galaxy";
         ]);
 
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
+      const isMobile = window.matchMedia("(max-width: 900px)").matches;
+      const hasFinePointer = window.matchMedia(
+        "(hover: hover) and (pointer: fine)",
+      ).matches;
 
       const footerContainer = document.querySelector(".footer-container");
       const mouse = { x: 0, y: 0 };
