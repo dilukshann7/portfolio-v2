@@ -1,12 +1,14 @@
 ---
+import { Font } from "astro:assets";
 import AboutCards from "../components/AboutCards.astro";
 import LandingPage from "../components/LandingPage.astro";
 import Projects from "../components/Projects.astro";
-import ScrollTrigger from "../components/ScrollTrigger.astro";
+import Certifications from "../components/Certifications.astro";
 ---
 
 <html lang="en">
   <head>
+    <Font cssVariable="--font-melodrame" />
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
@@ -20,9 +22,6 @@ import ScrollTrigger from "../components/ScrollTrigger.astro";
       rel="stylesheet"
     />
     <style is:global>
-      * {
-        font-family: "Space Grotesk", sans-serif !important;
-      }
       html,
       body {
         margin: 0;
