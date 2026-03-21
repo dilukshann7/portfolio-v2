@@ -255,23 +255,14 @@ import Galaxy from "./ui/Galaxy";
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const bootFooterScene = async () => {
-      const [{ default: gsap }, { ScrollTrigger }, { default: Lenis }, THREE, { GLTFLoader }] =
+      const [{ getMotionSystem }, THREE, { GLTFLoader }] =
         await Promise.all([
-          import("gsap"),
-          import("gsap/ScrollTrigger"),
-          import("lenis"),
+          import("../lib/client/motion"),
           import("three"),
           import("three/addons/loaders/GLTFLoader.js"),
         ]);
 
-      gsap.registerPlugin(ScrollTrigger);
-
-      const lenis = new Lenis();
-    lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
+      const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
 
       const footerContainer = document.querySelector(".footer-container");
       const mouse = { x: 0, y: 0 };
@@ -329,19 +320,21 @@ import Galaxy from "./ui/Galaxy";
         scene.add(model);
       });
 
-      ScrollTrigger.create({
-        trigger: "footer",
-        start: "top bottom",
-        end: "bottom bottom",
-        scrub: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const yValue = -35 * (1 - progress);
-          gsap.set(footerContainer, { y: `${yValue}%` });
-          modelBaseZ = -1 * (1 - progress);
-          modelBaseRotationX = 0.5 * (1 - progress);
-        },
-      });
+      if (!reducedMotion) {
+        ScrollTrigger.create({
+          trigger: "footer",
+          start: "top bottom",
+          end: "bottom bottom",
+          scrub: true,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const yValue = -35 * (1 - progress);
+            gsap.set(footerContainer, { y: `${yValue}%` });
+            modelBaseZ = -1 * (1 - progress);
+            modelBaseRotationX = 0.5 * (1 - progress);
+          },
+        });
+      }
 
       const animate = () => {
         requestAnimationFrame(animate);
@@ -366,6 +359,19 @@ import Galaxy from "./ui/Galaxy";
       });
     };
 
-    void bootFooterScene();
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void bootFooterScene();
+        }
+      },
+      { rootMargin: "300px 0px" },
+    );
+
+    observer.observe(footer);
   });
 </script>

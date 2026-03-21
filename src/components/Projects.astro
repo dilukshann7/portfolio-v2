@@ -118,13 +118,6 @@
 </style>
 
 <script>
-  // @ts-ignore
-  import gsap from "gsap";
-  // @ts-ignore
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-  // @ts-ignore
-  import Lenis from "lenis";
-
   export const projects = [
     {
       name: "NoxHD UI",
@@ -169,16 +162,8 @@
   ];
 
   document.addEventListener("DOMContentLoaded", () => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const lenis = new Lenis();
-    lenis.on("scroll", ScrollTrigger.update);
-    gsap.ticker.add((time: number) => {
-      lenis.raf(time * 1000);
-    });
-    gsap.ticker.lagSmoothing(0);
-
     const workContainer = document.querySelector(".work");
+    if (!workContainer) return;
 
     const createWorkItem = (project: {
       name: string;
@@ -218,34 +203,54 @@
       (workContainer as HTMLElement).appendChild(row);
     }
 
-    gsap.set(".work-item", {
-      y: 1000,
-    });
+    const boot = async () => {
+      const { getMotionSystem } = await import("../lib/client/motion");
+      const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
 
-    document.querySelectorAll(".row").forEach((row) => {
-      const workItems = row.querySelectorAll(".work-item");
+      if (reducedMotion) return;
 
-      workItems.forEach((item, itemIndex) => {
-        const isLeftProjectItem = itemIndex === 0;
-        gsap.set(item, {
-          rotation: isLeftProjectItem ? -60 : 60,
-          transformOrigin: "center center",
+      gsap.set(".work-item", {
+        y: 1000,
+      });
+
+      document.querySelectorAll(".row").forEach((row) => {
+        const workItems = row.querySelectorAll(".work-item");
+
+        workItems.forEach((item, itemIndex) => {
+          const isLeftProjectItem = itemIndex === 0;
+          gsap.set(item, {
+            rotation: isLeftProjectItem ? -60 : 60,
+            transformOrigin: "center center",
+          });
+        });
+
+        ScrollTrigger.create({
+          trigger: row,
+          start: "top 50%",
+          once: true,
+          onEnter: () => {
+            gsap.to(workItems, {
+              y: 0,
+              rotation: 0,
+              duration: 1,
+              ease: "power4.out",
+              stagger: 0.25,
+            });
+          },
         });
       });
+    };
 
-      ScrollTrigger.create({
-        trigger: row,
-        start: "top 50%",
-        onEnter: () => {
-          gsap.to(workItems, {
-            y: 0,
-            rotation: 0,
-            duration: 1,
-            ease: "power4.out",
-            stagger: 0.25,
-          });
-        },
-      });
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void boot();
+        }
+      },
+      { rootMargin: "250px 0px" },
+    );
+
+    observer.observe(workContainer);
   });
 </script>
