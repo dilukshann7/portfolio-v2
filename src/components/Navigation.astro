@@ -1,5 +1,24 @@
+---
+import GlassSurface from "./ui/GlassSurface.jsx";
+---
+
 <section class="navigation-container">
-  <div class="menu-toggle closed">
+  <GlassSurface
+    client:load
+    className="menu-toggle closed"
+    width="var(--menu-toggle-width, 120px)"
+    height="60px"
+    borderRadius={999}
+    borderWidth={0.08}
+    displace={0.5}
+    distortionScale={-180}
+    redOffset={0}
+    greenOffset={10}
+    blueOffset={20}
+    brightness={50}
+    opacity={0.93}
+    mixBlendMode="screen"
+  >
     <div class="menu-toggle-icon">
       <div class="hamburger">
         <div class="menu-bar" data-position="top"></div>
@@ -9,7 +28,7 @@
     <div class="menu-copy">
       <p>Menu</p>
     </div>
-  </div>
+  </GlassSurface>
 
   <div class="menu">
     <div class="col col-1">
@@ -79,18 +98,6 @@
     z-index: 100;
   }
 
-  @property --menu-angle-1 {
-    syntax: "<angle>";
-    inherits: false;
-    initial-value: -75deg;
-  }
-
-  @property --menu-angle-2 {
-    syntax: "<angle>";
-    inherits: false;
-    initial-value: -45deg;
-  }
-
   * {
     margin: 0;
     padding: 0;
@@ -120,159 +127,38 @@
   }
 
   /* menu toggle btn */
-  .menu-toggle {
-    --menu-hover-time: 400ms;
-    --menu-hover-ease: cubic-bezier(0.25, 1, 0.5, 1);
+  :global(.menu-toggle) {
+    --menu-toggle-width: 120px;
     position: fixed;
     top: 2em;
     right: 2em;
-    width: 120px;
-    height: 60px;
-    border-radius: 8em;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.2),
-      rgba(255, 255, 255, 0.08) 35%,
-      rgba(255, 255, 255, 0.04) 65%,
-      rgba(255, 255, 255, 0.16)
-    );
-    background-size: 140% 140%;
-    background-position: 50% 50%;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.38),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.08),
-      inset 0 0.125em 0.5em rgba(255, 255, 255, 0.18),
-      0 0.6em 1.4em rgba(0, 0, 0, 0.14),
-      0 0 0.9em rgba(117, 214, 255, 0.12),
-      0 0 1.4em rgba(255, 196, 128, 0.08);
-    backdrop-filter: blur(10px) saturate(155%);
-    -webkit-backdrop-filter: blur(10px) saturate(155%);
     transition:
       width 0.5s cubic-bezier(0.075, 0.82, 0.165, 1),
-      transform var(--menu-hover-time) var(--menu-hover-ease),
-      box-shadow var(--menu-hover-time) var(--menu-hover-ease),
-      backdrop-filter var(--menu-hover-time) var(--menu-hover-ease),
-      background-position var(--menu-hover-time) var(--menu-hover-ease);
+      transform 400ms cubic-bezier(0.25, 1, 0.5, 1),
+      box-shadow 400ms cubic-bezier(0.25, 1, 0.5, 1);
     transform-origin: right;
     cursor: pointer;
     z-index: 120;
-    overflow: visible;
   }
 
-  .menu-toggle.opened {
-    width: 60px;
-    background-position: 72% 50%;
+  :global(.menu-toggle.opened) {
+    --menu-toggle-width: 60px;
   }
 
-  .menu-toggle::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: var(--menu-border-width);
-    background:
-      conic-gradient(
-        from var(--menu-angle-1) at 50% 50%,
-        rgba(255, 255, 255, 0.45),
-        rgba(255, 255, 255, 0.02) 10% 38%,
-        rgba(111, 219, 255, 0.34) 50%,
-        rgba(255, 255, 255, 0.02) 62% 88%,
-        rgba(255, 204, 143, 0.4)
-      ),
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.62),
-        rgba(255, 255, 255, 0.16)
-      );
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    box-shadow: inset 0 0 0 calc(var(--menu-border-width) / 2)
-      rgba(255, 255, 255, 0.3);
-    opacity: 0.95;
-    pointer-events: none;
-    transition:
-      --menu-angle-1 500ms ease,
-      opacity var(--menu-hover-time) var(--menu-hover-ease);
+  :global(.menu-toggle .glass-surface__content) {
+    padding: 0;
   }
 
-  .menu-toggle::after {
-    content: "";
-    position: absolute;
-    inset: calc(var(--menu-border-width) / 2);
-    border-radius: inherit;
-    background:
-      linear-gradient(
-        var(--menu-angle-2),
-        rgba(255, 255, 255, 0) 4%,
-        rgba(255, 255, 255, 0.42) 28%,
-        rgba(255, 255, 255, 0.14) 45%,
-        rgba(255, 255, 255, 0) 62%
-      ),
-      radial-gradient(
-        circle at 24% 18%,
-        rgba(255, 255, 255, 0.36),
-        transparent 28%
-      );
-    mix-blend-mode: screen;
-    background-size: 200% 200%;
-    background-position: 0% 50%;
-    background-repeat: no-repeat;
-    pointer-events: none;
-    opacity: 0.95;
-    transition:
-      background-position calc(var(--menu-hover-time) * 1.25)
-        var(--menu-hover-ease),
-      --menu-angle-2 calc(var(--menu-hover-time) * 1.25) var(--menu-hover-ease),
-      opacity var(--menu-hover-time) var(--menu-hover-ease);
-  }
-
-  .menu-toggle:hover {
+  :global(.menu-toggle:hover) {
     transform: scale(0.972) translateY(-1px);
-    background-position: 42% 50%;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.48),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.12),
-      inset 0 0.125em 0.7em rgba(255, 255, 255, 0.22),
-      0 0.5em 1.1em rgba(0, 0, 0, 0.16),
-      0 0 1.1em rgba(117, 214, 255, 0.16),
-      0 0 1.7em rgba(255, 196, 128, 0.14);
-    backdrop-filter: blur(24px) saturate(170%);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
+    box-shadow: 0 0.5em 1.1em rgba(0, 0, 0, 0.12);
   }
 
-  .menu-toggle:hover::before {
-    --menu-angle-1: -125deg;
-    opacity: 1;
-  }
-
-  .menu-toggle:hover::after {
-    background-position: 24% 50%;
-    opacity: 1;
-  }
-
-  .menu-toggle:active {
+  :global(.menu-toggle:active) {
     transform: scale(0.958);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.38),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.08),
-      inset 0 0.125em 0.45em rgba(255, 255, 255, 0.18),
-      0 0.35em 0.8em rgba(0, 0, 0, 0.16),
-      0 0 0.9em rgba(117, 214, 255, 0.14),
-      0 0 1.2em rgba(255, 196, 128, 0.12);
   }
 
-  .menu-toggle:active::after {
-    background-position: 50% 20%;
-    --menu-angle-2: -15deg;
-  }
-
-  .menu-copy {
+  :global(.menu-toggle .menu-copy) {
     position: absolute;
     top: 50%;
     left: 30px;
@@ -282,7 +168,7 @@
     z-index: 1;
   }
 
-  .menu-copy p {
+  :global(.menu-toggle .menu-copy p) {
     text-transform: uppercase;
     font-weight: 500;
     font-size: 12px;
@@ -295,56 +181,43 @@
       0 0 0.8em rgba(255, 255, 255, 0.12);
   }
 
-  .menu-toggle:hover .menu-copy {
+  :global(.menu-toggle:hover .menu-copy) {
     left: 20px;
   }
 
-  .menu-toggle.opened .menu-copy {
+  :global(.menu-toggle.opened .menu-copy) {
     opacity: 0;
   }
 
-  .menu-toggle-icon {
+  :global(.menu-toggle .menu-toggle-icon) {
     position: absolute;
     right: 0;
     width: 60px;
     height: 60px;
     border-radius: 100%;
     clip-path: circle(10% at 50% 50%);
-    background:
-      radial-gradient(
-        circle at 28% 28%,
-        rgba(255, 255, 255, 0.92),
-        transparent 30%
-      ),
-      radial-gradient(
-        circle at 72% 74%,
-        rgba(255, 241, 212, 0.52),
-        transparent 38%
-      ),
-      linear-gradient(
-        145deg,
-        rgba(255, 232, 194, 0.98),
-        rgba(232, 172, 115, 0.92)
-      );
+    background: rgba(255, 245, 232, 0.72);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
     z-index: 10;
     overflow: hidden;
     box-shadow:
       inset 0 0.08em 0.16em rgba(255, 255, 255, 0.45),
-      inset 0 -0.08em 0.12em rgba(0, 0, 0, 0.1),
-      0 0 1em rgba(255, 210, 145, 0.18);
+      inset 0 -0.08em 0.12em rgba(0, 0, 0, 0.1);
   }
 
-  .menu-toggle:hover .menu-toggle-icon {
+  :global(.menu-toggle:hover .menu-toggle-icon) {
     clip-path: circle(35% at 50% 50%);
   }
 
-  .menu-toggle.opened .menu-toggle-icon {
+  :global(.menu-toggle.opened .menu-toggle-icon) {
     clip-path: circle(50% at 50% 50%);
     transform: scale(1.125);
   }
 
-  .hamburger {
+  :global(.menu-toggle .hamburger) {
     position: absolute;
     top: 60%;
     left: 50%;
@@ -358,13 +231,13 @@
     opacity: 0;
   }
 
-  .menu-toggle:hover .hamburger,
-  .menu-toggle.opened .hamburger {
+  :global(.menu-toggle:hover .hamburger),
+  :global(.menu-toggle.opened .hamburger) {
     top: 50%;
     opacity: 1;
   }
 
-  .menu-bar {
+  :global(.menu-toggle .menu-bar) {
     position: absolute;
     width: 15px;
     height: 1.5px;
@@ -373,19 +246,19 @@
     transition: all 250ms ease-out;
   }
 
-  .menu-bar[data-position="top"] {
+  :global(.menu-toggle .menu-bar[data-position="top"]) {
     transform: translateY(-3px);
   }
 
-  .menu-bar[data-position="bottom"] {
+  :global(.menu-toggle .menu-bar[data-position="bottom"]) {
     transform: translateY(3px);
   }
 
-  .menu-toggle.opened .menu-bar[data-position="top"] {
+  :global(.menu-toggle.opened .menu-bar[data-position="top"]) {
     transform: translateY(0) rotate(45deg) scaleX(1.05);
   }
 
-  .menu-toggle.opened .menu-bar[data-position="bottom"] {
+  :global(.menu-toggle.opened .menu-bar[data-position="bottom"]) {
     transform: translateY(0) rotate(-45deg) scaleX(1.05);
   }
 
@@ -541,21 +414,8 @@
   }
 
   @media (hover: none) and (pointer: coarse) {
-    .menu-toggle:hover {
+    :global(.menu-toggle:hover) {
       transform: none;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    .menu-toggle:hover::before,
-    .menu-toggle:active::before {
-      --menu-angle-1: -75deg;
-    }
-
-    .menu-toggle:hover::after,
-    .menu-toggle:active::after {
-      background-position: 0% 50%;
-      --menu-angle-2: -45deg;
     }
   }
 </style>
