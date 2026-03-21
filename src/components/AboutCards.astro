@@ -478,60 +478,66 @@
 </style>
 
 <script>
-  // @ts-ignore
-  import { gsap } from "gsap";
-  // @ts-ignore
-  import ScrollTrigger from "gsap/ScrollTrigger";
-  // @ts-ignore
-  import Lenis from "lenis";
-
   document.addEventListener("DOMContentLoaded", () => {
-    gsap.registerPlugin(ScrollTrigger);
-    const lenis = new Lenis();
-    lenis.on("scroll", ScrollTrigger.update);
-    gsap.ticker.add((time: number) => {
-      lenis.raf(time * 1000);
-    });
-    gsap.ticker.lagSmoothing(0);
+    const intro = document.querySelector(".intro");
+    if (!intro) return;
 
-    const cards = gsap.utils.toArray<HTMLElement>(".card");
+    const boot = async () => {
+      const { getMotionSystem } = await import("../lib/client/motion");
+      const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
+      const cards = gsap.utils.toArray<HTMLElement>(".card");
 
-    ScrollTrigger.create({
-      trigger: cards[0],
-      start: "top 80%",
-      endTrigger: cards[cards.length - 1],
-      end: "top 30%",
-      pin: ".intro",
-      pinSpacing: false,
-    });
+      if (cards.length === 0 || reducedMotion) return;
 
-    cards.forEach((card: HTMLElement, index: number) => {
-      const isLastCard = index === cards.length - 1;
-      const cardInner = card.querySelector(".card-inner");
+      ScrollTrigger.create({
+        trigger: cards[0],
+        start: "top 80%",
+        endTrigger: cards[cards.length - 1],
+        end: "top 30%",
+        pin: ".intro",
+        pinSpacing: false,
+      });
 
-      if (!isLastCard) {
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 25%",
-          endTrigger: ".outro",
-          end: "top 65%",
-          pin: true,
-          pinSpacing: false,
-        });
+      cards.forEach((card: HTMLElement, index: number) => {
+        const isLastCard = index === cards.length - 1;
+        const cardInner = card.querySelector(".card-inner");
 
-        gsap.to(cardInner, {
-          y: `-${(cards.length - index) * 14}vh`,
-          ease: "none",
-          scrollTrigger: {
+        if (!isLastCard) {
+          ScrollTrigger.create({
             trigger: card,
             start: "top 25%",
             endTrigger: ".outro",
             end: "top 65%",
-            scrub: true,
-          },
-        });
-      }
-    });
+            pin: true,
+            pinSpacing: false,
+          });
+
+          gsap.to(cardInner, {
+            y: `-${(cards.length - index) * 14}vh`,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 25%",
+              endTrigger: ".outro",
+              end: "top 65%",
+              scrub: true,
+            },
+          });
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void boot();
+        }
+      },
+      { rootMargin: "250px 0px" },
+    );
+
+    observer.observe(intro);
   });
 </script>
 
