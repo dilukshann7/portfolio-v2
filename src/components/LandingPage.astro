@@ -1,4 +1,9 @@
-<div class="landing-page">
+---
+import Navigation from "./Navigation.astro";
+---
+
+<div class="landing-page" id="home">
+  <Navigation />
   <div class="hero-img">
     <img src="/hero.jpeg" alt="" />
   </div>
@@ -23,29 +28,6 @@
         </div>
       </div>
     </div>
-    <nav>
-      <div class="nav-items">
-        <div class="nav-item">
-          <a href="#">about</a>
-        </div>
-        <div class="nav-item">
-          <a href="#">projects</a>
-        </div>
-      </div>
-      <div class="nav-items">
-        <div class="nav-item">
-          <a href="#" id="logo">Dilukshan N &copy;</a>
-        </div>
-      </div>
-      <div class="nav-items">
-        <div class="nav-item">
-          <a href="#">skills</a>
-        </div>
-        <div class="nav-item">
-          <a href="#">contact</a>
-        </div>
-      </div>
-    </nav>
   </div>
   <div class="loader-text-wrapper block">
     <h1 class="loader-text">Dilukshan</h1>
@@ -89,46 +71,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  .landing-page nav {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    background: #ebe2d5;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    display: flex;
-  }
-
-  .landing-page .nav-items {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-
-  .landing-page .nav-items:first-child {
-    margin-right: auto;
-  }
-
-  .landing-page .nav-items:last-child {
-    margin-left: auto;
-  }
-
-  .landing-page .nav-items .nav-item {
-    padding: 2em;
-  }
-
-  .landing-page .nav-items .nav-item a {
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 12px;
-    color: #000;
-  }
-
-  .landing-page .nav-items .nav-item a#logo {
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0.2em;
   }
 
   .landing-page .cols {
@@ -249,10 +191,6 @@
       width: 100%;
     }
 
-    .landing-page .nav-items:first-child,
-    .landing-page .nav-items:last-child {
-      display: none;
-    }
   }
 
   .landing-page .block {
