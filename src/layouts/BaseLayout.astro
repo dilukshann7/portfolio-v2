@@ -1,0 +1,87 @@
+---
+import { Font } from "astro:assets";
+import "../styles/global.css";
+import { SITE } from "../lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  image = SITE.socialImage,
+  noindex = false,
+} = Astro.props;
+
+const publicOrigin = Astro.site?.origin ?? Astro.url.origin;
+const canonicalUrl = new URL(Astro.url.pathname, publicOrigin);
+const socialImageUrl = new URL(image, publicOrigin);
+const robots = noindex
+  ? "noindex, nofollow"
+  : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Font cssVariable="--font-melodrame" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    <meta name="keywords" content={SITE.keywords.join(", ")} />
+    <meta name="theme-color" content={SITE.themeColor} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content={robots} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      name="format-detection"
+      content="telephone=no, address=no, email=no"
+    />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300;400;500;600;700&family=Stack+Sans+Notch:wght@200..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:alt" content={`${SITE.name} portfolio preview`} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:creator" content={SITE.twitterHandle} />
+    <meta name="twitter:site" content={SITE.twitterHandle} />
+
+    <slot name="head" />
+
+    <style is:global>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
