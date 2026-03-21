@@ -1,0 +1,314 @@
+<footer>
+  <div class="footer-container">
+    <div id="footer-canvas"></div>
+
+    <div class="footer-content">
+      <div class="footer-row">
+        <div class="footer-col">
+          <h2>I make it look easy because I put in the work.</h2>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-sub-col">
+            <h3>Improving Everyday</h3>
+            <h3>Since 2004</h3>
+          </div>
+
+          <div class="footer-sub-col">
+            <a href="https://instagram.com/dilukshann7" target="_blank"
+              >Instagram</a
+            >
+            <a href="https://linkedin.com/in/dilukshann7" target="_blank"
+              >LinkedIn</a
+            >
+            <a href="https://x.com/dilukshann7" target="_blank">X / Twitter</a>
+
+            <a href="https://github.com/dilukshann7" target="_blank">GitHub</a>
+            <a
+              href="mailto:dilukshann7@gmail.com?subject=Hello%20Dilukshan!"
+              target="_blank">Email Me</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <p>Built by Dilukshan N.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Stack+Sans+Notch:wght@200..700&display=swap");
+
+  :root {
+    --base-100: #e6eed6;
+    --base-200: #6200b3;
+    --base-300: #ffa630;
+    --base-400: #171717;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    font-family: "Stack Sans Notch", sans-serif;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: lighter;
+    line-height: 1.25;
+  }
+
+  h1 {
+    font-size: clamp(4rem, 5vw, 6rem);
+  }
+
+  h2 {
+    font-size: clamp(3rem, 4vw, 5rem);
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 1.75vw, 2.5rem);
+  }
+
+  a {
+    text-decoration: none;
+    color: #fff;
+    font-size: clamp(1.25rem, 1.75vw, 2.5rem);
+    font-weight: lighter;
+    line-height: 1.25;
+  }
+
+  p {
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  section {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .one {
+    background-color: var(--base-100);
+    color: #000;
+  }
+
+  .two {
+    background-color: var(--base-200);
+    color: #fff;
+  }
+
+  .three {
+    background-color: #ffa630;
+    color: #000;
+  }
+
+  footer {
+    position: relative;
+    width: 100%;
+    height: 75svh;
+    background-color: var(--base-400);
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .footer-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transform: translateY(-35%);
+    will-change: transform;
+  }
+
+  #footer-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: -1;
+  }
+
+  .footer-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1;
+  }
+
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .footer-row:nth-child(1) .footer-col:nth-child(1) {
+    flex: 3;
+  }
+
+  .footer-row:nth-child(1) .footer-col:nth-child(2) {
+    flex: 2;
+    display: flex;
+    gap: 2rem;
+  }
+
+  .footer-sub-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-row h2 {
+    width: 75%;
+  }
+
+  @media (max-width: 1000px) {
+    .footer-row:nth-child(1) {
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    .footer-row h2 {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import Lenis from "lenis";
+
+  import * as THREE from "three";
+  import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const lenis = new Lenis();
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    const footerContainer = document.querySelector(".footer-container");
+
+    const mouse = { x: 0, y: 0 };
+    window.addEventListener("mousemove", (e) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    const container = document.getElementById("footer-canvas");
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      50,
+      container.offsetWidth / container.offsetHeight,
+      0.1,
+      1000,
+    );
+    camera.position.set(0, 0, 0.75);
+
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+    });
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
+    directionalLight.position.set(1, 1, 0);
+    scene.add(directionalLight);
+
+    const loader = new GLTFLoader();
+    let model;
+    let modelBaseRotationX = 0.5;
+    let modelBaseZ = -1;
+
+    loader.load("./model.glb", (gltf) => {
+      model = gltf.scene;
+
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      const size = box.getSize(new THREE.Vector3());
+
+      model.position.sub(center);
+      model.position.y = 0;
+      model.position.z = -1;
+      model.rotation.x = 0.5;
+
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const scale = 1 / maxDim;
+      model.scale.setScalar(scale);
+
+      scene.add(model);
+    });
+
+    ScrollTrigger.create({
+      trigger: "footer",
+      start: "top bottom",
+      end: "bottom bottom",
+      scrub: true,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const yValue = -35 * (1 - progress);
+        gsap.set(footerContainer, { y: `${yValue}%` });
+
+        modelBaseZ = -1 * (1 - progress);
+        modelBaseRotationX = 0.5 * (1 - progress);
+      },
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (model) {
+        const targetRotationY = mouse.x * 0.3;
+        const targetRotationX = -mouse.y * 0.2 + modelBaseRotationX;
+
+        model.rotation.y += (targetRotationY - model.rotation.y) * 0.05;
+        model.rotation.x += (targetRotationX - model.rotation.x) * 0.05;
+        model.position.z += (modelBaseZ - model.position.z) * 0.05;
+      }
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("resize", () => {
+      camera.aspect = container.offsetWidth / container.offsetHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.offsetWidth, container.offsetHeight);
+    });
+  });
+</script>
