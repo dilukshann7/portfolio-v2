@@ -535,41 +535,84 @@
 
       if (cards.length === 0 || reducedMotion) return;
 
-      ScrollTrigger.create({
-        trigger: cards[0],
-        start: "top 80%",
-        endTrigger: cards[cards.length - 1],
-        end: "top 30%",
-        pin: ".intro",
-        pinSpacing: false,
-      });
+      let mm = gsap.matchMedia();
 
-      cards.forEach((card: HTMLElement, index: number) => {
-        const isLastCard = index === cards.length - 1;
-        const cardInner = card.querySelector(".card-inner");
+      mm.add("(min-width: 901px)", () => {
+        ScrollTrigger.create({
+          trigger: cards[0],
+          start: "top 80%",
+          endTrigger: cards[cards.length - 1],
+          end: "top 30%",
+          pin: ".intro",
+          pinSpacing: false,
+        });
 
-        if (!isLastCard) {
-          ScrollTrigger.create({
-            trigger: card,
-            start: "top 25%",
-            endTrigger: ".outro",
-            end: "top 65%",
-            pin: true,
-            pinSpacing: false,
-          });
+        cards.forEach((card: HTMLElement, index: number) => {
+          const isLastCard = index === cards.length - 1;
+          const cardInner = card.querySelector(".card-inner");
 
-          gsap.to(cardInner, {
-            y: `-${(cards.length - index) * 14}vh`,
-            ease: "none",
-            scrollTrigger: {
+          if (!isLastCard) {
+            ScrollTrigger.create({
               trigger: card,
               start: "top 25%",
               endTrigger: ".outro",
               end: "top 65%",
-              scrub: true,
-            },
-          });
-        }
+              pin: true,
+              pinSpacing: false,
+            });
+
+            gsap.to(cardInner, {
+              y: `-${(cards.length - index) * 14}vh`,
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 25%",
+                endTrigger: ".outro",
+                end: "top 65%",
+                scrub: true,
+              },
+            });
+          }
+        });
+      });
+
+      mm.add("(max-width: 900px)", () => {
+        ScrollTrigger.create({
+          trigger: cards[0],
+          start: "top 60%",
+          endTrigger: cards[cards.length - 1],
+          end: "top 40%",
+          pin: ".intro",
+          pinSpacing: false,
+        });
+
+        cards.forEach((card: HTMLElement, index: number) => {
+          const isLastCard = index === cards.length - 1;
+          const cardInner = card.querySelector(".card-inner");
+
+          if (!isLastCard) {
+            ScrollTrigger.create({
+              trigger: card,
+              start: "top 22%",
+              endTrigger: ".outro",
+              end: "top 65%",
+              pin: true,
+              pinSpacing: false,
+            });
+
+            gsap.to(cardInner, {
+              y: `-${(cards.length - index) * 6}vh`,
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 22%",
+                endTrigger: ".outro",
+                end: "top 65%",
+                scrub: true,
+              },
+            });
+          }
+        });
       });
     };
 
