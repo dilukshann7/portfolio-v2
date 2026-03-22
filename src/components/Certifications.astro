@@ -59,10 +59,16 @@
 
     if (!awardsListContainer || !awardPreview || !awardsList) return;
 
+    const isTouchDevice = () =>
+      window.matchMedia("(pointer: coarse)").matches ||
+      "ontouchstart" in window;
+
+    const rowHeight = isTouchDevice() ? 64 : 80;
+
     const POSITIONS = {
       BOTTOM: 0,
-      MIDDLE: -80,
-      TOP: -160,
+      MIDDLE: -rowHeight,
+      TOP: -rowHeight * 2,
     };
 
     let lastMousePosition = { x: 0, y: 0 };
@@ -78,13 +84,15 @@
       awardElement.innerHTML = `
       <div style="box-sizing: border-box;" class="award-wrapper">
         <div style="box-sizing: border-box;" class="award-name">
-          <h1 style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;">${award.name}</h1>
+          <h1 class="award-title" style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;">${award.name}</h1>
+          <span class="award-type-inline">${award.type}</span>
         </div>
         <div style="box-sizing: border-box;" class="award-project">
-          <h1 style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;">${award.type}</h1>
+          <h1 class="award-title" style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;">${award.type}</h1>
         </div>
         <div style="box-sizing: border-box;" class="award-name">
-          <h1 style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em">${award.name}</h1>
+          <h1 class="award-title" style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em">${award.name}</h1>
+          <span class="award-type-inline">${award.type}</span>
         </div>
       </div>
     `;
