@@ -718,13 +718,32 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       });
     };
 
+    const isTouchDevice = window.matchMedia(
+      "(hover: none) and (pointer: coarse)",
+    ).matches;
+
     menuToggle.addEventListener("click", () => {
+      if (isAnimating) return;
       if (menuToggle.classList.contains("closed")) {
         openMenu();
       } else {
         closeMenu();
       }
     });
+
+    menuToggle.addEventListener(
+      "touchstart",
+      (e) => {
+        if (isAnimating) return;
+        e.preventDefault();
+        if (menuToggle.classList.contains("closed")) {
+          openMenu();
+        } else {
+          closeMenu();
+        }
+      },
+      { passive: false },
+    );
 
     navLinks.forEach((link) => {
       link.addEventListener("click", (event) => {
