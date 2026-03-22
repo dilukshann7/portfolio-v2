@@ -106,6 +106,20 @@
       const { getMotionSystem } = await import("../lib/client/motion");
       const { gsap, reducedMotion } = await getMotionSystem();
 
+      if (isTouchDevice()) {
+        awardsElements.forEach((award) => {
+          award.addEventListener(
+            "touchstart",
+            () => {
+              awardsElements.forEach((a) => a.classList.remove("touch-active"));
+              award.classList.add("touch-active");
+            },
+            { passive: true },
+          );
+        });
+        return;
+      }
+
       const animatePreview = () => {
         const awardsListRect = (
           awardsList as HTMLElement
@@ -193,7 +207,9 @@
 
           mouseTimeout = setTimeout(() => {
             isMouseMoving = false;
-            const images = (awardPreview as HTMLElement).querySelectorAll("img");
+            const images = (awardPreview as HTMLElement).querySelectorAll(
+              "img",
+            );
             if (images.length > 1) {
               const lastImage = images[images.length - 1];
               images.forEach((img) => {
