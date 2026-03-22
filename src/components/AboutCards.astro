@@ -649,7 +649,6 @@
           .match(/\d+/g)
           ?.map((n) => parseInt(n, 10))
           .slice(0, 3) || [255, 255, 255];
-        // Perceived luminance
         const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
         return luminance < 0.35;
       })();
@@ -683,7 +682,8 @@
       };
 
       const moveHighlight = (e: MouseEvent) => {
-        const hoveredElement = (e.target as Element | null)?.closest(".grid-item");
+        const hoveredElement =
+          (e.target as Element | null)?.closest(".grid-item") ?? null;
         moveToElement(hoveredElement);
       };
 
