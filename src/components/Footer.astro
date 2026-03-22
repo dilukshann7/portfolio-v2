@@ -42,14 +42,14 @@ import Galaxy from "./ui/Galaxy";
               target="_blank"
               rel="noreferrer"
             >
-              >Instagram</a
+              Instagram</a
             >
             <a
               href="https://linkedin.com/in/dilukshann7"
               target="_blank"
               rel="noreferrer"
             >
-              >LinkedIn</a
+              LinkedIn</a
             >
             <a href="https://x.com/dilukshann7" target="_blank" rel="noreferrer"
               >X / Twitter</a
@@ -246,11 +246,8 @@ import Galaxy from "./ui/Galaxy";
     }
 
     .footer-container {
-      padding:
-        calc(env(safe-area-inset-top, 0px) + 1.25rem)
-        1rem
-        calc(env(safe-area-inset-bottom, 0px) + 1rem)
-        1rem;
+      padding: calc(env(safe-area-inset-top, 0px) + 1.25rem) 1rem
+        calc(env(safe-area-inset-bottom, 0px) + 1rem) 1rem;
       transform: translateY(-20%);
     }
 
@@ -285,12 +282,11 @@ import Galaxy from "./ui/Galaxy";
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const bootFooterScene = async () => {
-      const [{ getMotionSystem }, THREE, { GLTFLoader }] =
-        await Promise.all([
-          import("../lib/client/motion"),
-          import("three"),
-          import("three/addons/loaders/GLTFLoader.js"),
-        ]);
+      const [{ getMotionSystem }, THREE, { GLTFLoader }] = await Promise.all([
+        import("../lib/client/motion"),
+        import("three"),
+        import("three/addons/loaders/GLTFLoader.js"),
+      ]);
 
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
       const isMobile = window.matchMedia("(max-width: 900px)").matches;
