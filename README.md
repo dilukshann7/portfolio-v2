@@ -1,6 +1,19 @@
-# portfolio-v2
+<picture>
+    <img alt="Portfolio" src="public/dilukshan.dev.jpg" width="1920">
+</picture>
 
-Second iteration of a personal portfolio built with Astro, React, Tailwind CSS v4, and Cloudflare. The site combines editorial-style typography, animated transitions, interactive project showcases, and motion-driven UI experiments to present work, certifications, and technical interests in a more immersive way than a standard portfolio grid.
+<div align="center">
+
+[![Astro](https://img.shields.io/badge/Astro-6-FF5D01?logo=astro&logoColor=white)](https://astro.build)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![GSAP](https://img.shields.io/badge/GSAP-3.0-88CE02?logo=greensock&logoColor=white)](https://greensock.com/gsap)
+[![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?logo=cloudflare&logoColor=white)](https://cloudflare.com)
+
+</div>
+
+### Second iteration of a personal portfolio built with Astro, React, Tailwind CSS v4, and Cloudflare. The site combines editorial-style typography, animated transitions, interactive project showcases, and motion-driven UI experiments to present work, certifications, and technical interests in a more immersive way than a standard portfolio grid.
 
 ## Overview
 
