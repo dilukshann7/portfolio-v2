@@ -523,7 +523,8 @@ import ColorBends from "./ui/ColorBends";
         opacity: [0, 1],
         easing: "easeOutExpo",
         duration: isMobile ? 700 : 1200,
-        delay: (i: number) => (isMobile ? 900 : 2400) + 24 * i,
+        delay: (_element: HTMLElement, i: number) =>
+          (isMobile ? 900 : 2400) + 24 * i,
       });
     }
   }
