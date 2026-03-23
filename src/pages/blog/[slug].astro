@@ -1129,76 +1129,79 @@ const structuredData = [
 
   const initBlogPostPage = () =>
     runPageScript("blog-post-page", ({ signal, onCleanup }) => {
-    const cursor = document.getElementById("bpCursor");
-    if (cursor && window.matchMedia("(pointer: fine)").matches) {
-      document.addEventListener(
-        "mousemove",
-        (e) => {
-          cursor.style.left = e.clientX + "px";
-          cursor.style.top = e.clientY + "px";
-        },
-        { passive: true, signal },
-      );
-      document.querySelectorAll("a, button, .bp-related-card").forEach((el) => {
-        el.addEventListener(
-          "mouseenter",
-          () => (cursor.style.transform = "translate(-50%,-50%) scale(3.5)"),
-          { signal },
+      const cursor = document.getElementById("bpCursor");
+      if (cursor && window.matchMedia("(pointer: fine)").matches) {
+        document.addEventListener(
+          "mousemove",
+          (e) => {
+            cursor.style.left = e.clientX + "px";
+            cursor.style.top = e.clientY + "px";
+          },
+          { passive: true, signal },
         );
-        el.addEventListener(
-          "mouseleave",
-          () => (cursor.style.transform = "translate(-50%,-50%) scale(1)"),
-          { signal },
-        );
-      });
-    } else if (cursor) {
-      cursor.style.display = "none";
-    }
-
-    const line = document.getElementById("bpScrollLine");
-    if (line) {
-      window.addEventListener(
-        "scroll",
-        () => {
-          const pct =
-            (window.scrollY /
-              (document.body.scrollHeight - window.innerHeight)) *
-            100;
-          line.style.width = pct + "%";
-        },
-        { passive: true, signal },
-      );
-    }
-
-    const tocLinks = Array.from(
-      document.querySelectorAll<HTMLAnchorElement>(".bp-toc__link"),
-    );
-    if (tocLinks.length) {
-      const headingIds = tocLinks.map(
-        (a) => a.getAttribute("href")?.slice(1) ?? "",
-      );
-      const headingEls = headingIds
-        .map((id) => document.getElementById(id))
-        .filter(Boolean) as HTMLElement[];
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              tocLinks.forEach((a) => a.classList.remove("is-active"));
-              const active = tocLinks.find(
-                (a) => a.getAttribute("href") === `#${entry.target.id}`,
-              );
-              active?.classList.add("is-active");
-            }
+        document
+          .querySelectorAll("a, button, .bp-related-card")
+          .forEach((el) => {
+            el.addEventListener(
+              "mouseenter",
+              () =>
+                (cursor.style.transform = "translate(-50%,-50%) scale(3.5)"),
+              { signal },
+            );
+            el.addEventListener(
+              "mouseleave",
+              () => (cursor.style.transform = "translate(-50%,-50%) scale(1)"),
+              { signal },
+            );
           });
-        },
-        { rootMargin: "-20% 0px -70% 0px" },
-      );
+      } else if (cursor) {
+        cursor.style.display = "none";
+      }
 
-      headingEls.forEach((el) => observer.observe(el));
-      onCleanup(() => observer.disconnect());
-    }
+      const line = document.getElementById("bpScrollLine");
+      if (line) {
+        window.addEventListener(
+          "scroll",
+          () => {
+            const pct =
+              (window.scrollY /
+                (document.body.scrollHeight - window.innerHeight)) *
+              100;
+            line.style.width = pct + "%";
+          },
+          { passive: true, signal },
+        );
+      }
+
+      const tocLinks = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>(".bp-toc__link"),
+      );
+      if (tocLinks.length) {
+        const headingIds = tocLinks.map(
+          (a) => a.getAttribute("href")?.slice(1) ?? "",
+        );
+        const headingEls = headingIds
+          .map((id) => document.getElementById(id))
+          .filter(Boolean) as HTMLElement[];
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                tocLinks.forEach((a) => a.classList.remove("is-active"));
+                const active = tocLinks.find(
+                  (a) => a.getAttribute("href") === `#${entry.target.id}`,
+                );
+                active?.classList.add("is-active");
+              }
+            });
+          },
+          { rootMargin: "-20% 0px -70% 0px" },
+        );
+
+        headingEls.forEach((el) => observer.observe(el));
+        onCleanup(() => observer.disconnect());
+      }
     });
 
   document.addEventListener("astro:page-load", initBlogPostPage);
