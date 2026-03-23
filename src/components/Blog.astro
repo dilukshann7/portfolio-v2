@@ -1,0 +1,91 @@
+---
+import BlogScrollArc from "./BlogScrollArc.astro";
+import {
+  formatBlogDate,
+  getAllBlogPosts,
+  getPostUrl,
+  getReadingTime,
+} from "../lib/blog";
+
+const imagePool = [
+  "/blog/card-1.jpg",
+  "/blog/card-2.jpg",
+  "/blog/card-3.jpg",
+  "/blog/card-4.jpg",
+  "/blog/card-5.jpg",
+];
+
+const posts = await getAllBlogPosts();
+
+const fallbackCards = [
+  {
+    title: "Astro patterns that stay elegant after the demo phase",
+    description:
+      "Notes on content architecture, performance budgets, and structural choices that keep a polished Astro site from collapsing later.",
+    category: "Astro",
+    href: "/blog/",
+    image: imagePool[0],
+    imageAlt: "Abstract glowing interface preview",
+    meta: "Fresh notes",
+  },
+  {
+    title: "How shipped AI features survive product reality",
+    description:
+      "Practical writing on guardrails, UX framing, and engineering tradeoffs when a feature has to work for real users rather than a pitch deck.",
+    category: "AI Delivery",
+    href: "/blog/",
+    image: imagePool[1],
+    imageAlt: "AI-inspired gradient artwork",
+    meta: "System design",
+  },
+  {
+    title: "Frontend polish with measurable performance behind it",
+    description:
+      "A closer look at motion, scroll choreography, and interface details that feel expensive without quietly wrecking responsiveness.",
+    category: "Frontend",
+    href: "/blog/",
+    image: imagePool[2],
+    imageAlt: "High-contrast editorial layout mockup",
+    meta: "Interface craft",
+  },
+  {
+    title: "Engineering notes from building developer-first products",
+    description:
+      "Architecture choices, SEO decisions, and implementation lessons from projects that need to feel sharp, fast, and maintainable at the same time.",
+    category: "Engineering",
+    href: "/blog/",
+    image: imagePool[3],
+    imageAlt: "Technical dashboard with layered cards",
+    meta: "Build log",
+  },
+  {
+    title: "Systems thinking for modern product work",
+    description:
+      "Small implementation decisions that compound into better delivery speed, cleaner interfaces, and more resilient software.",
+    category: "Systems",
+    href: "/blog/",
+    image: imagePool[4],
+    imageAlt: "Editorial card collage in a dark layout",
+    meta: "Field notes",
+  },
+];
+
+const cards = (
+  posts.length
+    ? posts.slice(0, 6).map((post, index) => ({
+        title: post.data.title,
+        description: post.data.description,
+        category: post.data.category,
+        href: getPostUrl(post.id),
+        image: post.data.heroImage ?? imagePool[index % imagePool.length],
+        imageAlt: post.data.heroImageAlt ?? post.data.title,
+        meta: `${formatBlogDate(post.data.publishDate)} • ${getReadingTime(post.body)} min read`,
+      }))
+    : fallbackCards
+).map((card, index) => ({
+  ...card,
+  indexLabel: String(index + 1).padStart(2, "0"),
+}));
+---
+
+<BlogScrollArc cards={cards} />
