@@ -591,8 +591,10 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 <script>
   import gsap from "gsap";
   import CustomEase from "gsap/dist/CustomEase";
+  import { runPageScript } from "../lib/client/spa";
 
-  document.addEventListener("DOMContentLoaded", () => {
+  const initNavigation = () =>
+    runPageScript("navigation", ({ signal }) => {
     gsap.registerPlugin(CustomEase);
     CustomEase.create(
       "hop",
@@ -616,7 +618,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
         const text = element.innerText;
         const splitText = text
           .split("")
-          .map(function (char: string) {
+          .map((char: string) => {
             return `<span>${char === " " ? "&nbsp;&nbsp;" : char}</span>`;
           })
           .join("");
@@ -720,19 +722,23 @@ import GlassSurface from "./ui/GlassSurface.tsx";
           });
 
           isAnimating = false;
-          if (onComplete) onComplete();
+          onComplete?.();
         },
       });
     };
 
-    menuToggle.addEventListener("click", () => {
-      if (isAnimating) return;
-      if (menuToggle.classList.contains("closed")) {
-        openMenu();
-      } else {
-        closeMenu();
-      }
-    });
+    menuToggle.addEventListener(
+      "click",
+      () => {
+        if (isAnimating) return;
+        if (menuToggle.classList.contains("closed")) {
+          openMenu();
+        } else {
+          closeMenu();
+        }
+      },
+      { signal },
+    );
 
     menuToggle.addEventListener(
       "touchstart",
@@ -745,32 +751,38 @@ import GlassSurface from "./ui/GlassSurface.tsx";
           closeMenu();
         }
       },
-      { passive: false },
+      { passive: false, signal },
     );
 
     navLinks.forEach((link) => {
-      link.addEventListener("click", (event) => {
-        const targetId = link.getAttribute("data-nav-target");
-        if (!targetId) return;
+      link.addEventListener(
+        "click",
+        (event) => {
+          const targetId = link.getAttribute("data-nav-target");
+          if (!targetId) return;
 
-        const targetElement = document.getElementById(targetId);
-        if (!targetElement) return;
+          const targetElement = document.getElementById(targetId);
+          if (!targetElement) return;
 
-        event.preventDefault();
+          event.preventDefault();
 
-        const scrollToTarget = () => {
-          targetElement.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        };
+          const scrollToTarget = () => {
+            targetElement.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          };
 
-        if (menuToggle.classList.contains("opened")) {
-          closeMenu(scrollToTarget);
-        } else {
-          scrollToTarget();
-        }
-      });
+          if (menuToggle.classList.contains("opened")) {
+            closeMenu(scrollToTarget);
+          } else {
+            scrollToTarget();
+          }
+        },
+        { signal },
+      );
     });
-  });
+    });
+
+  document.addEventListener("astro:page-load", initNavigation);
 </script>
