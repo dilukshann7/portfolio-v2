@@ -163,20 +163,22 @@ const structuredDataItems = [
     gsap.registerPlugin(CustomEase);
     CustomEase.create("hop", "0.9, 0, 0.1, 1");
 
-    // Fires BEFORE the new page loads — the EXIT animation
+    // EXIT: black box grows UP from bottom
     document.addEventListener("astro:before-preparation", () => {
-      document.querySelector(".revealerMain").style.transform = "scaleY(1)";
+      gsap.fromTo(
+        ".revealerMain",
+        { scaleY: 0, transformOrigin: "center bottom" },
+        { scaleY: 1, duration: 1, ease: "hop" },
+      );
     });
 
-    // Fires AFTER the new page has loaded — the ENTER animation
+    // ENTER: black box slides UP and away from top
     document.addEventListener("astro:page-load", () => {
-      gsap.to(".revealerMain", {
-        scaleY: 0,
-        duration: 1.25,
-        delay: 0.5,
-        ease: "hop",
-        transformOrigin: "center top",
-      });
+      gsap.fromTo(
+        ".revealerMain",
+        { scaleY: 1, transformOrigin: "center top" },
+        { scaleY: 0, duration: 1.25, delay: 0.5, ease: "hop" },
+      );
     });
   </script>
 </html>
