@@ -154,7 +154,7 @@ const structuredDataItems = [
     </style>
   </head>
   <body>
-    <div class="revealerMain" transition:persist></div>
+    <div class="revealerMain"></div>
     <slot />
   </body><script>
     import gsap from "gsap";
@@ -163,16 +163,6 @@ const structuredDataItems = [
     gsap.registerPlugin(CustomEase);
     CustomEase.create("hop", "0.9, 0, 0.1, 1");
 
-    // EXIT: black box grows UP from bottom
-    document.addEventListener("astro:before-preparation", () => {
-      gsap.fromTo(
-        ".revealerMain",
-        { scaleY: 0, transformOrigin: "center bottom" },
-        { scaleY: 1, duration: 1, ease: "hop" },
-      );
-    });
-
-    // ENTER: black box slides UP and away from top
     document.addEventListener("astro:page-load", () => {
       gsap.fromTo(
         ".revealerMain",
