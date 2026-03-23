@@ -1,3 +1,43 @@
+---
+const awards = [
+  {
+    name: "Fundamentals of Digital Marketing",
+    type: "Google",
+    image: "/certifications/google-digital-marketing.jpg",
+  },
+  {
+    name: "AI Engineering for Developers",
+    type: "DataCamp",
+    image: "/certifications/datacamp-ai-eng.jpg",
+  },
+  {
+    name: "Developing AI Applications",
+    type: "DataCamp",
+    image: "/certifications/datacamp-ai-app.jpg",
+  },
+  {
+    name: "Meta Frontend Developer",
+    type: "Meta",
+    image: "/certifications/meta-frontend.jpg",
+  },
+  {
+    name: "Learn TypeScript",
+    type: "Scrimba",
+    image: "/certifications/scrimba-ts.jpg",
+  },
+  {
+    name: "Foundational C#",
+    type: "Microsoft",
+    image: "/certifications/microsoft-csharp.jpg",
+  },
+  {
+    name: "HTML, CSS, and JavaScript",
+    type: "Johns Hopkins University",
+    image: "/certifications/jhu-webdev.jpg",
+  },
+] as const;
+---
+
 <div class="certifications-container" id="certifications">
   <section class="intro">
     <h1
@@ -8,50 +48,51 @@
     </h1>
   </section>
   <section class="awards">
-    <div class="awards-list"></div>
+    <div class="awards-list">
+      {
+        awards.map((award) => (
+          <div
+            class="award"
+            data-award-image={award.image}
+            data-award-name={award.name}
+          >
+            <div style="box-sizing: border-box;" class="award-wrapper">
+              <div style="box-sizing: border-box;" class="award-name">
+                <h1
+                  class="award-title"
+                  style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;"
+                >
+                  {award.name}
+                </h1>
+                <span class="award-type-inline">{award.type}</span>
+              </div>
+              <div style="box-sizing: border-box;" class="award-project">
+                <h1
+                  class="award-title"
+                  style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;"
+                >
+                  {award.type}
+                </h1>
+              </div>
+              <div style="box-sizing: border-box;" class="award-name">
+                <h1
+                  class="award-title"
+                  style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em"
+                >
+                  {award.name}
+                </h1>
+                <span class="award-type-inline">{award.type}</span>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
   </section>
   <div class="award-preview"></div>
 </div>
 
 <script>
-  export const awards = [
-    {
-      name: "Fundamentals of Digital Marketing",
-      type: "Google",
-      image: "/certifications/google-digital-marketing.jpg",
-    },
-    {
-      name: "AI Engineering for Developers",
-      type: "DataCamp",
-      image: "/certifications/datacamp-ai-eng.jpg",
-    },
-    {
-      name: "Developing AI Applications",
-      type: "DataCamp",
-      image: "/certifications/datacamp-ai-app.jpg",
-    },
-    {
-      name: "Meta Frontend Developer",
-      type: "Meta",
-      image: "/certifications/meta-frontend.jpg",
-    },
-    {
-      name: "Learn TypeScript",
-      type: "Scrimba",
-      image: "/certifications/scrimba-ts.jpg",
-    },
-    {
-      name: "Foundational C#",
-      type: "Microsoft",
-      image: "/certifications/microsoft-csharp.jpg",
-    },
-    {
-      name: "HTML, CSS, and JavaScript",
-      type: "Johns Hopkins University",
-      image: "/certifications/jhu-webdev.jpg",
-    },
-  ];
-
   document.addEventListener("DOMContentLoaded", () => {
     const awardsListContainer =
       document.querySelector<HTMLElement>(".awards-list");
@@ -76,29 +117,6 @@
     let activeAward: HTMLElement | null = null;
     let ticking = false;
     let mouseTimeout: ReturnType<typeof setTimeout> | null = null;
-
-    awards.forEach((award) => {
-      const awardElement = document.createElement("div");
-      awardElement.className = "award";
-
-      awardElement.innerHTML = `
-      <div style="box-sizing: border-box;" class="award-wrapper">
-        <div style="box-sizing: border-box;" class="award-name">
-          <h1 class="award-title" style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;">${award.name}</h1>
-          <span class="award-type-inline">${award.type}</span>
-        </div>
-        <div style="box-sizing: border-box;" class="award-project">
-          <h1 class="award-title" style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;">${award.type}</h1>
-        </div>
-        <div style="box-sizing: border-box;" class="award-name">
-          <h1 class="award-title" style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em">${award.name}</h1>
-          <span class="award-type-inline">${award.type}</span>
-        </div>
-      </div>
-    `;
-
-      awardsListContainer.appendChild(awardElement);
-    });
 
     const awardsElements = document.querySelectorAll<HTMLElement>(".award");
 
@@ -246,8 +264,10 @@
         { passive: true },
       );
 
-      awardsElements.forEach((award, index) => {
+      awardsElements.forEach((award) => {
         const wrapper = award.querySelector(".award-wrapper");
+        const awardImage = award.dataset.awardImage;
+        const awardName = award.dataset.awardName ?? "";
         let currentPosition = POSITIONS.TOP;
 
         award.addEventListener("mouseenter", (e: MouseEvent) => {
@@ -264,9 +284,11 @@
             });
           }
 
+          if (!awardImage) return;
+
           const img = document.createElement("img");
-          img.src = awards[index].image;
-          img.alt = awards[index].name;
+          img.src = awardImage;
+          img.alt = awardName;
           img.loading = "lazy";
           img.decoding = "async";
           img.style.position = "absolute";
