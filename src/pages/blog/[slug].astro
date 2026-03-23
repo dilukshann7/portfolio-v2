@@ -14,7 +14,6 @@ import { SITE } from "../../lib/site";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
-
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -47,14 +46,11 @@ const relatedPosts = (await getAllBlogPosts())
     const rightScore = right.data.tags.filter((tag) =>
       post.data.tags.includes(tag),
     ).length;
-
-    if (leftScore !== rightScore) {
-      return rightScore - leftScore;
-    }
-
+    if (leftScore !== rightScore) return rightScore - leftScore;
     return right.data.publishDate.getTime() - left.data.publishDate.getTime();
   })
   .slice(0, 3);
+
 const structuredData = [
   {
     "@context": "https://schema.org",
