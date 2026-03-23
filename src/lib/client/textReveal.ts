@@ -2,6 +2,10 @@ import { getMotionSystem } from "./motion";
 
 type RevealMode = "lines" | "fade";
 
+const REVEAL_DURATION_MULTIPLIER = 1.15;
+const REVEAL_DELAY_MULTIPLIER = 1.12;
+const REVEAL_STAGGER_MULTIPLIER = 1.12;
+
 export interface TextRevealTarget {
   selector: string;
   mode?: RevealMode;
@@ -64,7 +68,7 @@ export async function initTextReveal(
       node.style.visibility = "visible";
 
       const mode = target.mode ?? "lines";
-      const delay = target.delay ?? 0;
+      const delay = (target.delay ?? 0) * REVEAL_DELAY_MULTIPLIER;
       const animateOnScroll = target.scroll !== false;
       const start =
         target.start ?? (mode === "lines" ? "top 82%" : "top 86%");
@@ -96,8 +100,10 @@ export async function initTextReveal(
 
         const tweenConfig = {
           yPercent: 0,
-          duration: target.duration ?? 0.9,
-          stagger: target.stagger ?? 0.08,
+          duration:
+            (target.duration ?? 0.9) * REVEAL_DURATION_MULTIPLIER,
+          stagger:
+            (target.stagger ?? 0.08) * REVEAL_STAGGER_MULTIPLIER,
           ease: "power3.out",
           delay,
           overwrite: "auto" as const,
@@ -137,7 +143,8 @@ export async function initTextReveal(
         const tweenConfig = {
           y: 0,
           opacity: 1,
-          duration: target.duration ?? 0.72,
+          duration:
+            (target.duration ?? 0.72) * REVEAL_DURATION_MULTIPLIER,
           ease: "power2.out",
           delay,
           overwrite: "auto" as const,
