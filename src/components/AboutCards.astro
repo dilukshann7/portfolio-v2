@@ -528,14 +528,109 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const intro = document.querySelector(".intro");
+    const cardInners =
+      document.querySelectorAll<HTMLElement>(".cards .card-inner");
     if (!intro) return;
 
+    cardInners.forEach((element) => {
+      element.style.visibility = "hidden";
+    });
+
     const boot = async () => {
-      const { getMotionSystem } = await import("../lib/client/motion");
+      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
+        import("../lib/client/motion"),
+        import("../lib/client/textReveal"),
+      ]);
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
       const cards = gsap.utils.toArray<HTMLElement>(".card");
 
-      if (cards.length === 0 || reducedMotion) return;
+      await initTextReveal(document, [
+        {
+          selector: ".intro .header",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".card-content h1",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".card-content p",
+          mode: "fade",
+          scroll: true,
+          y: 18,
+        },
+        {
+          selector: ".outro .header",
+          mode: "lines",
+          scroll: true,
+        },
+      ]);
+
+      cardInners.forEach((element) => {
+        element.style.visibility = "visible";
+      });
+
+      if (cards.length === 0) return;
+
+      if (reducedMotion) {
+        document
+          .querySelectorAll<HTMLElement>(".cards .tech-icon")
+          .forEach((element) => {
+            element.style.transform = "translate(-50%, -50%)";
+          });
+        document
+          .querySelectorAll<HTMLElement>(".cards .grid-item")
+          .forEach((element) => {
+            element.style.opacity = "1";
+          });
+        return;
+      }
+
+      cards.forEach((card) => {
+        const gridItems = Array.from(
+          card.querySelectorAll<HTMLElement>(".grid-item"),
+        );
+        const icons = Array.from(card.querySelectorAll<HTMLElement>(".tech-icon"));
+
+        if (!gridItems.length || !icons.length) {
+          return;
+        }
+
+        gsap.set(gridItems, {
+          opacity: 0,
+        });
+        gsap.set(icons, {
+          xPercent: -50,
+          yPercent: 85,
+          force3D: true,
+        });
+
+        ScrollTrigger.create({
+          trigger: card,
+          start: "top 78%",
+          once: true,
+          onEnter: () => {
+            gsap.to(gridItems, {
+              opacity: 1,
+              duration: 0.18,
+              stagger: 0.08,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+
+            gsap.to(icons, {
+              xPercent: -50,
+              yPercent: -50,
+              duration: 0.82,
+              stagger: 0.12,
+              ease: "power3.out",
+              overwrite: "auto",
+            });
+          },
+        });
+      });
 
       let mm = gsap.matchMedia();
 

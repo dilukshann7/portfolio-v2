@@ -212,8 +212,29 @@
     }
 
     const boot = async () => {
-      const { getMotionSystem } = await import("../lib/client/motion");
+      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
+        import("../lib/client/motion"),
+        import("../lib/client/textReveal"),
+      ]);
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
+
+      initTextReveal(workContainer, [
+        {
+          selector: ".work-item h3",
+          mode: "lines",
+          scroll: true,
+          start: "top 96%",
+          duration: 0.75,
+        },
+        {
+          selector: ".work-item p",
+          mode: "fade",
+          scroll: true,
+          start: "top 99%",
+          duration: 0.6,
+          y: 18,
+        },
+      ]);
 
       if (reducedMotion) return;
 

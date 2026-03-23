@@ -285,8 +285,14 @@ import Galaxy from "./ui/Galaxy";
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const bootFooterScene = async () => {
-      const [{ getMotionSystem }, THREE, { GLTFLoader }] = await Promise.all([
+      const [
+        { getMotionSystem },
+        { initTextReveal },
+        THREE,
+        { GLTFLoader },
+      ] = await Promise.all([
         import("../lib/client/motion"),
+        import("../lib/client/textReveal"),
         import("three"),
         import("three/addons/loaders/GLTFLoader.js"),
       ]);
@@ -302,6 +308,25 @@ import Galaxy from "./ui/Galaxy";
       const container = document.getElementById("footer-canvas");
 
       if (!container || !footerContainer) return;
+
+      initTextReveal(document.querySelector("footer") ?? document, [
+        {
+          selector: ".footer-col h2",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".footer-sub-col h3",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".footer-row > p",
+          mode: "fade",
+          scroll: true,
+          y: 16,
+        },
+      ]);
 
       if (hasFinePointer) {
         window.addEventListener("pointermove", (e) => {
