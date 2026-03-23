@@ -374,6 +374,7 @@
     position: relative;
     z-index: 2;
     background: transparent;
+    overflow: hidden;
   }
 
   .grid-item:last-child {
@@ -389,13 +390,13 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
   }
 
   .tech-icon {
     width: 52px;
     height: 52px;
     object-fit: contain;
+    transform: translate(-50%, -50%);
     transition:
       filter 0.25s ease,
       opacity 0.25s ease;
@@ -413,6 +414,7 @@
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
+    transform: translate(-50%, -50%);
     transition:
       color 0.25s ease,
       opacity 0.25s ease;
