@@ -270,9 +270,8 @@
     pin: true,
     pinSpacing: true,
     scrub: 1,
-    onUpdate: (self: ScrollTrigger.ScrollTriggerInstance) => {
+    onUpdate: (self: { progress: number }) => {
       const progress = self.progress;
-      const isLight = heroSection.classList.contains("light-bg");
 
       textSegments.forEach((segment) => gsap.set(segment, { opacity: 0 }));
 

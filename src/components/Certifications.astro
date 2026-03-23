@@ -53,9 +53,10 @@
   ];
 
   document.addEventListener("DOMContentLoaded", () => {
-    const awardsListContainer = document.querySelector(".awards-list");
-    const awardPreview = document.querySelector(".award-preview");
-    const awardsList = document.querySelector(".awards-list");
+    const awardsListContainer =
+      document.querySelector<HTMLElement>(".awards-list");
+    const awardPreview = document.querySelector<HTMLElement>(".award-preview");
+    const awardsList = document.querySelector<HTMLElement>(".awards-list");
 
     if (!awardsListContainer || !awardPreview || !awardsList) return;
 
@@ -72,10 +73,9 @@
     };
 
     let lastMousePosition = { x: 0, y: 0 };
-    let activeAward: Element | null = null;
+    let activeAward: HTMLElement | null = null;
     let ticking = false;
-    let mouseTimeout: number | null | undefined = null;
-    let isMouseMoving = false;
+    let mouseTimeout: ReturnType<typeof setTimeout> | null = null;
 
     awards.forEach((award) => {
       const awardElement = document.createElement("div");
@@ -97,14 +97,25 @@
       </div>
     `;
 
-      (awardsListContainer as HTMLElement).appendChild(awardElement);
+      awardsListContainer.appendChild(awardElement);
     });
 
-    const awardsElements = document.querySelectorAll(".award");
+    const awardsElements = document.querySelectorAll<HTMLElement>(".award");
 
     const boot = async () => {
-      const { getMotionSystem } = await import("../lib/client/motion");
+      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
+        import("../lib/client/motion"),
+        import("../lib/client/textReveal"),
+      ]);
       const { gsap, reducedMotion } = await getMotionSystem();
+
+      initTextReveal(document.querySelector(".certifications-container") ?? document, [
+        {
+          selector: ".certifications-container .intro .header",
+          mode: "lines",
+          scroll: true,
+        },
+      ]);
 
       if (isTouchDevice()) {
         awardsElements.forEach((award) => {
@@ -121,18 +132,14 @@
       }
 
       const animatePreview = () => {
-        const awardsListRect = (
-          awardsList as HTMLElement
-        ).getBoundingClientRect();
+        const awardsListRect = awardsList.getBoundingClientRect();
         if (
           lastMousePosition.x < awardsListRect.left ||
           lastMousePosition.x > awardsListRect.right ||
           lastMousePosition.y < awardsListRect.top ||
           lastMousePosition.y > awardsListRect.bottom
         ) {
-          const previewImages = (awardPreview as HTMLElement).querySelectorAll(
-            "img",
-          );
+          const previewImages = awardPreview.querySelectorAll("img");
           previewImages.forEach((img) => {
             gsap.to(img, {
               scale: 0,
@@ -196,20 +203,16 @@
 
       awardsList.addEventListener(
         "pointermove",
-        (e) => {
+        (e: PointerEvent) => {
           lastMousePosition.x = e.clientX;
           lastMousePosition.y = e.clientY;
 
-          isMouseMoving = true;
           if (mouseTimeout) {
             clearTimeout(mouseTimeout);
           }
 
           mouseTimeout = setTimeout(() => {
-            isMouseMoving = false;
-            const images = (awardPreview as HTMLElement).querySelectorAll(
-              "img",
-            );
+            const images = awardPreview.querySelectorAll("img");
             if (images.length > 1) {
               const lastImage = images[images.length - 1];
               images.forEach((img) => {
@@ -247,7 +250,7 @@
         const wrapper = award.querySelector(".award-wrapper");
         let currentPosition = POSITIONS.TOP;
 
-        award.addEventListener("mouseenter", (e) => {
+        award.addEventListener("mouseenter", (e: MouseEvent) => {
           activeAward = award;
           const rect = award.getBoundingClientRect();
           const enterFromTop = e.clientY < rect.top + rect.height / 2;
@@ -272,7 +275,7 @@
           img.style.scale = reducedMotion ? "1" : "0";
           img.style.zIndex = Date.now().toString();
 
-          (awardPreview as HTMLElement).appendChild(img);
+          awardPreview.appendChild(img);
 
           if (!reducedMotion) {
             gsap.to(img, {

@@ -596,20 +596,24 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       "M0,0 C0.354,0 0.464,0.133 0.498,0.502 0.532,0.872 0.651,1 1,1",
     );
 
-    const menuToggle = document.querySelector(".menu-toggle");
-    const menu = document.querySelector(".menu");
-    const links = document.querySelectorAll(".link");
-    const socialLinks = document.querySelectorAll(".socials p");
-    const navLinks = document.querySelectorAll("[data-nav-target]");
+    const menuToggle = document.querySelector<HTMLElement>(".menu-toggle");
+    const menu = document.querySelector<HTMLElement>(".menu");
+    const links = document.querySelectorAll<HTMLElement>(".link");
+    const socialLinks = document.querySelectorAll<HTMLParagraphElement>(
+      ".socials p",
+    );
+    const navLinks = document.querySelectorAll<HTMLElement>("[data-nav-target]");
     let isAnimating = false;
 
-    const splitTextIntoSpans = (selector) => {
-      let elements = document.querySelectorAll(selector);
+    if (!menuToggle || !menu) return;
+
+    const splitTextIntoSpans = (selector: string) => {
+      const elements = document.querySelectorAll<HTMLElement>(selector);
       elements.forEach((element) => {
-        let text = element.innerText;
-        let splitText = text
+        const text = element.innerText;
+        const splitText = text
           .split("")
-          .map(function (char) {
+          .map(function (char: string) {
             return `<span>${char === " " ? "&nbsp;&nbsp;" : char}</span>`;
           })
           .join("");
@@ -683,7 +687,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       }
     };
 
-    const closeMenu = (onComplete) => {
+    const closeMenu = (onComplete?: () => void) => {
       if (isAnimating || menuToggle.classList.contains("closed")) return;
 
       menuToggle.classList.remove("opened");
@@ -717,10 +721,6 @@ import GlassSurface from "./ui/GlassSurface.tsx";
         },
       });
     };
-
-    const isTouchDevice = window.matchMedia(
-      "(hover: none) and (pointer: coarse)",
-    ).matches;
 
     menuToggle.addEventListener("click", () => {
       if (isAnimating) return;

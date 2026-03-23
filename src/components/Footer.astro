@@ -331,7 +331,7 @@ import Galaxy from "./ui/Galaxy";
         scene.add(directionalLight);
 
         const loader = new GLTFLoader();
-        let model;
+        let model: import("three").Object3D | null = null;
         let modelBaseRotationX = 0.5;
         let modelBaseZ = -1;
 
