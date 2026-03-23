@@ -488,9 +488,22 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  import { runPageScript } from "../lib/client/spa";
+
+  const initBlogScrollArc = () =>
+    runPageScript("blog-scroll-arc", ({ signal, onCleanup }) => {
     const section = document.querySelector<HTMLElement>(".blog-template");
     if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void boot();
+        }
+      },
+      { rootMargin: "300px 0px" },
+    );
 
     const boot = async () => {
       const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
@@ -499,8 +512,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
       ]);
 
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
-
-      initTextReveal(section, [
+      const textRevealCleanup = await initTextReveal(section, [
         {
           selector: ".blog-template__intro-copy h2",
           mode: "lines",
@@ -518,6 +530,8 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
           scroll: true,
         },
       ]);
+
+      onCleanup(() => textRevealCleanup?.());
 
       const stickySection = section.querySelector<HTMLElement>(
         "[data-blog-template-steps]",
@@ -617,12 +631,12 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
             const ctaOpacity = Math.max(0, (self.progress - 0.8) / 0.15);
             gsap.set(cta, {
               opacity: ctaOpacity,
-              zIndex: ctaOpacity > 0.5 ? 10 : -10, // ← add this
+              zIndex: ctaOpacity > 0.5 ? 10 : -10,
               pointerEvents: ctaOpacity > 0.5 ? "auto" : "none",
             });
           }
 
-          const centerX = window.innerWidth / 1;
+          const centerX = window.innerWidth;
           const centerY = window.innerHeight / 2;
 
           let closestIndex = 0;
@@ -657,19 +671,13 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
         ScrollTrigger.refresh();
       };
 
-      window.addEventListener("resize", onResize);
+      window.addEventListener("resize", onResize, { signal });
+      onCleanup(() => trigger.kill());
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void boot();
-        }
-      },
-      { rootMargin: "300px 0px" },
-    );
-
     observer.observe(section);
-  });
+    onCleanup(() => observer.disconnect());
+    });
+
+  document.addEventListener("astro:page-load", initBlogScrollArc);
 </script>
