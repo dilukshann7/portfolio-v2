@@ -286,7 +286,23 @@ import Galaxy from "./ui/Galaxy";
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  import { runPageScript } from "../lib/client/spa";
+
+  const initFooter = () =>
+    runPageScript("footer", ({ signal, onCleanup }) => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void bootFooterScene();
+        }
+      },
+      { rootMargin: "300px 0px" },
+    );
+
     const bootFooterScene = async () => {
       const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
         import("../lib/client/motion"),
@@ -304,23 +320,31 @@ import Galaxy from "./ui/Galaxy";
       const clamp = (value: number, min: number, max: number) =>
         Math.min(max, Math.max(min, value));
       const container = document.getElementById("footer-canvas");
+      const triggers: Array<import("gsap/ScrollTrigger").ScrollTrigger> = [];
 
       if (!container || !footerContainer) return;
 
-      initTextReveal(document.querySelector("footer") ?? document, [
-        {
-          selector: ".footer-col h2",
-          mode: "lines",
-          scroll: true,
-        },
-        {
-          selector: ".footer-sub-col h3",
-          mode: "lines",
-          scroll: true,
-        },
-      ]);
+      const textRevealCleanup = await initTextReveal(
+        document.querySelector("footer") ?? document,
+        [
+          {
+            selector: ".footer-col h2",
+            mode: "lines",
+            scroll: true,
+          },
+          {
+            selector: ".footer-sub-col h3",
+            mode: "lines",
+            scroll: true,
+          },
+        ],
+      );
 
-      // Only set up the Three.js renderer and load the 3D model on non-mobile devices
+      onCleanup(() => {
+        textRevealCleanup?.();
+        triggers.forEach((trigger) => trigger.kill());
+      });
+
       if (!isMobile) {
         const [THREE, { GLTFLoader }] = await Promise.all([
           import("three"),
@@ -358,16 +382,20 @@ import Galaxy from "./ui/Galaxy";
         let pageVisible = !document.hidden;
 
         if (hasFinePointer) {
-          window.addEventListener("pointermove", (e) => {
-            const pointerX = (e.clientX / window.innerWidth) * 2 - 1.8;
-            const pointerY = -(e.clientY / window.innerHeight) * 2 + 1;
-            const pointerPivotX = model
-              ? model.position.clone().project(camera).x
-              : 0;
+          window.addEventListener(
+            "pointermove",
+            (e) => {
+              const pointerX = (e.clientX / window.innerWidth) * 2 - 1.8;
+              const pointerY = -(e.clientY / window.innerHeight) * 2 + 1;
+              const pointerPivotX = model
+                ? model.position.clone().project(camera).x
+                : 0;
 
-            mouse.x = clamp(pointerX - pointerPivotX, -1, 1);
-            mouse.y = clamp(pointerY, -1, 1);
-          });
+              mouse.x = clamp(pointerX - pointerPivotX, -1, 1);
+              mouse.y = clamp(pointerY, -1, 1);
+            },
+            { signal },
+          );
         }
 
         loader.load("/model.glb", (gltf) => {
@@ -391,19 +419,21 @@ import Galaxy from "./ui/Galaxy";
         });
 
         if (!reducedMotion) {
-          ScrollTrigger.create({
-            trigger: "footer",
-            start: "top bottom",
-            end: "bottom bottom",
-            scrub: true,
-            onUpdate: (self) => {
-              const progress = self.progress;
-              const yValue = -35 * (1 - progress);
-              gsap.set(footerContainer, { y: `${yValue}%` });
-              modelBaseZ = -1 * (1 - progress);
-              modelBaseRotationX = 0.5 * (1 - progress);
-            },
-          });
+          triggers.push(
+            ScrollTrigger.create({
+              trigger: "footer",
+              start: "top bottom",
+              end: "bottom bottom",
+              scrub: true,
+              onUpdate: (self) => {
+                const progress = self.progress;
+                const yValue = -35 * (1 - progress);
+                gsap.set(footerContainer, { y: `${yValue}%` });
+                modelBaseZ = -1 * (1 - progress);
+                modelBaseRotationX = 0.5 * (1 - progress);
+              },
+            }),
+          );
         }
 
         const renderFrame = () => {
@@ -446,21 +476,37 @@ import Galaxy from "./ui/Galaxy";
 
         footerObserver.observe(container);
 
-        document.addEventListener("visibilitychange", () => {
-          pageVisible = !document.hidden;
-          if (footerVisible && pageVisible) {
-            ensureAnimation();
-          }
-        });
+        document.addEventListener(
+          "visibilitychange",
+          () => {
+            pageVisible = !document.hidden;
+            if (footerVisible && pageVisible) {
+              ensureAnimation();
+            }
+          },
+          { signal },
+        );
 
-        window.addEventListener("resize", () => {
-          camera.aspect = container.offsetWidth / container.offsetHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(container.offsetWidth, container.offsetHeight);
+        window.addEventListener(
+          "resize",
+          () => {
+            camera.aspect = container.offsetWidth / container.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+          },
+          { signal },
+        );
+
+        onCleanup(() => {
+          footerObserver.disconnect();
+          if (frameId !== null) {
+            cancelAnimationFrame(frameId);
+          }
+          renderer.dispose();
+          container.replaceChildren();
         });
-      } else {
-        // On mobile, still handle the scroll animation for the footer container
-        if (!reducedMotion) {
+      } else if (!reducedMotion) {
+        triggers.push(
           ScrollTrigger.create({
             trigger: "footer",
             start: "top bottom",
@@ -471,24 +517,14 @@ import Galaxy from "./ui/Galaxy";
               const yValue = -20 * (1 - progress);
               gsap.set(footerContainer, { y: `${yValue}%` });
             },
-          });
-        }
+          }),
+        );
       }
     };
 
-    const footer = document.querySelector("footer");
-    if (!footer) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void bootFooterScene();
-        }
-      },
-      { rootMargin: "300px 0px" },
-    );
-
     observer.observe(footer);
-  });
+    onCleanup(() => observer.disconnect());
+    });
+
+  document.addEventListener("astro:page-load", initFooter);
 </script>
