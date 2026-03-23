@@ -652,22 +652,31 @@ import ColorBends from "./ui/ColorBends";
     duration: prefersReducedMotion ? 0.2 : isMobile ? 0.7 : 1,
   });
 
-  gsap.from(".landing-page .col-left .copy > div", {
-    x: "-40",
+  gsap.from(".landing-page .left-glass .copy", {
+    x: "-28",
     opacity: 0,
-    ease: "power3.inOut",
-    delay: contentDelay + 0.2,
-    duration: prefersReducedMotion ? 0.2 : isMobile ? 0.8 : 1.5,
-    stagger: {
-      amount: isMobile ? 0.18 : 0.3,
-    },
+    filter: "blur(8px)",
+    ease: "power3.out",
+    delay: contentDelay + 0.14,
+    duration: prefersReducedMotion ? 0.24 : isMobile ? 0.72 : 1.02,
   });
 
-  gsap.from(".landing-page .col-right .header", {
-    x: "-20",
+  gsap.from(".landing-page .col-right .right-copy", {
+    x: "24",
     opacity: 0,
-    ease: "power3.inOut",
-    delay: contentDelay + 0.45,
-    duration: prefersReducedMotion ? 0.2 : isMobile ? 0.7 : 1,
+    filter: "blur(8px)",
+    ease: "power3.out",
+    delay: contentDelay + 0.18,
+    duration: prefersReducedMotion ? 0.24 : isMobile ? 0.76 : 1.08,
   });
+
+  if (prefersReducedMotion) {
+    heroTextTargets.forEach((element) => {
+      element.style.visibility = "visible";
+    });
+  } else {
+    gsap.delayedCall(contentDelay + 0.22, () => {
+      void runHeroTextReveal();
+    });
+  }
 </script>
