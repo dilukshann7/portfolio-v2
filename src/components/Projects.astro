@@ -166,29 +166,8 @@ for (let index = 0; index < projects.length; index += 2) {
     if (!workContainer) return;
 
     const boot = async () => {
-      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
-        import("../lib/client/motion"),
-        import("../lib/client/textReveal"),
-      ]);
+      const { getMotionSystem } = await import("../lib/client/motion");
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
-
-      initTextReveal(workContainer, [
-        {
-          selector: ".work-item h3",
-          mode: "lines",
-          scroll: true,
-          start: "top 90%",
-          duration: 0.75,
-        },
-        {
-          selector: ".work-item p",
-          mode: "fade",
-          scroll: true,
-          start: "top 110%",
-          duration: 0.6,
-          y: 18,
-        },
-      ]);
 
       if (reducedMotion) return;
 
@@ -209,7 +188,17 @@ for (let index = 0; index < projects.length; index += 2) {
 
         ScrollTrigger.create({
           trigger: row,
-          start: "top 68%",
+          start: "top 70%",
+          once: true,
+          onEnter: () => {
+            gsap.to(workItems, {
+              y: 0,
+              rotation: 0,
+              duration: 1,
+              ease: "power4.out",
+              stagger: 0.25,
+            });
+          },
         });
       });
     };
