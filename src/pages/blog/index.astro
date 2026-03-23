@@ -1,0 +1,356 @@
+---
+export const prerender = true;
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  formatBlogDate,
+  getAllBlogPosts,
+  getPostUrl,
+  getReadingTime,
+} from "../../lib/blog";
+import { SITE } from "../../lib/site";
+
+const posts = await getAllBlogPosts();
+const [featuredPost, ...otherPosts] = posts;
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin;
+const blogUrl = new URL("/blog/", siteOrigin).toString();
+const keywords = [
+  ...SITE.keywords,
+  "Astro blog",
+  "engineering notes",
+  "frontend performance",
+  "AI product engineering",
+];
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: SITE.blogTitle,
+    description: SITE.blogDescription,
+    url: blogUrl,
+    inLanguage: "en",
+    author: {
+      "@type": "Person",
+      name: SITE.author,
+      url: siteOrigin,
+    },
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.data.title,
+      description: post.data.description,
+      datePublished: post.data.publishDate.toISOString(),
+      dateModified: (post.data.updatedDate ?? post.data.publishDate).toISOString(),
+      url: new URL(getPostUrl(post.id), siteOrigin).toString(),
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteOrigin,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: blogUrl,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={`${SITE.author} Blog | Astro, AI Engineering & Web Performance`}
+  description={SITE.blogDescription}
+  image={featuredPost?.data.heroImage ?? SITE.socialImage}
+  imageAlt={featuredPost?.data.heroImageAlt ?? SITE.blogTitle}
+  keywords={keywords}
+  structuredData={structuredData}
+>
+  <Fragment slot="head">
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${SITE.blogTitle} RSS feed`}
+      href="/rss.xml"
+    />
+  </Fragment>
+
+  <main class="blog-index">
+    <section class="blog-index__hero">
+      <div class="blog-index__hero-copy">
+        <p class="blog-index__eyebrow">Markdown blog</p>
+        <h1>Writing that connects product thinking, engineering, and SEO.</h1>
+        <p class="blog-index__lede">
+          Long-form notes on Astro, frontend performance, AI delivery, and the
+          systems behind polished digital work.
+        </p>
+        <div class="blog-index__actions">
+          <a href="/">Back to portfolio</a>
+          <a href="/rss.xml">Subscribe via RSS</a>
+        </div>
+      </div>
+
+      {
+        featuredPost && (
+          <article class="blog-index__featured">
+            <p class="blog-index__meta">
+              <span>{featuredPost.data.category}</span>
+              <span>{formatBlogDate(featuredPost.data.publishDate)}</span>
+              <span>{getReadingTime(featuredPost.body)} min read</span>
+            </p>
+            <h2>
+              <a href={getPostUrl(featuredPost.id)}>{featuredPost.data.title}</a>
+            </h2>
+            <p>{featuredPost.data.description}</p>
+            <div class="blog-index__tags">
+              {featuredPost.data.tags.map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+          </article>
+        )
+      }
+    </section>
+
+    <section class="blog-index__grid" aria-label="All blog posts">
+      {otherPosts.map((post) => (
+        <article class="blog-index__card">
+          <p class="blog-index__meta">
+            <span>{post.data.category}</span>
+            <span>{formatBlogDate(post.data.publishDate)}</span>
+            <span>{getReadingTime(post.body)} min read</span>
+          </p>
+          <h2>
+            <a href={getPostUrl(post.id)}>{post.data.title}</a>
+          </h2>
+          <p>{post.data.description}</p>
+          <div class="blog-index__tags">
+            {post.data.tags.slice(0, 4).map((tag) => (
+              <span>{tag}</span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-index {
+    min-height: 100vh;
+    padding: clamp(5rem, 7vw, 7rem) clamp(1.25rem, 4vw, 3rem) 4rem;
+    background:
+      radial-gradient(circle at top left, rgba(245, 179, 75, 0.18), transparent 28%),
+      radial-gradient(circle at top right, rgba(97, 221, 255, 0.12), transparent 26%),
+      linear-gradient(180deg, #030507 0%, #0b1016 48%, #07090d 100%);
+    color: #f8f5ef;
+  }
+
+  .blog-index__hero,
+  .blog-index__grid {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+  }
+
+  .blog-index__hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+    gap: 1.25rem;
+    align-items: end;
+    margin-bottom: 1.25rem;
+  }
+
+  .blog-index__hero-copy,
+  .blog-index__featured,
+  .blog-index__card {
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+      rgba(5, 8, 12, 0.84);
+    box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.26);
+    backdrop-filter: blur(16px);
+  }
+
+  .blog-index__hero-copy {
+    padding: clamp(1.5rem, 3vw, 2.2rem);
+  }
+
+  .blog-index__eyebrow,
+  .blog-index__meta {
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(248, 245, 239, 0.64);
+  }
+
+  .blog-index h1 {
+    margin: 0.85rem 0 1rem;
+    font-family: var(--font-melodrame);
+    font-size: clamp(3.5rem, 8vw, 6.7rem);
+    line-height: 0.9;
+    max-width: 9ch;
+  }
+
+  .blog-index__lede {
+    max-width: 37rem;
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    line-height: 1.7;
+    color: rgba(248, 245, 239, 0.8);
+  }
+
+  .blog-index__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 1.5rem;
+  }
+
+  .blog-index__actions a,
+  .blog-index__featured a,
+  .blog-index__card a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .blog-index__actions a {
+    padding: 0.95rem 1.15rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background 180ms ease;
+  }
+
+  .blog-index__actions a:hover,
+  .blog-index__actions a:focus-visible,
+  .blog-index__featured:hover,
+  .blog-index__featured:focus-within,
+  .blog-index__card:hover,
+  .blog-index__card:focus-within {
+    transform: translateY(-2px);
+  }
+
+  .blog-index__featured,
+  .blog-index__card {
+    padding: 1.5rem;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .blog-index__featured:hover,
+  .blog-index__featured:focus-within,
+  .blog-index__card:hover,
+  .blog-index__card:focus-within {
+    border-color: rgba(245, 179, 75, 0.38);
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.33);
+  }
+
+  .blog-index__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  .blog-index__featured h2,
+  .blog-index__card h2 {
+    margin: 0.8rem 0 0.75rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.5rem, 2vw, 2.4rem);
+    line-height: 1.1;
+  }
+
+  .blog-index__featured p,
+  .blog-index__card p {
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    line-height: 1.7;
+    color: rgba(248, 245, 239, 0.78);
+  }
+
+  .blog-index__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  .blog-index__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .blog-index__tags span {
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(97, 221, 255, 0.08);
+    color: #a8e9ff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 920px) {
+    .blog-index__hero {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-index h1 {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const page = document.querySelector(".blog-index");
+    if (!page) return;
+
+    const boot = async () => {
+      const { initTextReveal } = await import("../../lib/client/textReveal");
+
+      initTextReveal(page, [
+        {
+          selector: ".blog-index h1",
+          mode: "lines",
+          scroll: false,
+        },
+        {
+          selector: ".blog-index__lede",
+          mode: "fade",
+          scroll: false,
+          delay: 0.12,
+          y: 18,
+        },
+        {
+          selector: ".blog-index__featured h2, .blog-index__card h2",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".blog-index__featured p, .blog-index__card p",
+          mode: "fade",
+          scroll: true,
+          y: 16,
+        },
+      ]);
+    };
+
+    void boot();
+  });
+</script>
