@@ -1,0 +1,524 @@
+---
+export const prerender = true;
+
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  formatBlogDate,
+  getAllBlogPosts,
+  getPostUrl,
+  getReadingTime,
+  getWordCount,
+} from "../../lib/blog";
+import { SITE } from "../../lib/site";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin;
+const postUrl = new URL(getPostUrl(post.id), siteOrigin).toString();
+const imageUrl = new URL(
+  post.data.heroImage ?? SITE.socialImage,
+  siteOrigin,
+).toString();
+const readingTime = getReadingTime(post.body);
+const wordCount = getWordCount(post.body);
+const tableOfContents = headings.filter(
+  (heading) => heading.depth >= 2 && heading.depth <= 3,
+);
+const relatedPosts = (await getAllBlogPosts())
+  .filter((candidate) => candidate.id !== post.id)
+  .sort((left, right) => {
+    const leftScore = left.data.tags.filter((tag) =>
+      post.data.tags.includes(tag),
+    ).length;
+    const rightScore = right.data.tags.filter((tag) =>
+      post.data.tags.includes(tag),
+    ).length;
+
+    if (leftScore !== rightScore) {
+      return rightScore - leftScore;
+    }
+
+    return right.data.publishDate.getTime() - left.data.publishDate.getTime();
+  })
+  .slice(0, 3);
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.publishDate.toISOString(),
+    dateModified: (post.data.updatedDate ?? post.data.publishDate).toISOString(),
+    author: {
+      "@type": "Person",
+      name: SITE.author,
+      url: siteOrigin,
+    },
+    publisher: {
+      "@type": "Person",
+      name: SITE.author,
+      url: siteOrigin,
+    },
+    mainEntityOfPage: postUrl,
+    image: [imageUrl],
+    articleSection: post.data.category,
+    keywords: post.data.tags.join(", "),
+    wordCount,
+    timeRequired: `PT${readingTime}M`,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteOrigin,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: new URL("/blog/", siteOrigin).toString(),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.data.title,
+        item: postUrl,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={`${post.data.title} | ${SITE.author}`}
+  description={post.data.description}
+  image={post.data.heroImage ?? SITE.socialImage}
+  imageAlt={post.data.heroImageAlt ?? post.data.title}
+  keywords={[...post.data.tags, post.data.category, "blog post"]}
+  pageType="article"
+  publishedTime={post.data.publishDate}
+  modifiedTime={post.data.updatedDate ?? post.data.publishDate}
+  structuredData={structuredData}
+>
+  <Fragment slot="head">
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${SITE.blogTitle} RSS feed`}
+      href="/rss.xml"
+    />
+  </Fragment>
+
+  <main class="blog-post">
+    <div class="blog-post__shell">
+      <a class="blog-post__back" href="/blog/">Back to blog</a>
+
+      <article class="blog-post__article">
+        <header class="blog-post__hero">
+          <p class="blog-post__eyebrow">{post.data.category}</p>
+          <h1>{post.data.title}</h1>
+          <p class="blog-post__dek">{post.data.description}</p>
+
+          <div class="blog-post__meta">
+            <span>{formatBlogDate(post.data.publishDate)}</span>
+            <span>{readingTime} min read</span>
+            <span>{wordCount} words</span>
+          </div>
+
+          <div class="blog-post__tags">
+            {post.data.tags.map((tag) => (
+              <span>{tag}</span>
+            ))}
+          </div>
+
+          {post.data.heroImage && (
+            <img
+              class="blog-post__image"
+              src={post.data.heroImage}
+              alt={post.data.heroImageAlt ?? post.data.title}
+              loading="eager"
+              decoding="async"
+            />
+          )}
+        </header>
+
+        <div class="blog-post__content-wrap">
+          {tableOfContents.length > 0 && (
+            <aside class="blog-post__toc" aria-labelledby="toc-title">
+              <p id="toc-title">On this page</p>
+              <nav>
+                {tableOfContents.map((heading) => (
+                  <a href={`#${heading.slug}`} data-depth={heading.depth}>
+                    {heading.text}
+                  </a>
+                ))}
+              </nav>
+            </aside>
+          )}
+
+          <div class="article-prose">
+            <Content />
+          </div>
+        </div>
+      </article>
+
+      {relatedPosts.length > 0 && (
+        <section class="blog-post__related" aria-labelledby="related-title">
+          <div class="blog-post__related-head">
+            <p>Keep reading</p>
+            <h2 id="related-title">More posts from the blog</h2>
+          </div>
+
+          <div class="blog-post__related-grid">
+            {relatedPosts.map((relatedPost) => (
+              <article class="blog-post__related-card">
+                <p>
+                  {relatedPost.data.category} •{" "}
+                  {formatBlogDate(relatedPost.data.publishDate)}
+                </p>
+                <h3>
+                  <a href={getPostUrl(relatedPost.id)}>
+                    {relatedPost.data.title}
+                  </a>
+                </h3>
+                <p>{relatedPost.data.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    min-height: 100vh;
+    padding: clamp(4rem, 6vw, 6rem) clamp(1.25rem, 4vw, 3rem);
+    background:
+      radial-gradient(circle at top left, rgba(245, 179, 75, 0.16), transparent 26%),
+      radial-gradient(circle at 85% 10%, rgba(97, 221, 255, 0.12), transparent 24%),
+      linear-gradient(180deg, #040507 0%, #0b1118 50%, #07090d 100%);
+    color: #f8f5ef;
+  }
+
+  .blog-post__shell {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+  }
+
+  .blog-post__back {
+    display: inline-flex;
+    margin-bottom: 1rem;
+    color: rgba(248, 245, 239, 0.76);
+    text-decoration: none;
+    font-family: "Space Grotesk", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.82rem;
+  }
+
+  .blog-post__article,
+  .blog-post__related-card {
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+      rgba(6, 9, 13, 0.84);
+    box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.28);
+  }
+
+  .blog-post__article {
+    padding: clamp(1.4rem, 3vw, 2.1rem);
+  }
+
+  .blog-post__eyebrow,
+  .blog-post__meta,
+  .blog-post__toc p,
+  .blog-post__related-head p,
+  .blog-post__related-card p:first-child {
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(248, 245, 239, 0.62);
+  }
+
+  .blog-post__hero h1 {
+    margin: 0.9rem 0 1rem;
+    font-family: var(--font-melodrame);
+    font-size: clamp(3.1rem, 7vw, 5.8rem);
+    line-height: 0.92;
+    max-width: 12ch;
+  }
+
+  .blog-post__dek {
+    max-width: 42rem;
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    font-size: clamp(1.02rem, 1.2vw, 1.15rem);
+    line-height: 1.75;
+    color: rgba(248, 245, 239, 0.8);
+  }
+
+  .blog-post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .blog-post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1rem;
+  }
+
+  .blog-post__tags span {
+    padding: 0.45rem 0.72rem;
+    border-radius: 999px;
+    background: rgba(97, 221, 255, 0.08);
+    color: #a8e9ff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem;
+  }
+
+  .blog-post__image {
+    width: 100%;
+    margin-top: 1.5rem;
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+  }
+
+  .blog-post__content-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .blog-post__toc {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    padding: 1rem;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .blog-post__toc nav {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 0.85rem;
+  }
+
+  .blog-post__toc a {
+    color: rgba(248, 245, 239, 0.76);
+    text-decoration: none;
+    line-height: 1.5;
+    font-family: "DM Sans", sans-serif;
+  }
+
+  .blog-post__toc a[data-depth="3"] {
+    padding-left: 1rem;
+    color: rgba(248, 245, 239, 0.58);
+  }
+
+  .article-prose {
+    min-width: 0;
+  }
+
+  :global(.article-prose h2),
+  :global(.article-prose h3) {
+    font-family: "Space Grotesk", sans-serif;
+    line-height: 1.1;
+    scroll-margin-top: 1.25rem;
+  }
+
+  :global(.article-prose h2) {
+    margin: 2.1rem 0 0.9rem;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+  }
+
+  :global(.article-prose h3) {
+    margin: 1.5rem 0 0.75rem;
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+  }
+
+  :global(.article-prose p),
+  :global(.article-prose li),
+  :global(.article-prose blockquote) {
+    font-family: "DM Sans", sans-serif;
+    font-size: clamp(1rem, 1.1vw, 1.08rem);
+    line-height: 1.85;
+    color: rgba(248, 245, 239, 0.82);
+  }
+
+  :global(.article-prose p),
+  :global(.article-prose ul),
+  :global(.article-prose ol),
+  :global(.article-prose pre),
+  :global(.article-prose blockquote) {
+    margin: 0 0 1.1rem;
+  }
+
+  :global(.article-prose ul),
+  :global(.article-prose ol) {
+    padding-left: 1.3rem;
+  }
+
+  :global(.article-prose a) {
+    color: #a8e9ff;
+    text-decoration-thickness: 0.08em;
+  }
+
+  :global(.article-prose strong) {
+    color: #fff5e8;
+  }
+
+  :global(.article-prose blockquote) {
+    padding: 1rem 1.2rem;
+    border-left: 2px solid rgba(245, 179, 75, 0.58);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0 1rem 1rem 0;
+  }
+
+  :global(.article-prose code) {
+    padding: 0.14rem 0.35rem;
+    border-radius: 0.4rem;
+    background: rgba(255, 255, 255, 0.08);
+    font-family: "Geist Variable", monospace;
+    font-size: 0.94em;
+  }
+
+  :global(.article-prose pre) {
+    overflow-x: auto;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    background: #090d13;
+  }
+
+  :global(.article-prose pre code) {
+    padding: 0;
+    background: transparent;
+  }
+
+  .blog-post__related {
+    margin-top: 1.5rem;
+  }
+
+  .blog-post__related-head h2 {
+    margin: 0.5rem 0 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+  }
+
+  .blog-post__related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .blog-post__related-card {
+    padding: 1.25rem;
+  }
+
+  .blog-post__related-card h3 {
+    margin: 0.7rem 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.35rem;
+    line-height: 1.15;
+  }
+
+  .blog-post__related-card a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .blog-post__related-card p:last-child {
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    line-height: 1.7;
+    color: rgba(248, 245, 239, 0.76);
+  }
+
+  @media (max-width: 960px) {
+    .blog-post__content-wrap {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-post__toc {
+      position: relative;
+      top: auto;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const page = document.querySelector(".blog-post");
+    if (!page) return;
+
+    const boot = async () => {
+      const { initTextReveal } = await import("../../lib/client/textReveal");
+
+      initTextReveal(page, [
+        {
+          selector: ".blog-post__hero h1",
+          mode: "lines",
+          scroll: false,
+        },
+        {
+          selector: ".blog-post__hero .blog-post__dek",
+          mode: "fade",
+          scroll: false,
+          delay: 0.12,
+          y: 18,
+        },
+        {
+          selector: ".article-prose h2, .article-prose h3",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".blog-post__related-head h2, .blog-post__related-card h3",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".blog-post__related-card p:last-child",
+          mode: "fade",
+          scroll: true,
+          y: 16,
+        },
+      ]);
+    };
+
+    void boot();
+  });
+</script>
