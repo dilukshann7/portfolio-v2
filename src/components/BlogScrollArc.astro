@@ -1,0 +1,675 @@
+---
+interface BlogArcCard {
+  title: string;
+  description: string;
+  category: string;
+  href: string;
+  image: string;
+  imageAlt: string;
+  meta: string;
+  indexLabel: string;
+}
+
+interface Props {
+  cards: BlogArcCard[];
+}
+
+const { cards } = Astro.props;
+
+const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
+  ...cards.map((card) => ({ ...card, empty: false as const })),
+  { empty: true },
+  { empty: true },
+];
+---
+
+<section
+  class="blog-template"
+  style="padding-top: 6em;"
+  id="blog"
+  aria-labelledby="blog-template-title"
+>
+  <div class="blog-template__container">
+    <section class="blog-template__steps" data-blog-template-steps>
+      <div class="blog-template__step-counter">
+        <div class="blog-template__counter-title">
+          <h3>Latest Writing</h3>
+        </div>
+
+        <div class="blog-template__count">
+          <div class="blog-template__count-container" data-blog-template-count>
+            {cards.map((card) => <h3>{card.indexLabel}</h3>)}
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-template__cards" data-blog-template-stage>
+        {
+          stackCards.map((card, index) =>
+            card.empty ? (
+              <article
+                class="blog-template__card blog-template__card--empty"
+                data-blog-template-card
+                data-empty="true"
+                data-blog-template-index={index}
+              >
+                <div class="blog-template__card-image" />
+                <div class="blog-template__card-copy">
+                  <p>EMPTY</p>
+                </div>
+              </article>
+            ) : (
+              <article
+                class="blog-template__card"
+                data-blog-template-card
+                data-blog-template-visible-card
+                data-blog-template-index={index}
+              >
+                <a href={card.href} class="blog-template__card-link">
+                  <div class="blog-template__card-image">
+                    <img
+                      src={card.image}
+                      alt={card.imageAlt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+
+                  <div class="blog-template__card-copy">
+                    <p class="blog-template__card-meta">
+                      {card.category} • {card.meta}
+                    </p>
+                    <h4>{card.title}</h4>
+                    <p>{card.description}</p>
+                  </div>
+                </a>
+              </article>
+            ),
+          )
+        }
+      </div>
+      <div class="blog-template__cta" data-blog-template-cta>
+        <a class="fancy" href="/blog/">
+          <span class="top-key"></span>
+          <span class="text">View all posts</span>
+          <span class="bottom-key-1"></span>
+          <span class="bottom-key-2"></span>
+        </a>
+      </div>
+    </section>
+  </div>
+</section>
+
+<style>
+  .blog-template {
+    position: relative;
+    overflow: clip;
+  }
+
+  .blog-template__container {
+    position: relative;
+  }
+
+  .blog-template__cta {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .fancy {
+    background-color: transparent;
+    border: 2px solid #000;
+    border-radius: 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin: 0;
+    outline: none;
+    overflow: visible;
+    padding: 1.25em 2em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-transform: none;
+    transition: all 0.3s ease-in-out;
+    user-select: none;
+    font-size: 13px;
+  }
+
+  .fancy::before {
+    content: " ";
+    width: 1.5625rem;
+    height: 2px;
+    background: black;
+    top: 50%;
+    left: 1.5em;
+    position: absolute;
+    transform: translateY(-50%);
+    transform-origin: center;
+    transition:
+      background 0.3s linear,
+      width 0.3s linear;
+  }
+
+  .fancy .text {
+    font-size: 1.125em;
+    line-height: 1.33333em;
+    padding-left: 2em;
+    display: block;
+    text-align: left;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: black;
+  }
+
+  .fancy .top-key {
+    height: 2px;
+    width: 1.5625rem;
+    top: -2px;
+    left: 0.625rem;
+    position: absolute;
+    background: #e8e8e8;
+    transition:
+      width 0.5s ease-out,
+      left 0.3s ease-out;
+  }
+
+  .fancy .bottom-key-1 {
+    height: 2px;
+    width: 1.5625rem;
+    right: 1.875rem;
+    bottom: -2px;
+    position: absolute;
+    background: #e8e8e8;
+    transition:
+      width 0.5s ease-out,
+      right 0.3s ease-out;
+  }
+
+  .fancy .bottom-key-2 {
+    height: 2px;
+    width: 0.625rem;
+    right: 0.625rem;
+    bottom: -2px;
+    position: absolute;
+    background: #e8e8e8;
+    transition:
+      width 0.5s ease-out,
+      right 0.3s ease-out;
+  }
+
+  .fancy:hover {
+    color: white;
+    background: black;
+  }
+
+  .fancy:hover::before {
+    width: 0.9375rem;
+    background: white;
+  }
+
+  .fancy:hover .text {
+    color: white;
+    padding-left: 1.5em;
+  }
+
+  .fancy:hover .top-key {
+    left: -2px;
+    width: 0px;
+  }
+
+  .fancy:hover .bottom-key-1,
+  .fancy:hover .bottom-key-2 {
+    right: 0;
+    width: 0;
+  }
+  .blog-template__nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 4;
+  }
+
+  .blog-template__logo {
+    margin: 0;
+    text-transform: uppercase;
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    font-size: 0.84rem;
+  }
+
+  .blog-template__nav a {
+    border: none;
+    outline: none;
+    color: #000;
+    text-decoration: none;
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    background-color: #fff;
+    border-radius: 0.35rem;
+  }
+
+  .blog-template__intro,
+  .blog-template__steps,
+  .blog-template__outro {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .blog-template__intro {
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    background-size: cover;
+  }
+
+  .blog-template__intro-copy {
+    width: min(880px, 100%);
+    text-align: center;
+  }
+
+  .blog-template__eyebrow,
+  .blog-template__card-meta {
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.78rem;
+  }
+
+  .blog-template__intro-copy h2 {
+    margin: 0.9rem 0 1rem;
+    color: #000000;
+    font-family: var(--font-melodrame);
+    font-weight: 400;
+    font-size: clamp(3.2rem, 8vw, 7rem);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
+
+  .blog-template__intro-copy p:last-child,
+  .blog-template__outro p,
+  .blog-template__card-copy p {
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+  }
+
+  .blog-template__intro-copy p:last-child {
+    width: min(42rem, 100%);
+    margin-inline: auto;
+    font-size: clamp(1rem, 1.2vw, 1.12rem);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .blog-template__outro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(180deg, #000000, #202d33);
+    background-size: 200% 200%;
+  }
+
+  .blog-template__outro p {
+    width: min(980px, 100%);
+    text-align: center;
+    font-family: var(--font-melodrame);
+    font-size: clamp(3rem, 6vw, 5.2rem);
+    font-weight: 400;
+    line-height: 1.06;
+  }
+
+  .blog-template__outro p span {
+    color: #75e1ff;
+  }
+
+  .blog-template__cards {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150vw;
+    height: 600px;
+    will-change: transform;
+  }
+
+  .blog-template__card {
+    position: absolute;
+    width: clamp(22rem, 42vw, 52rem);
+    height: clamp(20rem, 32vw, 36rem);
+    left: 50%;
+    top: 50%;
+    margin-left: calc(clamp(22rem, 42vw, 52rem) / -2);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  .blog-template__card-link {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .blog-template__card-image {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .blog-template__card-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .blog-template__card-copy {
+    width: 100%;
+    min-height: 72px;
+  }
+
+  .blog-template__card-copy h4 {
+    margin: 0.45rem 0 0.55rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.52rem;
+    font-weight: 600;
+    line-height: 1.04;
+  }
+
+  .blog-template__card-copy p {
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .blog-template__step-counter {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 2rem;
+    z-index: 3;
+  }
+
+  .blog-template__counter-title,
+  .blog-template__count {
+    position: relative;
+    width: min(1200px, calc(100vw - 4rem));
+    height: 76px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    overflow: hidden;
+  }
+
+  .blog-template__count-container {
+    position: relative;
+    will-change: transform;
+  }
+
+  .blog-template__counter-title h3,
+  .blog-template__count h3 {
+    width: 100%;
+    position: relative;
+    margin: 0;
+    font-family: var(--font-melodrame);
+    font-weight: 300;
+    font-size: 72px;
+    text-align: left;
+    line-height: 1;
+    will-change: transform;
+  }
+
+  .blog-template__card--empty {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 900px) {
+    .blog-template__nav {
+      padding: 1rem;
+    }
+
+    .blog-template__counter-title,
+    .blog-template__count {
+      height: 42px;
+    }
+
+    .blog-template__counter-title h3,
+    .blog-template__count h3 {
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .blog-template__count {
+      top: 0;
+    }
+
+    .blog-template__cards {
+      top: 27.5%;
+    }
+
+    .blog-template__card {
+      width: min(375px, calc(100vw - 1.5rem));
+      height: 500px;
+      margin-left: calc(min(375px, calc(100vw - 1.5rem)) / -2);
+    }
+
+    .blog-template__card-copy h4 {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const section = document.querySelector<HTMLElement>(".blog-template");
+    if (!section) return;
+
+    const boot = async () => {
+      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
+        import("../lib/client/motion"),
+        import("../lib/client/textReveal"),
+      ]);
+
+      const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
+
+      initTextReveal(section, [
+        {
+          selector: ".blog-template__intro-copy h2",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".blog-template__intro-copy p:last-child",
+          mode: "fade",
+          scroll: true,
+          y: 18,
+        },
+        {
+          selector: ".blog-template__outro p",
+          mode: "lines",
+          scroll: true,
+        },
+      ]);
+
+      const stickySection = section.querySelector<HTMLElement>(
+        "[data-blog-template-steps]",
+      );
+      const cards = Array.from(
+        section.querySelectorAll<HTMLElement>("[data-blog-template-card]"),
+      );
+      const visibleCards = Array.from(
+        section.querySelectorAll<HTMLElement>(
+          "[data-blog-template-visible-card]",
+        ),
+      );
+      const countContainer = section.querySelector<HTMLElement>(
+        "[data-blog-template-count]",
+      );
+
+      const cta = section.querySelector<HTMLElement>(
+        "[data-blog-template-cta]",
+      );
+
+      if (!stickySection || !cards.length || !countContainer) return;
+
+      const stickyHeight = window.innerHeight * 7;
+      const totalCards = cards.length;
+      const arcAngle = Math.PI * 0.4;
+      const startAngle = Math.PI / 2 - arcAngle / 2;
+
+      const getRadius = () =>
+        window.innerWidth < 900
+          ? window.innerWidth * 7.0
+          : window.innerWidth * 3.0;
+
+      const getCountStep = () => {
+        const firstH3 = countContainer.querySelector("h3");
+        return firstH3
+          ? firstH3.getBoundingClientRect().height
+          : window.innerWidth < 900
+            ? 42
+            : 76;
+      };
+      function positionCards(progress = 0) {
+        const radius = getRadius();
+        const totalTravel = 1 + totalCards / 10;
+        const adjustedProgress = (progress * totalTravel - 1) * 0.75;
+
+        cards.forEach((card, index) => {
+          const normalizedProgress = (totalCards - 1 - index) / totalCards;
+          const cardProgress = normalizedProgress + adjustedProgress;
+          const angle = startAngle + arcAngle * cardProgress;
+
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+          const rotation = (angle - Math.PI / 2) * (180 / Math.PI);
+
+          gsap.set(card, {
+            x,
+            y: -y + radius,
+            rotation: -rotation,
+            transformOrigin: "center center",
+          });
+        });
+      }
+
+      let currentCardIndex = 0;
+
+      const setCounter = (index: number) => {
+        const safeIndex = Math.max(0, Math.min(visibleCards.length - 1, index));
+        currentCardIndex = safeIndex;
+
+        const targetY = getCountStep() - safeIndex * getCountStep();
+
+        gsap.to(countContainer, {
+          y: targetY,
+          duration: reducedMotion ? 0 : 0.3,
+          ease: "power1.out",
+          overwrite: true,
+        });
+      };
+
+      gsap.set(countContainer, { y: 0 });
+      positionCards(0);
+      setCounter(0);
+
+      if (reducedMotion) return;
+
+      const trigger = ScrollTrigger.create({
+        trigger: stickySection,
+        start: "top top",
+        end: `+=${stickyHeight}px`,
+        pin: true,
+        pinSpacing: true,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          positionCards(self.progress);
+
+          if (cta) {
+            const ctaOpacity = Math.max(0, (self.progress - 0.8) / 0.15);
+            gsap.set(cta, {
+              opacity: ctaOpacity,
+              zIndex: ctaOpacity > 0.5 ? 10 : -10, // ← add this
+              pointerEvents: ctaOpacity > 0.5 ? "auto" : "none",
+            });
+          }
+
+          const centerX = window.innerWidth / 1;
+          const centerY = window.innerHeight / 2;
+
+          let closestIndex = 0;
+          let closestDist = Infinity;
+
+          visibleCards.forEach((card, index) => {
+            const rect = card.getBoundingClientRect();
+            const cardCenterX = rect.left + rect.width / 2;
+            const cardCenterY = rect.top + rect.height / 2;
+            const dist = Math.hypot(
+              cardCenterX - centerX,
+              cardCenterY - centerY,
+            );
+
+            if (dist < closestDist) {
+              closestDist = dist;
+              closestIndex = index;
+            }
+          });
+
+          if (closestIndex !== currentCardIndex) {
+            setCounter(closestIndex);
+          }
+        },
+      });
+
+      const onResize = () => {
+        gsap.set(countContainer, {
+          y: getCountStep() - currentCardIndex * getCountStep(),
+        });
+        positionCards(trigger.progress);
+        ScrollTrigger.refresh();
+      };
+
+      window.addEventListener("resize", onResize);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void boot();
+        }
+      },
+      { rootMargin: "300px 0px" },
+    );
+
+    observer.observe(section);
+  });
+</script>
