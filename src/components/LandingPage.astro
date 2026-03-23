@@ -506,190 +506,220 @@ import ColorBends from "./ui/ColorBends";
 
   const initLandingPage = () =>
     runPageScript("landing-page", ({ onCleanup }) => {
-    const isMobile = window.matchMedia("(max-width: 900px)").matches;
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const heroScope = document.querySelector(".landing-page");
-    const heroTextTargets = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        [
-          ".landing-page .left-glass .header",
-          ".landing-page .left-glass .sub-header",
-          ".landing-page .left-glass .info",
-          ".landing-page .col-right .header",
-        ].join(", "),
-      ),
-    );
-    const textWrapper = document.querySelector(".landing-page .loader-text");
-    let revealCleanup: (() => void) | undefined;
+      const isMobile = window.matchMedia("(max-width: 900px)").matches;
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const heroScope = document.querySelector(".landing-page");
+      const heroTextTargets = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          [
+            ".landing-page .left-glass .header",
+            ".landing-page .left-glass .sub-header",
+            ".landing-page .left-glass .info",
+            ".landing-page .col-right .header",
+          ].join(", "),
+        ),
+      );
+      const textWrapper = document.querySelector(".landing-page .loader-text");
+      let revealCleanup: (() => void) | undefined;
 
-    const runHeroTextReveal = async () => {
-      if (!heroScope) return;
+      const runHeroTextReveal = async () => {
+        if (!heroScope) return;
 
-      const { initTextReveal } = await import("../lib/client/textReveal");
-      revealCleanup = await initTextReveal(heroScope, [
-        {
-          selector: ".left-glass .header",
-          mode: "lines",
-          scroll: false,
-          duration: isMobile ? 0.92 : 1.08,
-          stagger: isMobile ? 0.1 : 0.12,
-        },
-        {
-          selector: ".left-glass .sub-header",
-          mode: "fade",
-          scroll: false,
-          delay: isMobile ? 0.1 : 0.14,
-          duration: isMobile ? 0.7 : 0.8,
-          y: 18,
-        },
-        {
-          selector: ".left-glass .info",
-          mode: "fade",
-          scroll: false,
-          delay: isMobile ? 0.2 : 0.26,
-          duration: isMobile ? 0.82 : 0.95,
-          y: 22,
-        },
-        {
-          selector: ".col-right .header",
-          mode: "lines",
-          scroll: false,
-          delay: isMobile ? 0.16 : 0.2,
-          duration: isMobile ? 0.96 : 1.14,
-          stagger: isMobile ? 0.1 : 0.12,
-        },
-      ]);
-    };
-
-    if (!prefersReducedMotion) {
-      heroTextTargets.forEach((element) => {
-        element.style.visibility = "hidden";
-      });
-    }
-
-    if (textWrapper) {
-      textWrapper.innerHTML =
-        textWrapper.textContent?.replace(
-          /\S/g,
-          "<span class='letter'>$&</span>",
-        ) || "";
+        const { initTextReveal } = await import("../lib/client/textReveal");
+        revealCleanup = await initTextReveal(heroScope, [
+          {
+            selector: ".left-glass .header",
+            mode: "lines",
+            scroll: false,
+            duration: isMobile ? 0.92 : 1.08,
+            stagger: isMobile ? 0.1 : 0.12,
+          },
+          {
+            selector: ".left-glass .sub-header",
+            mode: "fade",
+            scroll: false,
+            delay: isMobile ? 0.1 : 0.14,
+            duration: isMobile ? 0.7 : 0.8,
+            y: 18,
+          },
+          {
+            selector: ".left-glass .info",
+            mode: "fade",
+            scroll: false,
+            delay: isMobile ? 0.2 : 0.26,
+            duration: isMobile ? 0.82 : 0.95,
+            y: 22,
+          },
+          {
+            selector: ".col-right .header",
+            mode: "lines",
+            scroll: false,
+            delay: isMobile ? 0.16 : 0.2,
+            duration: isMobile ? 0.96 : 1.14,
+            stagger: isMobile ? 0.1 : 0.12,
+          },
+        ]);
+      };
 
       if (!prefersReducedMotion) {
-        gsap.fromTo(
-          ".landing-page .loader-text .letter",
-          {
-            x: isMobile ? 20 : 40,
-            opacity: 0,
-          },
-          {
-            x: 0,
-            opacity: 1,
-            ease: "expo.out",
-            duration: isMobile ? 0.7 : 1.2,
-            delay: isMobile ? 0.9 : 2.4,
-            stagger: 0.024,
-            overwrite: "auto",
-          },
-        );
-      } else {
-        gsap.set(".landing-page .loader-text .letter", {
-          x: 0,
-          opacity: 1,
+        heroTextTargets.forEach((element) => {
+          element.style.visibility = "hidden";
         });
       }
-    }
 
-    const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 1 : 2;
-    const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.35 : 3;
-    const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.85 : 4.5;
+      if (textWrapper) {
+        textWrapper.innerHTML =
+          textWrapper.textContent?.replace(
+            /\S/g,
+            "<span class='letter'>$&</span>",
+          ) || "";
 
-    gsap.from(".landing-page .loader-wrapper", {
-      scale: 0.8,
-      ease: "power1.inOut",
-      duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
-    });
+        if (!prefersReducedMotion) {
+          gsap.fromTo(
+            ".landing-page .loader-text .letter",
+            {
+              x: isMobile ? 20 : 40,
+              opacity: 0,
+            },
+            {
+              x: 0,
+              opacity: 1,
+              ease: "expo.out",
+              duration: isMobile ? 0.7 : 1.2,
+              delay: isMobile ? 0.9 : 2.4,
+              stagger: 0.024,
+              overwrite: "auto",
+            },
+          );
+        } else {
+          gsap.set(".landing-page .loader-text .letter", {
+            x: 0,
+            opacity: 1,
+          });
+        }
+      }
 
-    gsap.from(".landing-page .loader", {
-      top: "100%",
-      ease: "power3.inOut",
-      duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
-    });
+      const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 1 : 2;
+      const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.35 : 3;
+      const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.85 : 4.5;
 
-    gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
-      scale: 1.5,
-      opacity: 0,
-      display: "none",
-      ease: "power3.inOut",
-      delay: loaderDelay,
-      duration: prefersReducedMotion ? 0.15 : isMobile ? 0.5 : 1,
-    });
-
-    gsap.from(".landing-page .revealer", {
-      width: "0%",
-      ease: "power3.inOut",
-      delay: revealDelay,
-      duration: prefersReducedMotion ? 0.15 : isMobile ? 0.5 : 1,
-    });
-
-    gsap.to(".landing-page .revealer", {
-      left: "100%",
-      ease: "power3.inOut",
-      delay: revealDelay + (isMobile ? 0.45 : 1),
-      duration: prefersReducedMotion ? 0.15 : isMobile ? 0.45 : 0.8,
-    });
-
-    gsap.to(".landing-page .loader-text-wrapper", {
-      opacity: 0,
-      display: "none",
-      ease: "power3.inOut",
-      delay: revealDelay + (isMobile ? 0.4 : 1),
-      duration: 0.2,
-    });
-
-    gsap.from(".landing-page .col-left", {
-      left: "-110%",
-      ease: "power3.inOut",
-      delay: contentDelay,
-      duration: prefersReducedMotion ? 0.2 : isMobile ? 0.7 : 1,
-    });
-
-    gsap.from(".landing-page .left-glass .copy", {
-      x: "-28",
-      opacity: 0,
-      filter: "blur(8px)",
-      ease: "power3.out",
-      delay: contentDelay + 0.14,
-      duration: prefersReducedMotion ? 0.24 : isMobile ? 0.72 : 1.02,
-    });
-
-    gsap.from(".landing-page .col-right .right-copy", {
-      x: "24",
-      opacity: 0,
-      filter: "blur(8px)",
-      ease: "power3.out",
-      delay: contentDelay + 0.18,
-      duration: prefersReducedMotion ? 0.24 : isMobile ? 0.76 : 1.08,
-    });
-
-    if (prefersReducedMotion) {
-      heroTextTargets.forEach((element) => {
-        element.style.visibility = "visible";
-      });
-    } else {
-      const delayedReveal = gsap.delayedCall(contentDelay + 0.22, () => {
-        void runHeroTextReveal();
+      gsap.from(".landing-page .loader-wrapper", {
+        scale: 0.8,
+        ease: "power1.inOut",
+        duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
       });
 
-      onCleanup(() => delayedReveal.kill());
+      gsap.from(".landing-page .loader", {
+        top: "100%",
+        ease: "power3.inOut",
+        duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
+      });
+
+      gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
+        scale: 1.5,
+        opacity: 0,
+        display: "none",
+        ease: "power3.inOut",
+        delay: loaderDelay,
+        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.5 : 1,
+      });
+
+      gsap.from(".landing-page .revealer", {
+        width: "0%",
+        ease: "power3.inOut",
+        delay: revealDelay,
+        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.5 : 1,
+      });
+
+      gsap.to(".landing-page .revealer", {
+        left: "100%",
+        ease: "power3.inOut",
+        delay: revealDelay + (isMobile ? 0.45 : 1),
+        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.45 : 0.8,
+      });
+
+      gsap.to(".landing-page .loader-text-wrapper", {
+        opacity: 0,
+        display: "none",
+        ease: "power3.inOut",
+        delay: revealDelay + (isMobile ? 0.4 : 1),
+        duration: 0.2,
+      });
+
+      gsap.from(".landing-page .col-left", {
+        left: "-110%",
+        ease: "power3.inOut",
+        delay: contentDelay,
+        duration: prefersReducedMotion ? 0.2 : isMobile ? 0.7 : 1,
+      });
+
+      gsap.from(".landing-page .left-glass .copy", {
+        x: "-28",
+        opacity: 0,
+        filter: "blur(8px)",
+        ease: "power3.out",
+        delay: contentDelay + 0.14,
+        duration: prefersReducedMotion ? 0.24 : isMobile ? 0.72 : 1.02,
+      });
+
+      gsap.from(".landing-page .col-right .right-copy", {
+        x: "24",
+        opacity: 0,
+        filter: "blur(8px)",
+        ease: "power3.out",
+        delay: contentDelay + 0.18,
+        duration: prefersReducedMotion ? 0.24 : isMobile ? 0.76 : 1.08,
+      });
+
+      if (prefersReducedMotion) {
+        heroTextTargets.forEach((element) => {
+          element.style.visibility = "visible";
+        });
+      } else {
+        const delayedReveal = gsap.delayedCall(contentDelay + 0.22, () => {
+          void runHeroTextReveal();
+        });
+
+        onCleanup(() => delayedReveal.kill());
+      }
+
+      onCleanup(() => {
+        revealCleanup?.();
+        gsap.killTweensOf(".landing-page *");
+      });
+    });
+
+  let hasBootedLandingPage = false;
+  let hasSeenInitialAstroPageLoad = false;
+
+  const bootLandingPage = () => {
+    hasBootedLandingPage = true;
+    void initLandingPage();
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    if (!hasSeenInitialAstroPageLoad) {
+      hasSeenInitialAstroPageLoad = true;
+
+      if (hasBootedLandingPage) return;
     }
 
-    onCleanup(() => {
-      revealCleanup?.();
-      gsap.killTweensOf(".landing-page *");
-    });
-    });
+    bootLandingPage();
+  });
 
-  document.addEventListener("astro:page-load", initLandingPage);
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        if (!hasBootedLandingPage) {
+          bootLandingPage();
+        }
+      },
+      { once: true },
+    );
+  } else {
+    bootLandingPage();
+  }
 </script>
