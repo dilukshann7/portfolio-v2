@@ -285,16 +285,9 @@ import Galaxy from "./ui/Galaxy";
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const bootFooterScene = async () => {
-      const [
-        { getMotionSystem },
-        { initTextReveal },
-        THREE,
-        { GLTFLoader },
-      ] = await Promise.all([
+      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
         import("../lib/client/motion"),
         import("../lib/client/textReveal"),
-        import("three"),
-        import("three/addons/loaders/GLTFLoader.js"),
       ]);
 
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
@@ -337,6 +330,11 @@ import Galaxy from "./ui/Galaxy";
 
       // Only set up the Three.js renderer and load the 3D model on non-mobile devices
       if (!isMobile) {
+        const [THREE, { GLTFLoader }] = await Promise.all([
+          import("three"),
+          import("three/addons/loaders/GLTFLoader.js"),
+        ]);
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(
           50,
@@ -362,6 +360,9 @@ import Galaxy from "./ui/Galaxy";
         let model: import("three").Object3D | null = null;
         let modelBaseRotationX = 0.5;
         let modelBaseZ = -1;
+        let frameId: number | null = null;
+        let footerVisible = false;
+        let pageVisible = !document.hidden;
 
         loader.load("/model.glb", (gltf) => {
           model = gltf.scene;
@@ -398,8 +399,13 @@ import Galaxy from "./ui/Galaxy";
           });
         }
 
-        const animate = () => {
-          requestAnimationFrame(animate);
+        const renderFrame = () => {
+          if (!footerVisible || !pageVisible) {
+            frameId = null;
+            return;
+          }
+
+          frameId = requestAnimationFrame(renderFrame);
 
           if (model) {
             const targetRotationY = hasFinePointer ? mouse.x * 0.3 : 0;
@@ -414,7 +420,31 @@ import Galaxy from "./ui/Galaxy";
 
           renderer.render(scene, camera);
         };
-        animate();
+
+        const ensureAnimation = () => {
+          if (frameId === null) {
+            frameId = requestAnimationFrame(renderFrame);
+          }
+        };
+
+        const footerObserver = new IntersectionObserver(
+          ([entry]) => {
+            footerVisible = entry?.isIntersecting ?? false;
+            if (footerVisible && pageVisible) {
+              ensureAnimation();
+            }
+          },
+          { rootMargin: "200px 0px" },
+        );
+
+        footerObserver.observe(container);
+
+        document.addEventListener("visibilitychange", () => {
+          pageVisible = !document.hidden;
+          if (footerVisible && pageVisible) {
+            ensureAnimation();
+          }
+        });
 
         window.addEventListener("resize", () => {
           camera.aspect = container.offsetWidth / container.offsetHeight;
