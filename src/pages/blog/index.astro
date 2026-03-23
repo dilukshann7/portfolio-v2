@@ -914,7 +914,10 @@ const marqueeTopics = [
 </style>
 
 <script>
-  (() => {
+  import { runPageScript } from "../../lib/client/spa";
+
+  const initBlogIndexPage = () =>
+    runPageScript("blog-index-page", ({ signal }) => {
     const cursor = document.getElementById("biCursor");
     if (cursor && window.matchMedia("(pointer: fine)").matches) {
       document.addEventListener(
@@ -923,16 +926,24 @@ const marqueeTopics = [
           cursor.style.left = e.clientX + "px";
           cursor.style.top = e.clientY + "px";
         },
-        { passive: true },
+        { passive: true, signal },
       );
 
       document.querySelectorAll("a, button, .bi-card").forEach((el) => {
-        el.addEventListener("mouseenter", () => {
-          cursor.style.transform = "translate(-50%,-50%) scale(3.5)";
-        });
-        el.addEventListener("mouseleave", () => {
-          cursor.style.transform = "translate(-50%,-50%) scale(1)";
-        });
+        el.addEventListener(
+          "mouseenter",
+          () => {
+            cursor.style.transform = "translate(-50%,-50%) scale(3.5)";
+          },
+          { signal },
+        );
+        el.addEventListener(
+          "mouseleave",
+          () => {
+            cursor.style.transform = "translate(-50%,-50%) scale(1)";
+          },
+          { signal },
+        );
       });
     } else if (cursor) {
       cursor.style.display = "none";
@@ -949,8 +960,10 @@ const marqueeTopics = [
             100;
           line.style.width = pct + "%";
         },
-        { passive: true },
+        { passive: true, signal },
       );
     }
-  })();
+    });
+
+  document.addEventListener("astro:page-load", initBlogIndexPage);
 </script>
