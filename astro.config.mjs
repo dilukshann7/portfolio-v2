@@ -19,8 +19,8 @@ export default defineConfig({
   integrations: [react()],
   compressHTML: true,
   prefetch: {
-    prefetchAll: true,
-    defaultStrategy: "viewport",
+    prefetchAll: false,
+    defaultStrategy: "hover",
   },
 
   fonts: [
