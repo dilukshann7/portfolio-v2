@@ -526,15 +526,29 @@
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  import { runPageScript } from "../lib/client/spa";
+
+  const initAboutCardsMotion = () =>
+    runPageScript("about-cards-motion", ({ onCleanup }) => {
     const intro = document.querySelector(".intro");
     const cardInners =
       document.querySelectorAll<HTMLElement>(".cards .card-inner");
+
     if (!intro) return;
 
     cardInners.forEach((element) => {
       element.style.visibility = "hidden";
     });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void boot();
+        }
+      },
+      { rootMargin: "250px 0px" },
+    );
 
     const boot = async () => {
       const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
@@ -543,8 +557,17 @@
       ]);
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
       const cards = gsap.utils.toArray<HTMLElement>(".card");
-
-      await initTextReveal(document, [
+      const triggers: Array<ReturnType<typeof ScrollTrigger.create>> = [];
+      const tweens: Array<ReturnType<typeof gsap.to>> = [];
+      const registerTrigger = (trigger: ReturnType<typeof ScrollTrigger.create>) => {
+        triggers.push(trigger);
+        return trigger;
+      };
+      const registerTween = (tween: ReturnType<typeof gsap.to>) => {
+        tweens.push(tween);
+        return tween;
+      };
+      const textRevealCleanup = await initTextReveal(document, [
         {
           selector: ".intro .header",
           mode: "lines",
@@ -567,6 +590,12 @@
           scroll: true,
         },
       ]);
+
+      onCleanup(() => {
+        textRevealCleanup?.();
+        tweens.forEach((tween) => tween.kill());
+        triggers.forEach((trigger) => trigger.kill());
+      });
 
       cardInners.forEach((element) => {
         element.style.visibility = "visible";
@@ -607,128 +636,144 @@
           force3D: true,
         });
 
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 78%",
-          once: true,
-          onEnter: () => {
-            gsap.to(gridItems, {
-              opacity: 1,
-              duration: 0.18,
-              stagger: 0.08,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
+        registerTrigger(
+          ScrollTrigger.create({
+            trigger: card,
+            start: "top 78%",
+            once: true,
+            onEnter: () => {
+              registerTween(
+                gsap.to(gridItems, {
+                  opacity: 1,
+                  duration: 0.18,
+                  stagger: 0.08,
+                  ease: "power2.out",
+                  overwrite: "auto",
+                }),
+              );
 
-            gsap.to(icons, {
-              xPercent: -50,
-              yPercent: -50,
-              duration: 0.82,
-              stagger: 0.12,
-              ease: "power3.out",
-              overwrite: "auto",
-            });
-          },
-        });
+              registerTween(
+                gsap.to(icons, {
+                  xPercent: -50,
+                  yPercent: -50,
+                  duration: 0.82,
+                  stagger: 0.12,
+                  ease: "power3.out",
+                  overwrite: "auto",
+                }),
+              );
+            },
+          }),
+        );
       });
 
-      let mm = gsap.matchMedia();
+      const mm = gsap.matchMedia();
+
+      onCleanup(() => mm.revert());
 
       mm.add("(min-width: 901px)", () => {
-        ScrollTrigger.create({
-          trigger: cards[0],
-          start: "top 80%",
-          endTrigger: cards[cards.length - 1],
-          end: "top 30%",
-          pin: ".intro",
-          pinSpacing: false,
-        });
+        registerTrigger(
+          ScrollTrigger.create({
+            trigger: cards[0],
+            start: "top 80%",
+            endTrigger: cards[cards.length - 1],
+            end: "top 30%",
+            pin: ".intro",
+            pinSpacing: false,
+          }),
+        );
 
         cards.forEach((card: HTMLElement, index: number) => {
           const isLastCard = index === cards.length - 1;
           const cardInner = card.querySelector(".card-inner");
 
           if (!isLastCard) {
-            ScrollTrigger.create({
-              trigger: card,
-              start: "top 25%",
-              endTrigger: ".outro",
-              end: "top 65%",
-              pin: true,
-              pinSpacing: false,
-            });
-
-            gsap.to(cardInner, {
-              y: `-${(cards.length - index) * 14}vh`,
-              ease: "none",
-              scrollTrigger: {
+            registerTrigger(
+              ScrollTrigger.create({
                 trigger: card,
                 start: "top 25%",
                 endTrigger: ".outro",
                 end: "top 65%",
-                scrub: true,
-              },
-            });
+                pin: true,
+                pinSpacing: false,
+              }),
+            );
+
+            registerTween(
+              gsap.to(cardInner, {
+                y: `-${(cards.length - index) * 14}vh`,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 25%",
+                  endTrigger: ".outro",
+                  end: "top 65%",
+                  scrub: true,
+                },
+              }),
+            );
           }
         });
       });
 
       mm.add("(max-width: 900px)", () => {
-        ScrollTrigger.create({
-          trigger: cards[0],
-          start: "top 60%",
-          endTrigger: cards[cards.length - 1],
-          end: "top 40%",
-          pin: ".intro",
-          pinSpacing: false,
-        });
+        registerTrigger(
+          ScrollTrigger.create({
+            trigger: cards[0],
+            start: "top 60%",
+            endTrigger: cards[cards.length - 1],
+            end: "top 40%",
+            pin: ".intro",
+            pinSpacing: false,
+          }),
+        );
 
         cards.forEach((card: HTMLElement, index: number) => {
           const isLastCard = index === cards.length - 1;
           const cardInner = card.querySelector(".card-inner");
 
           if (!isLastCard) {
-            ScrollTrigger.create({
-              trigger: card,
-              start: "top 22%",
-              endTrigger: ".outro",
-              end: "top 65%",
-              pin: true,
-              pinSpacing: false,
-            });
-
-            gsap.to(cardInner, {
-              y: `-${(cards.length - index) * 6}vh`,
-              ease: "none",
-              scrollTrigger: {
+            registerTrigger(
+              ScrollTrigger.create({
                 trigger: card,
                 start: "top 22%",
                 endTrigger: ".outro",
                 end: "top 65%",
-                scrub: true,
-              },
-            });
+                pin: true,
+                pinSpacing: false,
+              }),
+            );
+
+            registerTween(
+              gsap.to(cardInner, {
+                y: `-${(cards.length - index) * 6}vh`,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 22%",
+                  endTrigger: ".outro",
+                  end: "top 65%",
+                  scrub: true,
+                },
+              }),
+            );
           }
         });
       });
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void boot();
-        }
-      },
-      { rootMargin: "250px 0px" },
-    );
-
     observer.observe(intro);
-  });
+    onCleanup(() => observer.disconnect());
+    });
+
+  document.addEventListener("astro:page-load", initAboutCardsMotion);
 </script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  import { runPageScript } from "../lib/client/spa";
+
+  const initAboutCardsGrid = () =>
+    runPageScript("about-cards-grid", ({ signal }) => {
     const cards = document.querySelectorAll(".card");
 
     cards.forEach((card) => {
@@ -778,17 +823,22 @@
         }
       };
 
-      const moveHighlight = (e: MouseEvent) => {
-        const hoveredElement =
-          (e.target as Element | null)?.closest(".grid-item") ?? null;
-        moveToElement(hoveredElement);
-      };
-
       moveToElement(firstItem);
 
-      (grid as HTMLElement).addEventListener("mousemove", moveHighlight, {
-        passive: true,
-      });
+      (grid as HTMLElement).addEventListener(
+        "mousemove",
+        (e: MouseEvent) => {
+          const hoveredElement =
+            (e.target as Element | null)?.closest(".grid-item") ?? null;
+          moveToElement(hoveredElement);
+        },
+        {
+          passive: true,
+          signal,
+        },
+      );
     });
-  });
+    });
+
+  document.addEventListener("astro:page-load", initAboutCardsGrid);
 </script>
