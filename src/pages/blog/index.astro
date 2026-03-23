@@ -79,18 +79,65 @@ const structuredData = [
       title={`${SITE.blogTitle} RSS feed`}
       href="/rss.xml"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
   </Fragment>
 
-  <main class="blog-index">
-    <section class="blog-index__hero">
-      <div class="blog-index__hero-copy">
-        <p class="blog-index__eyebrow">Markdown blog</p>
-        <h1>Writing that connects product thinking, engineering, and SEO.</h1>
-        <p class="blog-index__lede">
-          Long-form notes on Astro, frontend performance, AI delivery, and the
-          systems behind polished digital work.
-        </p>
-        <div class="blog-index__actions">
+  <div class="bi-cursor" id="biCursor" aria-hidden="true"></div>
+  <div class="bi-scroll-line" id="biScrollLine" aria-hidden="true"></div>
+
+  <main class="bi">
+    <nav class="bi-nav">
+      <a href="/" class="bi-nav__logo">{SITE.author}</a>
+      <ul class="bi-nav__links">
+        <li><a href="/">Work</a></li>
+        <li><a href="/blog/">Journal</a></li>
+      </ul>
+      <a href="/rss.xml" class="bi-nav__pill" aria-label="Subscribe via RSS">
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 10 10"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="2" cy="8" r="1.5" fill="currentColor"></circle>
+          <path
+            d="M1 5a4 4 0 014 4"
+            stroke="currentColor"
+            stroke-width="1.2"
+            stroke-linecap="round"
+            fill="none"></path>
+          <path
+            d="M1 2a7 7 0 017 7"
+            stroke="currentColor"
+            stroke-width="1.2"
+            stroke-linecap="round"
+            fill="none"></path>
+        </svg>
+        RSS
+      </a>
+    </nav>
+
+    <header class="bi-hero">
+      <div class="bi-hero__banner">
+        <div class="bi-hero__eyebrow" aria-hidden="true">
+          <div class="bi-hero__eyebrow-line"></div>
+          <span>Markdown blog</span>
+          <div class="bi-hero__eyebrow-line"></div>
+          <span>Engineering &amp; Product</span>
+        </div>
+        <h1 class="bi-hero__title">
+          Writing that<br />
+          <em>connects</em><br />
+          product &amp;<br />
+          engineering.
+        </h1>
+        <div class="bi-hero__actions">
           <a href="/">Back to portfolio</a>
           <a href="/rss.xml">Subscribe via RSS</a>
         </div>
