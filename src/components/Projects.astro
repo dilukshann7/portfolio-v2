@@ -161,13 +161,33 @@ for (let index = 0; index < projects.length; index += 2) {
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  import { runPageScript } from "../lib/client/spa";
+
+  const initProjects = () =>
+    runPageScript("projects", ({ onCleanup }) => {
     const workContainer = document.querySelector(".work");
     if (!workContainer) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void boot();
+        }
+      },
+      { rootMargin: "250px 0px" },
+    );
 
     const boot = async () => {
       const { getMotionSystem } = await import("../lib/client/motion");
       const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
+      const triggers: Array<ReturnType<typeof ScrollTrigger.create>> = [];
+      const tweens: Array<ReturnType<typeof gsap.to>> = [];
+
+      onCleanup(() => {
+        tweens.forEach((tween) => tween.kill());
+        triggers.forEach((trigger) => trigger.kill());
+      });
 
       if (reducedMotion) return;
 
@@ -186,33 +206,30 @@ for (let index = 0; index < projects.length; index += 2) {
           });
         });
 
-        ScrollTrigger.create({
-          trigger: row,
-          start: "top 70%",
-          once: true,
-          onEnter: () => {
-            gsap.to(workItems, {
-              y: 0,
-              rotation: 0,
-              duration: 1,
-              ease: "power4.out",
-              stagger: 0.25,
-            });
-          },
-        });
+        triggers.push(
+          ScrollTrigger.create({
+            trigger: row,
+            start: "top 70%",
+            once: true,
+            onEnter: () => {
+              tweens.push(
+                gsap.to(workItems, {
+                  y: 0,
+                  rotation: 0,
+                  duration: 1,
+                  ease: "power4.out",
+                  stagger: 0.25,
+                }),
+              );
+            },
+          }),
+        );
       });
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void boot();
-        }
-      },
-      { rootMargin: "250px 0px" },
-    );
-
     observer.observe(workContainer);
-  });
+    onCleanup(() => observer.disconnect());
+    });
+
+  document.addEventListener("astro:page-load", initProjects);
 </script>
