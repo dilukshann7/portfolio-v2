@@ -225,7 +225,7 @@ for (let index = 0; index < projects.length; index += 2) {
           selector: ".work-item p",
           mode: "fade",
           scroll: true,
-          start: "top 88%",
+          start: "top 50%",
           duration: 0.6,
           y: 18,
         },
@@ -251,16 +251,6 @@ for (let index = 0; index < projects.length; index += 2) {
         ScrollTrigger.create({
           trigger: row,
           start: "top 68%",
-          once: true,
-          onEnter: () => {
-            gsap.to(workItems, {
-              y: 0,
-              rotation: 0,
-              duration: 1,
-              ease: "power4.out",
-              stagger: 0.25,
-            });
-          },
         });
       });
     };
