@@ -1,0 +1,267 @@
+---
+import {
+  formatBlogDate,
+  getAllBlogPosts,
+  getPostUrl,
+  getReadingTime,
+} from "../lib/blog";
+
+const posts = (await getAllBlogPosts()).slice(0, 3);
+---
+
+<section
+  class="latest-writing"
+  id="blog"
+  aria-labelledby="latest-writing-title"
+>
+  <div class="latest-writing__inner">
+    <div class="latest-writing__intro">
+      <h2 id="latest-writing-title">Latest writing</h2>
+      <p class="latest-writing__copy">
+        Fresh internal links, crawlable markdown posts, and a dedicated archive
+        now sit alongside the portfolio work.
+      </p>
+      <div class="latest-writing__actions">
+        <a href="/blog/">Visit the blog</a>
+      </div>
+    </div>
+
+    <div class="latest-writing__grid">
+      {
+        posts.map((post) => (
+          <article class="latest-writing__card">
+            <p class="latest-writing__meta">
+              <span>{post.data.category}</span>
+              <span>{formatBlogDate(post.data.publishDate)}</span>
+              <span>{getReadingTime(post.body)} min read</span>
+            </p>
+            <h3>
+              <a href={getPostUrl(post.id)}>{post.data.title}</a>
+            </h3>
+            <p>{post.data.description}</p>
+            <div class="latest-writing__tags">
+              {post.data.tags.slice(0, 3).map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro h1 {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 0.9;
+  }
+  .latest-writing {
+    position: relative;
+    padding: clamp(1rem, 8vw, 2rem) clamp(1.25rem, 4vw, 3rem)
+      clamp(4rem, 9vw, 8rem);
+    color: #000000;
+  }
+
+  .latest-writing__inner {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .latest-writing__intro {
+    width: min(760px, 100%);
+    text-align: center;
+  }
+
+  .latest-writing__eyebrow,
+  .latest-writing__meta {
+    font-family: "Space Grotesk", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(0, 0, 0, 0.66);
+    font-size: 0.75rem;
+  }
+
+  .latest-writing__intro h2 {
+    margin: 0.7rem 0 1rem;
+    font-family: var(--font-melodrame);
+    font-size: clamp(2.7rem, 5vw, 5rem);
+    line-height: 0.95;
+    max-width: 11ch;
+    margin-inline: auto;
+  }
+
+  .latest-writing__copy {
+    max-width: 34rem;
+    margin: 0 auto 1.5rem;
+    font-family: "DM Sans", sans-serif;
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    line-height: 1.7;
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .latest-writing__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+  }
+
+  .latest-writing__actions a,
+  .latest-writing__card a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .latest-writing__actions a {
+    padding: 0.9rem 1.15rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background 180ms ease;
+  }
+
+  .latest-writing__actions a:hover,
+  .latest-writing__actions a:focus-visible,
+  .latest-writing__card:hover,
+  .latest-writing__card:focus-within {
+    transform: translateY(-2px);
+  }
+
+  .latest-writing__actions a:hover,
+  .latest-writing__actions a:focus-visible {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .latest-writing__grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .latest-writing__card {
+    padding: 1.35rem;
+    border-radius: 1.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.08),
+        rgba(255, 255, 255, 0.03)
+      ),
+      rgba(6, 9, 13, 0.82);
+    box-shadow: 0 1.6rem 3rem rgba(0, 0, 0, 0.2);
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .latest-writing__card:hover,
+  .latest-writing__card:focus-within {
+    border-color: rgba(245, 179, 75, 0.35);
+    box-shadow: 0 1.8rem 3.2rem rgba(0, 0, 0, 0.28);
+  }
+
+  .latest-writing__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .latest-writing__card h3 {
+    margin: 0 0 0.75rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.4rem, 2vw, 2rem);
+    line-height: 1.1;
+  }
+
+  .latest-writing__card p {
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    line-height: 1.65;
+    color: rgba(247, 243, 237, 0.76);
+  }
+
+  .latest-writing__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .latest-writing__tags span {
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(107, 211, 255, 0.09);
+    color: #9de4ff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 960px) {
+    .latest-writing__intro {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const section = document.querySelector(".latest-writing");
+    if (!section) return;
+
+    const boot = async () => {
+      const { initTextReveal } = await import("../lib/client/textReveal");
+
+      initTextReveal(section, [
+        {
+          selector: ".latest-writing__intro h2",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".latest-writing__copy",
+          mode: "fade",
+          scroll: true,
+          y: 18,
+        },
+        {
+          selector: ".latest-writing__card h3",
+          mode: "lines",
+          scroll: true,
+        },
+        {
+          selector: ".latest-writing__card p",
+          mode: "fade",
+          scroll: true,
+          y: 16,
+        },
+      ]);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          void boot();
+        }
+      },
+      { rootMargin: "250px 0px" },
+    );
+
+    observer.observe(section);
+  });
+</script>
