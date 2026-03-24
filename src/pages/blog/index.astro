@@ -95,51 +95,13 @@ const marqueeTopics = [
   <div class="bi-scroll-line" id="biScrollLine" aria-hidden="true"></div>
 
   <main class="bi">
-    <nav class="bi-nav">
-      <a href="/" class="bi-nav__logo">{SITE.author}</a>
-      <ul class="bi-nav__links">
-        <li><a href="/">Work</a></li>
-        <li><a href="/blog/">Journal</a></li>
-      </ul>
-      <a href="/rss.xml" class="bi-nav__pill" aria-label="Subscribe via RSS">
-        <svg
-          width="10"
-          height="10"
-          viewBox="0 0 10 10"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle cx="2" cy="8" r="1.5" fill="currentColor"></circle>
-          <path
-            d="M1 5a4 4 0 014 4"
-            stroke="currentColor"
-            stroke-width="1.2"
-            stroke-linecap="round"
-            fill="none"></path>
-          <path
-            d="M1 2a7 7 0 017 7"
-            stroke="currentColor"
-            stroke-width="1.2"
-            stroke-linecap="round"
-            fill="none"></path>
-        </svg>
-        RSS
-      </a>
-    </nav>
     <header class="bi-hero">
       <div class="bi-hero__banner">
         <div class="bi-hero__eyebrow" aria-hidden="true">
           <div class="bi-hero__eyebrow-line"></div>
           <span>Markdown blog</span>
-          <div class="bi-hero__eyebrow-line"></div>
-          <span>Engineering &amp; Product</span>
         </div>
-        <h1 class="bi-hero__title">
-          Writing that<br />
-          <em>connects</em><br />
-          product &amp;<br />
-          engineering.
-        </h1>
+        <h1 class="bi-hero__title">Latest Writing.</h1>
         <div class="bi-hero__actions">
           <a href="/">Back to portfolio</a>
           <a href="/rss.xml">Subscribe via RSS</a>
@@ -307,81 +269,6 @@ const marqueeTopics = [
     z-index: 9998;
     width: 0%;
     transition: width 60ms linear;
-  }
-
-  .bi-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 clamp(1.5rem, 4vw, 3.5rem);
-    height: 64px;
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(20px) saturate(1.4);
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .bi-nav__logo {
-    font-family: var(--f-ui);
-    font-weight: 700;
-    font-size: 0.82rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--ink);
-  }
-
-  .bi-nav__links {
-    display: flex;
-    align-items: center;
-    gap: 2.5rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .bi-nav__links a {
-    font-family: var(--f-ui);
-    font-size: 0.76rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--ink-60);
-    transition: color 200ms;
-  }
-
-  .bi-nav__links a:hover,
-  .bi-nav__links a[aria-current="page"] {
-    color: var(--ink);
-  }
-
-  .bi-nav__pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.42rem 0.9rem;
-    border: 1px solid var(--ink);
-    border-radius: 999px;
-    font-family: var(--f-ui);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink);
-    text-decoration: none;
-    transition:
-      background 200ms,
-      color 200ms;
-  }
-
-  .bi-nav__pill:hover {
-    background: var(--ink);
-    color: var(--white);
   }
 
   .bi-hero {
@@ -891,9 +778,6 @@ const marqueeTopics = [
   }
 
   @media (max-width: 600px) {
-    .bi-nav__links {
-      display: none;
-    }
     .bi-hero__banner {
       grid-template-columns: 1fr;
     }
