@@ -3,6 +3,7 @@ import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import { SITE } from "../lib/site";
+import Navigation from "@/components/Navigation.astro";
 
 interface Props {
   title?: string;
@@ -155,6 +156,7 @@ const structuredDataItems = [
   </head>
   <body>
     <div class="revealerMain"></div>
+    <Navigation />
     <slot />
   </body><script>
     import gsap from "gsap";
