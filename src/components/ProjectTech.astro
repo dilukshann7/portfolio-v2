@@ -7,7 +7,12 @@ const { technologies = [], techImages = [] } = Astro.props;
     {
       technologies.map((tech: string, i: number) => (
         <div class="img">
-          <img src={techImages[i] ?? "/placeholder.jpg"} alt={tech} />
+          {/* Added crossorigin="anonymous" to allow canvas pixel reading */}
+          <img
+            src={techImages[i] ?? "/placeholder.jpg"}
+            alt={tech}
+            crossorigin="anonymous"
+          />
         </div>
       ))
     }
@@ -32,6 +37,50 @@ const { technologies = [], techImages = [] } = Astro.props;
 
   gsap.registerPlugin(SplitText);
 
+  function getDominantColor(imgEl: HTMLImageElement) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return "#000000"; // Fallback color
+
+    canvas.width = imgEl.width || 50;
+    canvas.height = imgEl.height || 50;
+
+    ctx.drawImage(imgEl, 0, 0, canvas.width, canvas.height);
+
+    let imageData;
+    try {
+      imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    } catch (e) {
+      console.warn("Canvas tainted by CORS, using fallback color.");
+      return "#000000";
+    }
+
+    const colorCounts: Record<string, number> = {};
+    let maxCount = 0;
+    let dominantColor = "#000000";
+
+    for (let i = 0; i < imageData.length; i += 4) {
+      const r = imageData[i];
+      const g = imageData[i + 1];
+      const b = imageData[i + 2];
+      const a = imageData[i + 3];
+
+      if (a < 128) continue;
+      if (r > 200 && g > 200 && b > 200) continue;
+
+      const rgbKey = `${Math.round(r / 10) * 10},${Math.round(g / 10) * 10},${Math.round(b / 10) * 10}`;
+
+      colorCounts[rgbKey] = (colorCounts[rgbKey] || 0) + 1;
+
+      if (colorCounts[rgbKey] > maxCount) {
+        maxCount = colorCounts[rgbKey];
+        dominantColor = `rgb(${r}, ${g}, ${b})`;
+      }
+    }
+
+    return dominantColor;
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const profileImagesContainer = document.querySelector(".profile-images");
     const profileImages = document.querySelectorAll(".profile-images .img");
@@ -49,17 +98,23 @@ const { technologies = [], techImages = [] } = Astro.props;
     gsap.set(defaultLetters, { y: "100%" });
 
     if (window.innerWidth >= 900) {
-      profileImages.forEach((img, index) => {
+      profileImages.forEach((imgWrapper, index) => {
         const correspondingName = nameElements[index + 1];
         const letters = correspondingName.querySelectorAll(".letter");
+        const actualImg = imgWrapper.querySelector("img") as HTMLImageElement;
 
-        img.addEventListener("mouseenter", () => {
-          gsap.to(img, {
+        imgWrapper.addEventListener("mouseenter", () => {
+          const brandColor = getDominantColor(actualImg);
+
+          gsap.set(letters, { color: brandColor });
+
+          gsap.to(imgWrapper, {
             width: 140,
             height: 140,
             duration: 0.5,
             ease: "power4.out",
           });
+
           gsap.to(letters, {
             y: "-100%",
             ease: "power4.out",
@@ -71,13 +126,14 @@ const { technologies = [], techImages = [] } = Astro.props;
           });
         });
 
-        img.addEventListener("mouseleave", () => {
-          gsap.to(img, {
+        imgWrapper.addEventListener("mouseleave", () => {
+          gsap.to(imgWrapper, {
             width: 70,
             height: 70,
             duration: 0.5,
             ease: "power4.out",
           });
+
           gsap.to(letters, {
             y: "0%",
             ease: "power4.out",
@@ -85,6 +141,9 @@ const { technologies = [], techImages = [] } = Astro.props;
             stagger: {
               each: 0.025,
               from: "center",
+            },
+            onComplete: () => {
+              gsap.set(letters, { color: "#000000" });
             },
           });
         });
