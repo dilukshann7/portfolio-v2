@@ -156,6 +156,7 @@ const marqueeTopics = [
         )
       }
     </header>
+
     <div class="bi-marquee" aria-hidden="true">
       <div class="bi-marquee__track">
         {
@@ -337,12 +338,6 @@ const marqueeTopics = [
     animation: biUp 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  .bi-hero__title em {
-    font-style: italic;
-    font-weight: 300;
-    color: var(--ink-60);
-  }
-
   .bi-hero__actions {
     grid-column: 1 / -1;
     display: flex;
@@ -518,7 +513,6 @@ const marqueeTopics = [
     gap: 1rem;
     opacity: 0.55;
   }
-
   .bi-featured__cta-arrow {
     transition: transform 200ms;
   }
@@ -543,7 +537,6 @@ const marqueeTopics = [
   .bi-marquee__item {
     display: inline-flex;
     align-items: center;
-    gap: 0;
     padding: 0 2.5rem;
     font-family: var(--f-display);
     font-size: 1rem;
@@ -622,7 +615,6 @@ const marqueeTopics = [
   .bi-card:hover::before {
     transform: translateY(0);
   }
-
   .bi-card > * {
     position: relative;
     z-index: 1;
@@ -820,7 +812,6 @@ const marqueeTopics = [
           },
           { passive: true, signal },
         );
-
         document.querySelectorAll("a, button, .bi-card").forEach((el) => {
           el.addEventListener(
             "mouseenter",
