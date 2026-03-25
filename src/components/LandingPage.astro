@@ -243,18 +243,13 @@ import ColorBends from "./ui/ColorBends";
     margin-top: 0.35rem;
   }
 
+  /* 900px Breakpoint */
   @media (max-width: 900px) {
     .landing-page {
-      min-height: 100vh;
-      min-height: 100svh;
-      min-height: 100dvh;
-      overflow: clip;
+      overflow: clip; /* Better than hidden for preventing mobile overscroll */
     }
 
     .landing-page .container {
-      min-height: 100vh;
-      min-height: 100svh;
-      min-height: 100dvh;
       overflow: visible;
     }
 
@@ -296,7 +291,6 @@ import ColorBends from "./ui/ColorBends";
 
     .landing-page .col-left,
     .landing-page .col-right {
-      min-height: auto;
       padding: 0;
     }
 
@@ -307,10 +301,10 @@ import ColorBends from "./ui/ColorBends";
 
     :global(.left-glass) {
       width: min(100%, 34rem);
-      min-height: clamp(18rem, 44vh, 28rem);
       justify-content: flex-start;
       align-items: stretch;
       padding: 1.4rem 1.25rem 1.25rem;
+      min-height: clamp(15rem, 38vh, 22rem);
       background:
         linear-gradient(180deg, rgba(18, 18, 18, 0.22), rgba(0, 0, 0, 0.1)),
         radial-gradient(circle at top left, rgba(0, 0, 0, 0.2), transparent 38%);
