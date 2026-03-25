@@ -121,6 +121,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   html {
     @apply font-sans;
     -webkit-text-size-adjust: 100%;
@@ -128,12 +129,14 @@
     scroll-behavior: smooth;
     overflow-x: clip;
   }
+
   body {
     @apply bg-background text-foreground;
     overflow-x: clip;
     overscroll-behavior-x: none;
     -webkit-tap-highlight-color: transparent;
   }
+
   img,
   video,
   canvas,
