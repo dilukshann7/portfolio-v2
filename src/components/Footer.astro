@@ -210,14 +210,14 @@ import Galaxy from "./ui/Galaxy";
   }
 
   @media (max-width: 1000px) {
-    footer {
-      min-height: 92svh;
+    .footer-container {
+      padding: calc(env(safe-area-inset-top, 0px) + 4rem) 2rem
+        calc(env(safe-area-inset-bottom, 0px) + 6rem) 2rem;
+      transform: translateY(-20%);
     }
 
-    .footer-container {
-      padding: calc(env(safe-area-inset-top, 0px) + 4rem) 4em
-        calc(env(safe-area-inset-bottom, 0px) + 1rem) 4em;
-      transform: translateY(-20%);
+    #footer-canvas {
+      display: none;
     }
 
     .footer-row:nth-child(1) {
@@ -227,15 +227,18 @@ import Galaxy from "./ui/Galaxy";
 
     .footer-row h2 {
       width: 100%;
+      text-align: left;
     }
 
     .footer-row:nth-child(1) .footer-col:nth-child(2) {
       flex-direction: column;
       gap: 1.25rem;
+      align-items: flex-start;
     }
 
     .footer-sub-col {
       gap: 0.35rem;
+      align-items: flex-start;
     }
 
     a {
@@ -246,6 +249,8 @@ import Galaxy from "./ui/Galaxy";
       font-size: clamp(2.1rem, 10vw, 3.2rem);
     }
   }
+
+
 </style>
 
 <script>
