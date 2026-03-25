@@ -115,14 +115,16 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
 <style>
   .navigation-container {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     z-index: 100;
+    pointer-events: none;
   }
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  .navigation-container > :global(*) {
+    pointer-events: auto;
   }
 
   /* logos */
