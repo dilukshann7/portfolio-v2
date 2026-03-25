@@ -3,8 +3,8 @@ import { projects } from "../data/projects";
 
 const rows = [];
 
-for (let index = 0; index < projects.length; index += 2) {
-  rows.push(projects.slice(index, index + 2));
+for (let index = 0; index < projects.length; index += 3) {
+  rows.push(projects.slice(index, index + 3));
 }
 ---
 
@@ -37,7 +37,6 @@ for (let index = 0; index < projects.length; index += 2) {
 
 <style is:global>
   body {
-    font-family: "Manrope";
     color: #0f0f0f;
     font-family: "Space Grotesk", sans-serif;
   }
@@ -55,11 +54,13 @@ for (let index = 0; index < projects.length; index += 2) {
 
   h3 {
     font-size: 1.25rem;
+    padding-left: 2px;
     letter-spacing: -0.025rem;
   }
 
   p {
     font-size: 1rem;
+    padding-left: 2px;
     font-weight: 500;
     letter-spacing: -0.0125rem;
   }
