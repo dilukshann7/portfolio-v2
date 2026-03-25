@@ -34,13 +34,14 @@ const { technologies = [], techImages = [] } = Astro.props;
 <script>
   import gsap from "gsap";
   import SplitText from "gsap/SplitText";
+  import { runPageScript } from "../lib/client/spa";
 
   gsap.registerPlugin(SplitText);
 
   function getDominantColor(imgEl: HTMLImageElement) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
-    if (!ctx) return "#000000"; // Fallback color
+    if (!ctx) return "#000000";
 
     canvas.width = imgEl.width || 50;
     canvas.height = imgEl.height || 50;
@@ -81,115 +82,150 @@ const { technologies = [], techImages = [] } = Astro.props;
     return dominantColor;
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const profileImagesContainer = document.querySelector(".profile-images");
-    const profileImages = document.querySelectorAll(".profile-images .img");
-    const nameElements = document.querySelectorAll(".profile-names .name");
-    const nameHeadings = document.querySelectorAll(".profile-names .name h1");
+  const initProjectTech = () =>
+    runPageScript("project-tech", ({ signal }) => {
+      const profileImagesContainer = document.querySelector(".profile-images");
+      const profileImages = document.querySelectorAll(".profile-images .img");
+      const nameElements = document.querySelectorAll(".profile-names .name");
+      const nameHeadings = document.querySelectorAll(".profile-names .name h1");
 
-    nameHeadings.forEach((heading) => {
-      const split = new SplitText(heading, { type: "chars" });
-      split.chars.forEach((char) => {
-        char.classList.add("letter");
+      if (!profileImagesContainer || !profileImages.length || !nameElements.length) return;
+
+      const splitRefs: SplitText[] = [];
+      nameHeadings.forEach((heading) => {
+        const split = new SplitText(heading as HTMLElement, { type: "chars" });
+        split.chars.forEach((char) => {
+          (char as HTMLElement).classList.add("letter");
+        });
+        splitRefs.push(split);
       });
+
+      const defaultLetters = nameElements[0].querySelectorAll(".letter");
+      gsap.set(defaultLetters, { y: "100%" });
+
+      const isMobile = window.innerWidth < 900;
+
+      if (isMobile) {
+        // Mobile: tap to reveal tech name
+        let activeIndex = -1;
+        profileImages.forEach((imgWrapper, index) => {
+          const correspondingName = nameElements[index + 1];
+          if (!correspondingName) return;
+          const letters = correspondingName.querySelectorAll(".letter");
+          const actualImg = imgWrapper.querySelector("img") as HTMLImageElement;
+
+          imgWrapper.addEventListener(
+            "click",
+            () => {
+              // Reset previous active
+              if (activeIndex >= 0 && activeIndex !== index) {
+                const prevName = nameElements[activeIndex + 1];
+                if (prevName) {
+                  const prevLetters = prevName.querySelectorAll(".letter");
+                  gsap.to(prevLetters, {
+                    y: "0%",
+                    ease: "power4.out",
+                    duration: 0.5,
+                    stagger: { each: 0.02, from: "center" },
+                  });
+                }
+              }
+
+              const brandColor = getDominantColor(actualImg);
+              gsap.set(letters, { color: brandColor });
+
+              gsap.to(defaultLetters, {
+                y: "0%",
+                ease: "power4.out",
+                duration: 0.5,
+                stagger: { each: 0.02, from: "center" },
+              });
+
+              gsap.to(letters, {
+                y: "-100%",
+                ease: "power4.out",
+                duration: 0.6,
+                stagger: { each: 0.02, from: "center" },
+              });
+
+              activeIndex = index;
+            },
+            { signal },
+          );
+        });
+      } else {
+        // Desktop: hover to reveal
+        profileImages.forEach((imgWrapper, index) => {
+          const correspondingName = nameElements[index + 1];
+          if (!correspondingName) return;
+          const letters = correspondingName.querySelectorAll(".letter");
+          const actualImg = imgWrapper.querySelector("img") as HTMLImageElement;
+
+          imgWrapper.addEventListener(
+            "mouseenter",
+            () => {
+              const brandColor = getDominantColor(actualImg);
+              gsap.set(letters, { color: brandColor });
+              gsap.to(imgWrapper, { width: 140, height: 140, duration: 0.5, ease: "power4.out" });
+              gsap.to(letters, {
+                y: "-100%",
+                ease: "power4.out",
+                duration: 0.75,
+                stagger: { each: 0.025, from: "center" },
+              });
+            },
+            { signal },
+          );
+
+          imgWrapper.addEventListener(
+            "mouseleave",
+            () => {
+              gsap.to(imgWrapper, { width: 70, height: 70, duration: 0.5, ease: "power4.out" });
+              gsap.to(letters, {
+                y: "0%",
+                ease: "power4.out",
+                duration: 0.75,
+                stagger: { each: 0.025, from: "center" },
+                onComplete: () => { gsap.set(letters, { color: "#000000" }); },
+              });
+            },
+            { signal },
+          );
+        });
+
+        (profileImagesContainer as HTMLElement).addEventListener(
+          "mouseenter",
+          () => {
+            gsap.to(defaultLetters, {
+              y: "0%",
+              ease: "power4.out",
+              duration: 0.75,
+              stagger: { each: 0.025, from: "center" },
+            });
+          },
+          { signal },
+        );
+
+        (profileImagesContainer as HTMLElement).addEventListener(
+          "mouseleave",
+          () => {
+            gsap.to(defaultLetters, {
+              y: "100%",
+              ease: "power4.out",
+              duration: 0.75,
+              stagger: { each: 0.025, from: "center" },
+            });
+          },
+          { signal },
+        );
+      }
     });
 
-    const defaultLetters = nameElements[0].querySelectorAll(".letter");
-    gsap.set(defaultLetters, { y: "100%" });
-
-    if (window.innerWidth >= 900) {
-      profileImages.forEach((imgWrapper, index) => {
-        const correspondingName = nameElements[index + 1];
-        const letters = correspondingName.querySelectorAll(".letter");
-        const actualImg = imgWrapper.querySelector("img") as HTMLImageElement;
-
-        imgWrapper.addEventListener("mouseenter", () => {
-          const brandColor = getDominantColor(actualImg);
-
-          gsap.set(letters, { color: brandColor });
-
-          gsap.to(imgWrapper, {
-            width: 140,
-            height: 140,
-            duration: 0.5,
-            ease: "power4.out",
-          });
-
-          gsap.to(letters, {
-            y: "-100%",
-            ease: "power4.out",
-            duration: 0.75,
-            stagger: {
-              each: 0.025,
-              from: "center",
-            },
-          });
-        });
-
-        imgWrapper.addEventListener("mouseleave", () => {
-          gsap.to(imgWrapper, {
-            width: 70,
-            height: 70,
-            duration: 0.5,
-            ease: "power4.out",
-          });
-
-          gsap.to(letters, {
-            y: "0%",
-            ease: "power4.out",
-            duration: 0.75,
-            stagger: {
-              each: 0.025,
-              from: "center",
-            },
-            onComplete: () => {
-              gsap.set(letters, { color: "#000000" });
-            },
-          });
-        });
-      });
-
-      (profileImagesContainer as HTMLElement).addEventListener(
-        "mouseenter",
-        () => {
-          gsap.to(defaultLetters, {
-            y: "0%",
-            ease: "power4.out",
-            duration: 0.75,
-            stagger: {
-              each: 0.025,
-              from: "center",
-            },
-          });
-        },
-      );
-
-      (profileImagesContainer as HTMLElement).addEventListener(
-        "mouseleave",
-        () => {
-          gsap.to(defaultLetters, {
-            y: "100%",
-            ease: "power4.out",
-            duration: 0.75,
-            stagger: {
-              each: 0.025,
-              from: "center",
-            },
-          });
-        },
-      );
-    }
-  });
+  document.addEventListener("astro:page-load", initProjectTech);
 </script>
 
-<style is:global>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  .img img {
+<style>
+  .team :global(.img img) {
     width: 100%;
     height: 100%;
     object-fit: contain;
