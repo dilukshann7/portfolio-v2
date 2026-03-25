@@ -226,7 +226,7 @@ const { technologies = [], techImages = [] } = Astro.props;
     cursor: pointer;
   }
 
-  .img:hover img {
+  .img:hover :global(img) {
     opacity: 0.8;
   }
 
@@ -237,7 +237,7 @@ const { technologies = [], techImages = [] } = Astro.props;
     overflow: hidden;
   }
 
-  .name h1 {
+  .name :global(h1) {
     position: absolute;
     width: 100%;
     text-align: center;
@@ -251,12 +251,12 @@ const { technologies = [], techImages = [] } = Astro.props;
     transform: translateY(100%);
   }
 
-  .name.default h1 {
+  .name.default :global(h1) {
     color: #000000;
     transform: translateY(-100%);
   }
 
-  .name h1 .letter {
+  .name :global(h1 .letter) {
     position: relative;
     transform: translateY(0%);
     will-change: transform;
@@ -283,7 +283,7 @@ const { technologies = [], techImages = [] } = Astro.props;
       height: 4rem;
     }
 
-    .name h1 {
+    .name :global(h1) {
       font-size: 4rem;
       letter-spacing: 0;
     }
