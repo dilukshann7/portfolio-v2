@@ -609,7 +609,7 @@ import ColorBends from "./ui/ColorBends";
               opacity: 1,
               ease: "expo.out",
               duration: isMobile ? 0.7 : 1.2,
-              delay: isMobile ? 0.9 : 2.4,
+              delay: isMobile ? 0.6 : 2.4,
               stagger: 0.024,
               overwrite: "auto",
             },
@@ -622,9 +622,9 @@ import ColorBends from "./ui/ColorBends";
         }
       }
 
-      const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 1 : 2;
-      const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.35 : 3;
-      const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.85 : 4.5;
+      const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 0.8 : 2;
+      const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.15 : 3;
+      const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.55 : 4.5;
 
       gsap.from(".landing-page .loader-wrapper", {
         scale: 0.8,
