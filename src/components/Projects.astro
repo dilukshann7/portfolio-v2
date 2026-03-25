@@ -165,70 +165,70 @@ for (let index = 0; index < projects.length; index += 2) {
 
   const initProjects = () =>
     runPageScript("projects", ({ onCleanup }) => {
-    const workContainer = document.querySelector(".work");
-    if (!workContainer) return;
+      const workContainer = document.querySelector(".work");
+      if (!workContainer) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void boot();
-        }
-      },
-      { rootMargin: "250px 0px" },
-    );
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            observer.disconnect();
+            void boot();
+          }
+        },
+        { rootMargin: "250px 0px" },
+      );
 
-    const boot = async () => {
-      const { getMotionSystem } = await import("../lib/client/motion");
-      const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
-      const triggers: Array<ReturnType<typeof ScrollTrigger.create>> = [];
-      const tweens: Array<ReturnType<typeof gsap.to>> = [];
+      const boot = async () => {
+        const { getMotionSystem } = await import("../lib/client/motion");
+        const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
+        const triggers: Array<ReturnType<typeof ScrollTrigger.create>> = [];
+        const tweens: Array<ReturnType<typeof gsap.to>> = [];
 
-      onCleanup(() => {
-        tweens.forEach((tween) => tween.kill());
-        triggers.forEach((trigger) => trigger.kill());
-      });
-
-      if (reducedMotion) return;
-
-      gsap.set(".work-item", {
-        y: 1000,
-      });
-
-      document.querySelectorAll(".row").forEach((row) => {
-        const workItems = row.querySelectorAll(".work-item");
-
-        workItems.forEach((item, itemIndex) => {
-          const isLeftProjectItem = itemIndex === 0;
-          gsap.set(item, {
-            rotation: isLeftProjectItem ? -60 : 60,
-            transformOrigin: "center center",
-          });
+        onCleanup(() => {
+          tweens.forEach((tween) => tween.kill());
+          triggers.forEach((trigger) => trigger.kill());
         });
 
-        triggers.push(
-          ScrollTrigger.create({
-            trigger: row,
-            start: "top 70%",
-            once: true,
-            onEnter: () => {
-              tweens.push(
-                gsap.to(workItems, {
-                  y: 0,
-                  rotation: 0,
-                  duration: 1,
-                  ease: "power4.out",
-                  stagger: 0.25,
-                }),
-              );
-            },
-          }),
-        );
-      });
-    };
+        if (reducedMotion) return;
 
-    observer.observe(workContainer);
-    onCleanup(() => observer.disconnect());
+        gsap.set(".work-item", {
+          y: 1000,
+        });
+
+        document.querySelectorAll(".row").forEach((row) => {
+          const workItems = row.querySelectorAll(".work-item");
+
+          workItems.forEach((item, itemIndex) => {
+            const isLeftProjectItem = itemIndex === 0;
+            gsap.set(item, {
+              rotation: isLeftProjectItem ? -60 : 60,
+              transformOrigin: "center center",
+            });
+          });
+
+          triggers.push(
+            ScrollTrigger.create({
+              trigger: row,
+              start: "top 70%",
+              once: true,
+              onEnter: () => {
+                tweens.push(
+                  gsap.to(workItems, {
+                    y: 0,
+                    rotation: 0,
+                    duration: 1,
+                    ease: "power4.out",
+                    stagger: 0.25,
+                  }),
+                );
+              },
+            }),
+          );
+        });
+      };
+
+      observer.observe(workContainer);
+      onCleanup(() => observer.disconnect());
     });
 
   document.addEventListener("astro:page-load", initProjects);

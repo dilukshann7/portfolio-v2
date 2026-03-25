@@ -492,191 +492,194 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
   const initBlogScrollArc = () =>
     runPageScript("blog-scroll-arc", ({ signal, onCleanup }) => {
-    const section = document.querySelector<HTMLElement>(".blog-template");
-    if (!section) return;
+      const section = document.querySelector<HTMLElement>(".blog-template");
+      if (!section) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void boot();
-        }
-      },
-      { rootMargin: "300px 0px" },
-    );
-
-    const boot = async () => {
-      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
-        import("../lib/client/motion"),
-        import("../lib/client/textReveal"),
-      ]);
-
-      const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
-      const textRevealCleanup = await initTextReveal(section, [
-        {
-          selector: ".blog-template__intro-copy h2",
-          mode: "lines",
-          scroll: true,
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            observer.disconnect();
+            void boot();
+          }
         },
-        {
-          selector: ".blog-template__intro-copy p:last-child",
-          mode: "fade",
-          scroll: true,
-          y: 18,
-        },
-        {
-          selector: ".blog-template__outro p",
-          mode: "lines",
-          scroll: true,
-        },
-      ]);
-
-      onCleanup(() => textRevealCleanup?.());
-
-      const stickySection = section.querySelector<HTMLElement>(
-        "[data-blog-template-steps]",
-      );
-      const cards = Array.from(
-        section.querySelectorAll<HTMLElement>("[data-blog-template-card]"),
-      );
-      const visibleCards = Array.from(
-        section.querySelectorAll<HTMLElement>(
-          "[data-blog-template-visible-card]",
-        ),
-      );
-      const countContainer = section.querySelector<HTMLElement>(
-        "[data-blog-template-count]",
+        { rootMargin: "300px 0px" },
       );
 
-      const cta = section.querySelector<HTMLElement>(
-        "[data-blog-template-cta]",
-      );
+      const boot = async () => {
+        const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
+          import("../lib/client/motion"),
+          import("../lib/client/textReveal"),
+        ]);
 
-      if (!stickySection || !cards.length || !countContainer) return;
+        const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
+        const textRevealCleanup = await initTextReveal(section, [
+          {
+            selector: ".blog-template__intro-copy h2",
+            mode: "lines",
+            scroll: true,
+          },
+          {
+            selector: ".blog-template__intro-copy p:last-child",
+            mode: "fade",
+            scroll: true,
+            y: 18,
+          },
+          {
+            selector: ".blog-template__outro p",
+            mode: "lines",
+            scroll: true,
+          },
+        ]);
 
-      const stickyHeight = window.innerHeight * 7;
-      const totalCards = cards.length;
-      const arcAngle = Math.PI * 0.4;
-      const startAngle = Math.PI / 2 - arcAngle / 2;
+        onCleanup(() => textRevealCleanup?.());
 
-      const getRadius = () =>
-        window.innerWidth < 900
-          ? window.innerWidth * 7.0
-          : window.innerWidth * 3.0;
+        const stickySection = section.querySelector<HTMLElement>(
+          "[data-blog-template-steps]",
+        );
+        const cards = Array.from(
+          section.querySelectorAll<HTMLElement>("[data-blog-template-card]"),
+        );
+        const visibleCards = Array.from(
+          section.querySelectorAll<HTMLElement>(
+            "[data-blog-template-visible-card]",
+          ),
+        );
+        const countContainer = section.querySelector<HTMLElement>(
+          "[data-blog-template-count]",
+        );
 
-      const getCountStep = () => {
-        const firstH3 = countContainer.querySelector("h3");
-        return firstH3
-          ? firstH3.getBoundingClientRect().height
-          : window.innerWidth < 900
-            ? 42
-            : 76;
-      };
-      function positionCards(progress = 0) {
-        const radius = getRadius();
-        const totalTravel = 1 + totalCards / 10;
-        const adjustedProgress = (progress * totalTravel - 1) * 0.75;
+        const cta = section.querySelector<HTMLElement>(
+          "[data-blog-template-cta]",
+        );
 
-        cards.forEach((card, index) => {
-          const normalizedProgress = (totalCards - 1 - index) / totalCards;
-          const cardProgress = normalizedProgress + adjustedProgress;
-          const angle = startAngle + arcAngle * cardProgress;
+        if (!stickySection || !cards.length || !countContainer) return;
 
-          const x = Math.cos(angle) * radius;
-          const y = Math.sin(angle) * radius;
-          const rotation = (angle - Math.PI / 2) * (180 / Math.PI);
+        const stickyHeight = window.innerHeight * 7;
+        const totalCards = cards.length;
+        const arcAngle = Math.PI * 0.4;
+        const startAngle = Math.PI / 2 - arcAngle / 2;
 
-          gsap.set(card, {
-            x,
-            y: -y + radius,
-            rotation: -rotation,
-            transformOrigin: "center center",
-          });
-        });
-      }
+        const getRadius = () =>
+          window.innerWidth < 900
+            ? window.innerWidth * 7.0
+            : window.innerWidth * 3.0;
 
-      let currentCardIndex = 0;
+        const getCountStep = () => {
+          const firstH3 = countContainer.querySelector("h3");
+          return firstH3
+            ? firstH3.getBoundingClientRect().height
+            : window.innerWidth < 900
+              ? 42
+              : 76;
+        };
+        function positionCards(progress = 0) {
+          const radius = getRadius();
+          const totalTravel = 1 + totalCards / 10;
+          const adjustedProgress = (progress * totalTravel - 1) * 0.75;
 
-      const setCounter = (index: number) => {
-        const safeIndex = Math.max(0, Math.min(visibleCards.length - 1, index));
-        currentCardIndex = safeIndex;
+          cards.forEach((card, index) => {
+            const normalizedProgress = (totalCards - 1 - index) / totalCards;
+            const cardProgress = normalizedProgress + adjustedProgress;
+            const angle = startAngle + arcAngle * cardProgress;
 
-        const targetY = getCountStep() - safeIndex * getCountStep();
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            const rotation = (angle - Math.PI / 2) * (180 / Math.PI);
 
-        gsap.to(countContainer, {
-          y: targetY,
-          duration: reducedMotion ? 0 : 0.3,
-          ease: "power1.out",
-          overwrite: true,
-        });
-      };
-
-      gsap.set(countContainer, { y: 0 });
-      positionCards(0);
-      setCounter(0);
-
-      if (reducedMotion) return;
-
-      const trigger = ScrollTrigger.create({
-        trigger: stickySection,
-        start: "top top",
-        end: `+=${stickyHeight}px`,
-        pin: true,
-        pinSpacing: true,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          positionCards(self.progress);
-
-          if (cta) {
-            const ctaOpacity = Math.max(0, (self.progress - 0.8) / 0.15);
-            gsap.set(cta, {
-              opacity: ctaOpacity,
-              zIndex: ctaOpacity > 0.5 ? 10 : -10,
-              pointerEvents: ctaOpacity > 0.5 ? "auto" : "none",
+            gsap.set(card, {
+              x,
+              y: -y + radius,
+              rotation: -rotation,
+              transformOrigin: "center center",
             });
-          }
-
-          const centerX = window.innerWidth;
-          const centerY = window.innerHeight / 2;
-
-          let closestIndex = 0;
-          let closestDist = Infinity;
-
-          visibleCards.forEach((card, index) => {
-            const rect = card.getBoundingClientRect();
-            const cardCenterX = rect.left + rect.width / 2;
-            const cardCenterY = rect.top + rect.height / 2;
-            const dist = Math.hypot(
-              cardCenterX - centerX,
-              cardCenterY - centerY,
-            );
-
-            if (dist < closestDist) {
-              closestDist = dist;
-              closestIndex = index;
-            }
           });
+        }
 
-          if (closestIndex !== currentCardIndex) {
-            setCounter(closestIndex);
-          }
-        },
-      });
+        let currentCardIndex = 0;
 
-      const onResize = () => {
-        gsap.set(countContainer, {
-          y: getCountStep() - currentCardIndex * getCountStep(),
+        const setCounter = (index: number) => {
+          const safeIndex = Math.max(
+            0,
+            Math.min(visibleCards.length - 1, index),
+          );
+          currentCardIndex = safeIndex;
+
+          const targetY = getCountStep() - safeIndex * getCountStep();
+
+          gsap.to(countContainer, {
+            y: targetY,
+            duration: reducedMotion ? 0 : 0.3,
+            ease: "power1.out",
+            overwrite: true,
+          });
+        };
+
+        gsap.set(countContainer, { y: 0 });
+        positionCards(0);
+        setCounter(0);
+
+        if (reducedMotion) return;
+
+        const trigger = ScrollTrigger.create({
+          trigger: stickySection,
+          start: "top top",
+          end: `+=${stickyHeight}px`,
+          pin: true,
+          pinSpacing: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            positionCards(self.progress);
+
+            if (cta) {
+              const ctaOpacity = Math.max(0, (self.progress - 0.8) / 0.15);
+              gsap.set(cta, {
+                opacity: ctaOpacity,
+                zIndex: ctaOpacity > 0.5 ? 10 : -10,
+                pointerEvents: ctaOpacity > 0.5 ? "auto" : "none",
+              });
+            }
+
+            const centerX = window.innerWidth;
+            const centerY = window.innerHeight / 2;
+
+            let closestIndex = 0;
+            let closestDist = Infinity;
+
+            visibleCards.forEach((card, index) => {
+              const rect = card.getBoundingClientRect();
+              const cardCenterX = rect.left + rect.width / 2;
+              const cardCenterY = rect.top + rect.height / 2;
+              const dist = Math.hypot(
+                cardCenterX - centerX,
+                cardCenterY - centerY,
+              );
+
+              if (dist < closestDist) {
+                closestDist = dist;
+                closestIndex = index;
+              }
+            });
+
+            if (closestIndex !== currentCardIndex) {
+              setCounter(closestIndex);
+            }
+          },
         });
-        positionCards(trigger.progress);
-        ScrollTrigger.refresh();
+
+        const onResize = () => {
+          gsap.set(countContainer, {
+            y: getCountStep() - currentCardIndex * getCountStep(),
+          });
+          positionCards(trigger.progress);
+          ScrollTrigger.refresh();
+        };
+
+        window.addEventListener("resize", onResize, { signal });
+        onCleanup(() => trigger.kill());
       };
 
-      window.addEventListener("resize", onResize, { signal });
-      onCleanup(() => trigger.kill());
-    };
-
-    observer.observe(section);
-    onCleanup(() => observer.disconnect());
+      observer.observe(section);
+      onCleanup(() => observer.disconnect());
     });
 
   document.addEventListener("astro:page-load", initBlogScrollArc);
