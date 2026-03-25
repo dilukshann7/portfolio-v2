@@ -1,0 +1,291 @@
+---
+const { technologies = [], techImages = [] } = Astro.props;
+---
+
+<section class="team">
+  <div class="profile-images">
+    {
+      technologies.map((tech: string, i: number) => (
+        <div class="img">
+          {/* Added crossorigin="anonymous" to allow canvas pixel reading */}
+          <img
+            src={techImages[i] ?? "/placeholder.jpg"}
+            alt={tech}
+            crossorigin="anonymous"
+          />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="profile-names">
+    <div class="name default"><h1>Tech Stack</h1></div>
+
+    {
+      technologies.map((tech: string) => (
+        <div class="name">
+          <h1>{tech}</h1>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import gsap from "gsap";
+  import SplitText from "gsap/SplitText";
+
+  gsap.registerPlugin(SplitText);
+
+  function getDominantColor(imgEl: HTMLImageElement) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return "#000000"; // Fallback color
+
+    canvas.width = imgEl.width || 50;
+    canvas.height = imgEl.height || 50;
+
+    ctx.drawImage(imgEl, 0, 0, canvas.width, canvas.height);
+
+    let imageData;
+    try {
+      imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    } catch (e) {
+      console.warn("Canvas tainted by CORS, using fallback color.");
+      return "#000000";
+    }
+
+    const colorCounts: Record<string, number> = {};
+    let maxCount = 0;
+    let dominantColor = "#000000";
+
+    for (let i = 0; i < imageData.length; i += 4) {
+      const r = imageData[i];
+      const g = imageData[i + 1];
+      const b = imageData[i + 2];
+      const a = imageData[i + 3];
+
+      if (a < 128) continue;
+      if (r > 200 && g > 200 && b > 200) continue;
+
+      const rgbKey = `${Math.round(r / 10) * 10},${Math.round(g / 10) * 10},${Math.round(b / 10) * 10}`;
+
+      colorCounts[rgbKey] = (colorCounts[rgbKey] || 0) + 1;
+
+      if (colorCounts[rgbKey] > maxCount) {
+        maxCount = colorCounts[rgbKey];
+        dominantColor = `rgb(${r}, ${g}, ${b})`;
+      }
+    }
+
+    return dominantColor;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const profileImagesContainer = document.querySelector(".profile-images");
+    const profileImages = document.querySelectorAll(".profile-images .img");
+    const nameElements = document.querySelectorAll(".profile-names .name");
+    const nameHeadings = document.querySelectorAll(".profile-names .name h1");
+
+    nameHeadings.forEach((heading) => {
+      const split = new SplitText(heading, { type: "chars" });
+      split.chars.forEach((char) => {
+        char.classList.add("letter");
+      });
+    });
+
+    const defaultLetters = nameElements[0].querySelectorAll(".letter");
+    gsap.set(defaultLetters, { y: "100%" });
+
+    if (window.innerWidth >= 900) {
+      profileImages.forEach((imgWrapper, index) => {
+        const correspondingName = nameElements[index + 1];
+        const letters = correspondingName.querySelectorAll(".letter");
+        const actualImg = imgWrapper.querySelector("img") as HTMLImageElement;
+
+        imgWrapper.addEventListener("mouseenter", () => {
+          const brandColor = getDominantColor(actualImg);
+
+          gsap.set(letters, { color: brandColor });
+
+          gsap.to(imgWrapper, {
+            width: 140,
+            height: 140,
+            duration: 0.5,
+            ease: "power4.out",
+          });
+
+          gsap.to(letters, {
+            y: "-100%",
+            ease: "power4.out",
+            duration: 0.75,
+            stagger: {
+              each: 0.025,
+              from: "center",
+            },
+          });
+        });
+
+        imgWrapper.addEventListener("mouseleave", () => {
+          gsap.to(imgWrapper, {
+            width: 70,
+            height: 70,
+            duration: 0.5,
+            ease: "power4.out",
+          });
+
+          gsap.to(letters, {
+            y: "0%",
+            ease: "power4.out",
+            duration: 0.75,
+            stagger: {
+              each: 0.025,
+              from: "center",
+            },
+            onComplete: () => {
+              gsap.set(letters, { color: "#000000" });
+            },
+          });
+        });
+      });
+
+      (profileImagesContainer as HTMLElement).addEventListener(
+        "mouseenter",
+        () => {
+          gsap.to(defaultLetters, {
+            y: "0%",
+            ease: "power4.out",
+            duration: 0.75,
+            stagger: {
+              each: 0.025,
+              from: "center",
+            },
+          });
+        },
+      );
+
+      (profileImagesContainer as HTMLElement).addEventListener(
+        "mouseleave",
+        () => {
+          gsap.to(defaultLetters, {
+            y: "100%",
+            ease: "power4.out",
+            duration: 0.75,
+            stagger: {
+              each: 0.025,
+              from: "center",
+            },
+          });
+        },
+      );
+    }
+  });
+</script>
+
+<style is:global>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+    border-radius: 0.5rem;
+    transition: opacity 0.3s ease;
+  }
+
+  .team {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    color: #000000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5em;
+    overflow: hidden;
+  }
+
+  .profile-images {
+    width: max-content;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .img {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+  }
+
+  .img:hover img {
+    opacity: 0.8;
+  }
+
+  .profile-names {
+    width: 100%;
+    height: 8rem;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    overflow: hidden;
+  }
+
+  .name h1 {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 8rem;
+    font-weight: 900;
+    letter-spacing: -0.2rem;
+    line-height: 1;
+    color: #f93535;
+    user-select: none;
+    transform: translateY(100%);
+  }
+
+  .name.default h1 {
+    color: #000000;
+    transform: translateY(-100%);
+  }
+
+  .name h1 .letter {
+    position: relative;
+    transform: translateY(0%);
+    will-change: transform;
+  }
+
+  @media screen and (max-width: 900px) {
+    .team {
+      flex-direction: column-reverse;
+      height: 300px;
+    }
+    .profile-images {
+      flex-wrap: wrap;
+      max-width: 90%;
+      justify-content: center;
+      height: auto;
+    }
+
+    .img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .profile-names {
+      height: 4rem;
+    }
+
+    .name h1 {
+      font-size: 4rem;
+      letter-spacing: 0;
+    }
+  }
+</style>

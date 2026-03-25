@@ -150,32 +150,31 @@
   }
 }
 
-::view-transition-group(root) {
-  animation: none;
-  z-index: auto;
+@keyframes wipeIn {
+  from {
+    clip-path: polygon(25% 75%, 75% 75%, 75% 75%, 25% 75%);
+  }
+  to {
+    clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%);
+  }
 }
 
-::view-transition-image-pair(root) {
-  isolation: isolate;
-  z-index: 1;
+::view-transition-new(root) {
+  animation: wipeIn 1s cubic-bezier(0.9, 0, 0.1, 1) forwards;
 }
 
 ::view-transition-old(root) {
   animation: none;
-  z-index: 1;
 }
 
-::view-transition-new(root) {
-  animation: none;
-  will-change: clip-path;
-  z-index: 10000;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(root),
-  ::view-transition-image-pair(root),
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
-  }
+.revealerMain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  transform-origin: center top;
+  background-color: #0a0a0a;
+  transform: scaleY(1);
+  z-index: 9999;
 }

@@ -33,10 +33,9 @@ import GlassSurface from "./ui/GlassSurface.tsx";
   <div class="menu">
     <div class="col col-1">
       <div class="menu-logo">
-        <a href="#home" data-nav-target="home">Dilukshan N.</a>
+        <a href="/">Dilukshan N.</a>
       </div>
       <div class="links">
-        <div class="link"><a href="#home" data-nav-target="home">Home</a></div>
         <div class="link">
           <a href="#expertise" data-nav-target="expertise">Expertise</a>
         </div>
@@ -50,6 +49,9 @@ import GlassSurface from "./ui/GlassSurface.tsx";
         </div>
         <div class="link">
           <a href="/blog/">Blog</a>
+        </div>
+        <div class="link">
+          <a href="/contact/">Contact</a>
         </div>
       </div>
       <div class="socials socials-left">
@@ -403,36 +405,36 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
   @media (max-width: 900px) {
     :global(.menu-toggle) {
-      --menu-toggle-width: 100px;
+      --menu-toggle-width: 90px;
       top: 1em;
       right: 1em;
     }
 
     :global(.menu-toggle .menu-copy) {
-      left: 20px;
+      left: 18px;
     }
 
     :global(.menu-toggle .menu-copy p) {
-      font-size: 11px;
-      letter-spacing: 0.15em;
+      font-size: 10px;
+      letter-spacing: 0.12em;
     }
 
     :global(.menu-toggle:hover .menu-copy) {
-      left: 16px;
+      left: 14px;
     }
 
     :global(.menu-toggle .menu-toggle-icon) {
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
     }
 
     :global(.menu-toggle .hamburger) {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
     }
 
     :global(.menu-toggle .menu-bar) {
-      width: 13px;
+      width: 12px;
       height: 1.5px;
     }
 
@@ -442,7 +444,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .col {
-      padding: 6em 1.5em 2em 1.5em;
+      padding: 7em 1.25em 1.5em 1.25em;
       align-items: flex-start;
     }
 
@@ -452,8 +454,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
     .col-2 {
       justify-content: flex-start;
-      padding-top: 2em;
-      padding-bottom: 3em;
+      padding-top: 1.5em;
+      padding-bottom: 2.5em;
     }
 
     .menu-logo {
@@ -462,23 +464,23 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .menu-logo a {
-      font-size: 32px;
+      font-size: 28px;
     }
 
     .links {
       display: flex;
       flex-direction: column;
-      gap: 0.5em;
+      gap: 0.4em;
     }
 
     .link {
-      transform: translateY(20px);
+      transform: translateY(16px);
     }
 
     .link a {
-      font-size: 42px;
-      letter-spacing: -1px;
-      line-height: 110%;
+      font-size: 2rem;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
     }
 
     .socials-left {
@@ -487,13 +489,13 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
     .socials {
       width: 100%;
-      gap: 1em;
+      gap: 0.75em;
     }
 
     .socials .sub-col p {
-      font-size: 16px;
-      line-height: 1.5;
-      transform: translateY(20px);
+      font-size: 14px;
+      line-height: 1.6;
+      transform: translateY(16px);
     }
 
     .socials .sub-col p br {
@@ -501,14 +503,14 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .header h1 {
-      font-size: 20vw;
+      font-size: 18vw;
       height: auto;
-      min-height: 80px;
-      margin-top: 0.5em;
+      min-height: 70px;
+      margin-top: 0.25em;
     }
 
     .header {
-      margin-top: 1em;
+      margin-top: 0.5em;
       align-self: flex-start;
     }
   }
@@ -534,56 +536,62 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
   @media (max-width: 480px) {
     :global(.menu-toggle) {
-      --menu-toggle-width: 90px;
-      height: 50px;
+      --menu-toggle-width: 80px;
+      height: 44px;
       top: 0.75em;
       right: 0.75em;
     }
 
     :global(.menu-toggle .menu-toggle-icon) {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
     }
 
     :global(.menu-toggle .menu-copy) {
-      left: 16px;
+      left: 14px;
     }
 
     :global(.menu-toggle .menu-copy p) {
-      font-size: 10px;
+      font-size: 9px;
     }
 
     .col {
-      padding: 9em 1.25em 1.5em 1.25em;
+      padding: 8em 1rem 1.25em 1rem;
+    }
+
+    .menu-logo {
+      top: 0.75em;
+      left: 0.75em;
     }
 
     .menu-logo a {
-      font-size: 5em;
+      font-size: 24px;
     }
 
     .link a {
-      font-size: 3em;
+      font-size: 1.75rem;
     }
 
     .links {
-      gap: 0.8em;
+      gap: 0.6em;
     }
 
     .socials .sub-col p {
-      font-size: 2em;
+      font-size: 13px;
     }
 
     .col-2 {
-      padding-top: 1.5em;
+      padding-top: 1.25em;
       padding-bottom: 2em;
     }
 
     .header {
-      margin-top: 0em;
+      margin-top: 0;
     }
 
     .header h1 {
-      font-size: 36vw;
+      font-size: 22vw;
+      min-height: 60px;
     }
   }
 </style>
@@ -591,186 +599,198 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 <script>
   import gsap from "gsap";
   import CustomEase from "gsap/dist/CustomEase";
+  import { runPageScript } from "../lib/client/spa";
 
-  document.addEventListener("DOMContentLoaded", () => {
-    gsap.registerPlugin(CustomEase);
-    CustomEase.create(
-      "hop",
-      "M0,0 C0.354,0 0.464,0.133 0.498,0.502 0.532,0.872 0.651,1 1,1",
-    );
+  const initNavigation = () =>
+    runPageScript("navigation", ({ signal }) => {
+      gsap.registerPlugin(CustomEase);
+      CustomEase.create(
+        "hop",
+        "M0,0 C0.354,0 0.464,0.133 0.498,0.502 0.532,0.872 0.651,1 1,1",
+      );
 
-    const menuToggle = document.querySelector<HTMLElement>(".menu-toggle");
-    const menu = document.querySelector<HTMLElement>(".menu");
-    const links = document.querySelectorAll<HTMLElement>(".link");
-    const socialLinks = document.querySelectorAll<HTMLParagraphElement>(
-      ".socials p",
-    );
-    const navLinks = document.querySelectorAll<HTMLElement>("[data-nav-target]");
-    let isAnimating = false;
+      const menuToggle = document.querySelector<HTMLElement>(".menu-toggle");
+      const menu = document.querySelector<HTMLElement>(".menu");
+      const links = document.querySelectorAll<HTMLElement>(".link");
+      const socialLinks =
+        document.querySelectorAll<HTMLParagraphElement>(".socials p");
+      const navLinks =
+        document.querySelectorAll<HTMLElement>("[data-nav-target]");
+      let isAnimating = false;
 
-    if (!menuToggle || !menu) return;
+      if (!menuToggle || !menu) return;
 
-    const splitTextIntoSpans = (selector: string) => {
-      const elements = document.querySelectorAll<HTMLElement>(selector);
-      elements.forEach((element) => {
-        const text = element.innerText;
-        const splitText = text
-          .split("")
-          .map(function (char: string) {
-            return `<span>${char === " " ? "&nbsp;&nbsp;" : char}</span>`;
-          })
-          .join("");
-        element.innerHTML = splitText;
-      });
-    };
-    splitTextIntoSpans(".header h1");
+      const splitTextIntoSpans = (selector: string) => {
+        const elements = document.querySelectorAll<HTMLElement>(selector);
+        elements.forEach((element) => {
+          const text = element.innerText;
+          const splitText = text
+            .split("")
+            .map((char: string) => {
+              return `<span>${char === " " ? "&nbsp;&nbsp;" : char}</span>`;
+            })
+            .join("");
+          element.innerHTML = splitText;
+        });
+      };
+      splitTextIntoSpans(".header h1");
 
-    const openMenu = () => {
-      if (isAnimating) return;
+      const openMenu = () => {
+        if (isAnimating) return;
 
-      if (menuToggle.classList.contains("closed")) {
-        menuToggle.classList.remove("closed");
-        menuToggle.classList.add("opened");
+        if (menuToggle.classList.contains("closed")) {
+          menuToggle.classList.remove("closed");
+          menuToggle.classList.add("opened");
+
+          isAnimating = true;
+
+          gsap.to(menu, {
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            ease: "hop",
+            duration: 1.5,
+            onStart: () => {
+              menu.style.pointerEvents = "all";
+            },
+            onComplete: () => {
+              isAnimating = false;
+            },
+          });
+
+          gsap.to(links, {
+            y: 0,
+            opacity: 1,
+            stagger: 0.1,
+            delay: 0.85,
+            duration: 1,
+            ease: "power3.out",
+          });
+
+          gsap.to(socialLinks, {
+            y: 0,
+            opacity: 1,
+            stagger: 0.05,
+            delay: 0.85,
+            duration: 1,
+            ease: "power3.out",
+          });
+
+          gsap.to(".video-wrapper", {
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            ease: "hop",
+            duration: 1.5,
+            delay: 0.5,
+          });
+
+          gsap.to(".header h1 span", {
+            rotateY: 0,
+            stagger: 0.05,
+            delay: 0.75,
+            duration: 1.5,
+            ease: "power4.out",
+          });
+
+          gsap.to(".header h1 span", {
+            y: 0,
+            scale: 1,
+            stagger: 0.05,
+            delay: 0.5,
+            duration: 1.5,
+            ease: "power4.out",
+          });
+        }
+      };
+
+      const closeMenu = (onComplete?: () => void) => {
+        if (isAnimating || menuToggle.classList.contains("closed")) return;
+
+        menuToggle.classList.remove("opened");
+        menuToggle.classList.add("closed");
 
         isAnimating = true;
 
         gsap.to(menu, {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
           ease: "hop",
           duration: 1.5,
-          onStart: () => {
-            menu.style.pointerEvents = "all";
-          },
           onComplete: () => {
+            menu.style.pointerEvents = "none";
+            gsap.set(menu, {
+              clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+            });
+
+            gsap.set(links, { y: 30, opacity: 0 });
+            gsap.set(socialLinks, { y: 30, opacity: 0 });
+            gsap.set(".video-wrapper", {
+              clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+            });
+            gsap.set(".header h1 span", {
+              y: 500,
+              rotateY: 90,
+              scale: 0.75,
+            });
+
             isAnimating = false;
+            onComplete?.();
           },
         });
+      };
 
-        gsap.to(links, {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          delay: 0.85,
-          duration: 1,
-          ease: "power3.out",
-        });
-
-        gsap.to(socialLinks, {
-          y: 0,
-          opacity: 1,
-          stagger: 0.05,
-          delay: 0.85,
-          duration: 1,
-          ease: "power3.out",
-        });
-
-        gsap.to(".video-wrapper", {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          ease: "hop",
-          duration: 1.5,
-          delay: 0.5,
-        });
-
-        gsap.to(".header h1 span", {
-          rotateY: 0,
-          stagger: 0.05,
-          delay: 0.75,
-          duration: 1.5,
-          ease: "power4.out",
-        });
-
-        gsap.to(".header h1 span", {
-          y: 0,
-          scale: 1,
-          stagger: 0.05,
-          delay: 0.5,
-          duration: 1.5,
-          ease: "power4.out",
-        });
-      }
-    };
-
-    const closeMenu = (onComplete?: () => void) => {
-      if (isAnimating || menuToggle.classList.contains("closed")) return;
-
-      menuToggle.classList.remove("opened");
-      menuToggle.classList.add("closed");
-
-      isAnimating = true;
-
-      gsap.to(menu, {
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-        ease: "hop",
-        duration: 1.5,
-        onComplete: () => {
-          menu.style.pointerEvents = "none";
-          gsap.set(menu, {
-            clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
-          });
-
-          gsap.set(links, { y: 30, opacity: 0 });
-          gsap.set(socialLinks, { y: 30, opacity: 0 });
-          gsap.set(".video-wrapper", {
-            clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
-          });
-          gsap.set(".header h1 span", {
-            y: 500,
-            rotateY: 90,
-            scale: 0.75,
-          });
-
-          isAnimating = false;
-          if (onComplete) onComplete();
+      menuToggle.addEventListener(
+        "click",
+        () => {
+          if (isAnimating) return;
+          if (menuToggle.classList.contains("closed")) {
+            openMenu();
+          } else {
+            closeMenu();
+          }
         },
-      });
-    };
+        { signal },
+      );
 
-    menuToggle.addEventListener("click", () => {
-      if (isAnimating) return;
-      if (menuToggle.classList.contains("closed")) {
-        openMenu();
-      } else {
-        closeMenu();
-      }
-    });
+      menuToggle.addEventListener(
+        "touchstart",
+        (e) => {
+          if (isAnimating) return;
+          e.preventDefault();
+          if (menuToggle.classList.contains("closed")) {
+            openMenu();
+          } else {
+            closeMenu();
+          }
+        },
+        { passive: false, signal },
+      );
 
-    menuToggle.addEventListener(
-      "touchstart",
-      (e) => {
-        if (isAnimating) return;
-        e.preventDefault();
-        if (menuToggle.classList.contains("closed")) {
-          openMenu();
-        } else {
-          closeMenu();
-        }
-      },
-      { passive: false },
-    );
+      navLinks.forEach((link) => {
+        link.addEventListener(
+          "click",
+          (event) => {
+            const targetId = link.getAttribute("data-nav-target");
+            if (!targetId) return;
 
-    navLinks.forEach((link) => {
-      link.addEventListener("click", (event) => {
-        const targetId = link.getAttribute("data-nav-target");
-        if (!targetId) return;
+            const targetElement = document.getElementById(targetId);
+            if (!targetElement) return;
 
-        const targetElement = document.getElementById(targetId);
-        if (!targetElement) return;
+            event.preventDefault();
 
-        event.preventDefault();
+            const scrollToTarget = () => {
+              targetElement.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            };
 
-        const scrollToTarget = () => {
-          targetElement.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        };
-
-        if (menuToggle.classList.contains("opened")) {
-          closeMenu(scrollToTarget);
-        } else {
-          scrollToTarget();
-        }
+            if (menuToggle.classList.contains("opened")) {
+              closeMenu(scrollToTarget);
+            } else {
+              scrollToTarget();
+            }
+          },
+          { signal },
+        );
       });
     });
-  });
+
+  document.addEventListener("astro:page-load", initNavigation);
 </script>
