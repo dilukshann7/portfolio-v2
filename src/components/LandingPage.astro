@@ -349,11 +349,10 @@ import ColorBends from "./ui/ColorBends";
 
     .landing-page .col-right {
       display: flex;
-      align-items: center; /* Center horizontally in column */
-      justify-content: center; /* Center the copy block vertically if there's space */
-      padding: 1.5rem 1.25rem 2rem; /* Give space, but remove excessive initial padding */
-      text-align: center; /* Center the text itself on mobile */
-      /* Remove position relative if it's not strictly needed for layering */
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1.25rem 2rem;
+      text-align: center;
     }
 
     .landing-page .col-right .right-copy {
@@ -375,7 +374,6 @@ import ColorBends from "./ui/ColorBends";
     }
   }
 
-  /* Animations & Loader Setup */
   .landing-page .block {
     display: flex;
     justify-content: center;
@@ -384,7 +382,7 @@ import ColorBends from "./ui/ColorBends";
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
-    pointer-events: none; /* Let clicks pass through loaders */
+    pointer-events: none;
   }
 
   .landing-page .loader-text-wrapper,
@@ -397,7 +395,7 @@ import ColorBends from "./ui/ColorBends";
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
-    will-change: transform, opacity; /* GPU Accel */
+    will-change: transform, opacity;
   }
 
   .landing-page .loader-text-wrapper {
@@ -464,7 +462,6 @@ import ColorBends from "./ui/ColorBends";
     will-change: top;
   }
 
-  /* 640px Mobile Breakpoint */
   @media (max-width: 640px) {
     .landing-page .cols {
       gap: 0.75rem;
@@ -484,11 +481,7 @@ import ColorBends from "./ui/ColorBends";
 
     .landing-page .col-right .header {
       text-align: left;
-      font-size: clamp(
-        2.5rem,
-        14vw,
-        4.2rem
-      ); /* Prevent clipping on tiny screens like iPhone SE */
+      font-size: clamp(2.5rem, 14vw, 4.2rem);
       width: auto;
       max-width: 8ch;
     }
