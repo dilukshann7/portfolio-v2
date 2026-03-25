@@ -21,52 +21,6 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: "portfolio-v2",
-    name: "Portfolio v2",
-    description:
-      "Second iteration of a personal portfolio featuring editorial typography and interactive 3D motion.",
-    img: "/projects/portfolio.png",
-    route: "/portfolio-v2",
-    fullDescription:
-      "A single-page portfolio combining editorial-style typography, animated transitions, interactive project showcases, and motion-driven UI experiments. It utilizes a powerful Astro-first rendering approach with React and advanced WebGL/GSAP animations to present work in an immersive way.",
-    role: "Solo Developer",
-    timeline: "2026",
-    status: "Completed",
-    technologies: [
-      "Astro",
-      "React",
-      "TypeScript",
-      "Tailwind CSS v4",
-      "GSAP",
-      "Three.js / OGL",
-    ],
-    features: [
-      "Full-screen animated landing experience",
-      "Preloader and shader-like background effects",
-      "Interactive client-side project cards with GSAP & Lenis",
-      "Hover-reactive technology stack highlights",
-      "Cloudflare-ready deployment",
-    ],
-    links: {
-      demo: "https://dilukshan.dev",
-      github: "https://github.com/dilukshann7/portfolio-v2",
-      website: "https://dilukshan.dev",
-    },
-    highlights: [
-      "Smooth scroll and motion-driven UI via Lenis and GSAP",
-      "Optimized Astro-first rendering for fast load times",
-      "Custom 3D background effects",
-    ],
-    techImages: [
-      "/tech/astro.svg",
-      "/tech/react.svg",
-      "/tech/typescript.svg",
-      "/tech/tailwind.svg",
-      "/tech/gsap.svg",
-      "/tech/three.svg",
-    ],
-  },
-  {
     id: "noxhd-ui",
     name: "NoxHD UI",
     description: "Beautifully Designed UI Library for Next.js",
