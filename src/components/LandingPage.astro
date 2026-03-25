@@ -383,13 +383,32 @@ import ColorBends from "./ui/ColorBends";
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
+    pointer-events: none; /* Let clicks pass through loaders */
   }
 
-  .landing-page .loader-text-wrapper {
+  .landing-page .loader-text-wrapper,
+  .landing-page .revealer,
+  .landing-page .pre-loader {
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+    will-change: transform, opacity; /* GPU Accel */
+  }
+
+  .landing-page .loader-text-wrapper {
     background: #000;
+  }
+
+  .landing-page .revealer {
+    background: #ffffff;
+  }
+
+  .landing-page .pre-loader {
+    background: #fff;
   }
 
   .landing-page .loader-text {
@@ -399,29 +418,14 @@ import ColorBends from "./ui/ColorBends";
     text-transform: uppercase;
     letter-spacing: 0.24em;
     color: #fff;
+    text-align: center;
+    padding: 0 1rem;
   }
 
   .landing-page .loader-text .letter {
     display: inline-block;
     line-height: 1em;
-  }
-
-  .landing-page .revealer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100svh;
-    min-height: 100dvh;
-    background: #ffffff;
-  }
-
-  .landing-page .pre-loader {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #fff;
+    will-change: transform, opacity;
   }
 
   .landing-page .loader-wrapper {
@@ -432,6 +436,7 @@ import ColorBends from "./ui/ColorBends";
     border-radius: 4px;
     overflow: hidden;
     transform: rotate(45deg);
+    will-change: transform;
   }
 
   .landing-page .loader {
