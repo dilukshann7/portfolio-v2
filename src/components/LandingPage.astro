@@ -457,59 +457,66 @@ import ColorBends from "./ui/ColorBends";
       rgba(251, 0, 255, 1) 0%,
       rgba(253, 29, 29, 1) 100%
     );
+    will-change: top;
   }
 
+  /* 640px Mobile Breakpoint */
   @media (max-width: 640px) {
     .landing-page .cols {
-      gap: 1rem;
-      padding: calc(env(safe-area-inset-top, 0px) + 6rem) 1rem
-        calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
+      gap: 0.75rem;
+      padding: calc(env(safe-area-inset-top, 0px) + 5.5rem) 1rem
+        calc(env(safe-area-inset-bottom, 0px) + 2rem);
     }
 
     .landing-page .col-right {
-      height: 20svh;
+      justify-content: center;
     }
 
-    :global(.left-glass) {
-      min-height: clamp(17rem, 42vh, 22rem);
-      border-radius: 1.4rem;
-    }
-
-    :global(.left-glass .copy) {
-      padding-left: 1rem;
-      gap: 0.72rem;
-    }
-
-    :global(.left-glass .header) {
-      font-size: clamp(2.8rem, 14vw, 4.1rem);
-      max-width: 0ch;
-      margin-bottom: 15px;
-    }
-
-    :global(.left-glass .sub-header) {
-      font-size: 0.76rem;
-      letter-spacing: 0.12em;
-    }
-
-    :global(.left-glass .info) {
-      max-width: 26ch;
-      font-size: 1rem;
+    .landing-page .col-right .right-copy {
+      align-items: flex-start;
+      margin-inline: 0;
+      width: 100%;
     }
 
     .landing-page .col-right .header {
-      width: min(7.5ch, 100%);
-      font-size: clamp(5rem, 20vw, 5.6rem);
+      text-align: left;
+      font-size: clamp(
+        2.5rem,
+        14vw,
+        4.2rem
+      ); /* Prevent clipping on tiny screens like iPhone SE */
+      width: auto;
+      max-width: 8ch;
+    }
+
+    :global(.left-glass) {
+      min-height: clamp(15rem, 38svh, 22rem);
+      border-radius: 1.25rem;
+    }
+
+    :global(.left-glass .header) {
+      font-size: clamp(2.2rem, 12vw, 3.8rem); /* Prevent clipping */
+      margin-bottom: 0.75rem;
+    }
+
+    :global(.left-glass .info) {
+      max-width: 100%;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
     .landing-page .loader-text {
-      font-size: clamp(2rem, 9vw, 2.8rem);
-      letter-spacing: 0.14em;
-      text-align: center;
-      padding-inline: 1rem;
+      font-size: clamp(
+        1.2rem,
+        6vw,
+        2.4rem
+      ); /* Kept text safe inside screen bounds */
+      letter-spacing: 0.09em;
+      word-break: break-word;
     }
 
     .landing-page .loader-wrapper {
-      height: 108px;
+      height: 90px;
     }
   }
 </style>
