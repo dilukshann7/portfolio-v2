@@ -330,10 +330,16 @@ import ColorBends from "./ui/ColorBends";
     }
 
     :global(.left-glass .header) {
-      font-size: clamp(3.15rem, 13vw, 4.8rem);
-      line-height: 0.92;
+      font-size: clamp(
+        2.4rem,
+        11vw,
+        3.8rem
+      ); /* Slightly smaller than before for a refined look */
+      line-height: 0.95; /* Increased for better legibility on mobile */
+      letter-spacing: 0.04em;
       max-width: 10ch;
       text-wrap: balance;
+      margin-bottom: 0.8rem; /* Use margin for spacing, not gap */
     }
 
     :global(.left-glass .sub-header) {
@@ -348,27 +354,34 @@ import ColorBends from "./ui/ColorBends";
     }
 
     .landing-page .col-right {
-      align-items: center;
-      justify-content: flex-end;
-      padding-top: 0;
+      display: flex;
+      align-items: center; /* Center horizontally in column */
+      justify-content: center; /* Center the copy block vertically if there's space */
+      padding: 1.5rem 1.25rem 2rem; /* Give space, but remove excessive initial padding */
+      text-align: center; /* Center the text itself on mobile */
+      /* Remove position relative if it's not strictly needed for layering */
     }
 
     .landing-page .col-right .right-copy {
+      position: relative;
       width: min(22rem, 100%);
       margin-inline: auto;
-      align-items: center;
-      gap: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center items within the copy flex container */
+      gap: 0.8rem;
     }
 
     .landing-page .col-right .header {
       width: min(8ch, 100%);
-      font-size: clamp(3.2rem, 14vw, 5.1rem);
+      font-size: clamp(3rem, 13vw, 5.1rem); /* Tuned lower bound */
       line-height: 0.9;
       text-wrap: balance;
       text-align: center;
     }
   }
 
+  /* Animations & Loader Setup */
   .landing-page .block {
     display: flex;
     justify-content: center;
