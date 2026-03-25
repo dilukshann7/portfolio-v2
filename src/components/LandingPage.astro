@@ -615,9 +615,9 @@ import ColorBends from "./ui/ColorBends";
         }
       }
 
-      const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 0.8 : 2;
-      const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.15 : 3;
-      const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.55 : 4.5;
+      const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 1.0 : 2;
+      const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.4 : 3;
+      const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.85 : 4.5;
 
       gsap.from(".landing-page .loader-wrapper", {
         scale: 0.8,
@@ -627,31 +627,31 @@ import ColorBends from "./ui/ColorBends";
 
       gsap.from(".landing-page .loader", {
         top: "100%",
-        ease: "power3.inOut",
-        duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
+        ease: "power2.inOut",
+        duration: prefersReducedMotion ? 0.2 : isMobile ? 1.2 : 2,
       });
 
       gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
         scale: 1.5,
         opacity: 0,
         display: "none",
-        ease: "power3.inOut",
+        ease: "power2.inOut",
         delay: loaderDelay,
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.5 : 1,
+        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.65 : 1,
       });
 
       gsap.from(".landing-page .revealer", {
         width: "0%",
-        ease: "power3.inOut",
+        ease: "power2.inOut",
         delay: revealDelay,
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.5 : 1,
+        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.65 : 1,
       });
 
       gsap.to(".landing-page .revealer", {
         left: "100%",
-        ease: "power3.inOut",
-        delay: revealDelay + (isMobile ? 0.45 : 1),
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.45 : 0.8,
+        ease: "power2.inOut",
+        delay: revealDelay + (isMobile ? 0.55 : 1),
+        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.55 : 0.8,
       });
 
       gsap.to(".landing-page .loader-text-wrapper", {
@@ -664,9 +664,9 @@ import ColorBends from "./ui/ColorBends";
 
       gsap.from(".landing-page .col-left", {
         left: "-110%",
-        ease: "power3.inOut",
+        ease: "power2.inOut",
         delay: contentDelay,
-        duration: prefersReducedMotion ? 0.2 : isMobile ? 0.7 : 1,
+        duration: prefersReducedMotion ? 0.2 : isMobile ? 0.85 : 1,
       });
 
       gsap.from(".landing-page .left-glass .copy", {
