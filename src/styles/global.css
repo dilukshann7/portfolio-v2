@@ -144,12 +144,38 @@
     max-width: 100%;
     height: auto;
   }
+
   @media (max-width: 900px) {
+
     html,
     body {
       width: 100%;
       max-width: 100%;
     }
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  /* Firefox */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
   }
 }
 
@@ -157,6 +183,7 @@
   from {
     clip-path: polygon(25% 75%, 75% 75%, 75% 75%, 25% 75%);
   }
+
   to {
     clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%);
   }
