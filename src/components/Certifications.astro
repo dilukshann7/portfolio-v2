@@ -61,265 +61,278 @@ import { certifications as awards } from "../data/certifications";
 
   const initCertifications = () =>
     runPageScript("certifications", ({ signal, onCleanup }) => {
-    const awardsListContainer =
-      document.querySelector<HTMLElement>(".awards-list");
-    const awardPreview = document.querySelector<HTMLElement>(".award-preview");
-    const awardsList = document.querySelector<HTMLElement>(".awards-list");
+      const awardsListContainer =
+        document.querySelector<HTMLElement>(".awards-list");
+      const awardPreview =
+        document.querySelector<HTMLElement>(".award-preview");
+      const awardsList = document.querySelector<HTMLElement>(".awards-list");
 
-    if (!awardsListContainer || !awardPreview || !awardsList) return;
+      if (!awardsListContainer || !awardPreview || !awardsList) return;
 
-    const isTouchDevice = () =>
-      window.matchMedia("(pointer: coarse)").matches ||
-      "ontouchstart" in window;
+      const isTouchDevice = () =>
+        window.matchMedia("(pointer: coarse)").matches ||
+        "ontouchstart" in window;
 
-    const rowHeight = isTouchDevice() ? 64 : 80;
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      const isSmallMobile = window.matchMedia("(max-width: 400px)").matches;
+      const rowHeight = isSmallMobile
+        ? 48
+        : isMobile
+          ? 52
+          : isTouchDevice()
+            ? 64
+            : 80;
 
-    const POSITIONS = {
-      BOTTOM: 0,
-      MIDDLE: -rowHeight,
-      TOP: -rowHeight * 2,
-    };
+      const POSITIONS = {
+        BOTTOM: 0,
+        MIDDLE: -rowHeight,
+        TOP: -rowHeight * 2,
+      };
 
-    let lastMousePosition = { x: 0, y: 0 };
-    let activeAward: HTMLElement | null = null;
-    let ticking = false;
-    let mouseTimeout: ReturnType<typeof setTimeout> | null = null;
+      let lastMousePosition = { x: 0, y: 0 };
+      let activeAward: HTMLElement | null = null;
+      let ticking = false;
+      let mouseTimeout: ReturnType<typeof setTimeout> | null = null;
 
-    const awardsElements = document.querySelectorAll<HTMLElement>(".award");
+      const awardsElements = document.querySelectorAll<HTMLElement>(".award");
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void boot();
-        }
-      },
-      { rootMargin: "250px 0px" },
-    );
-
-    const boot = async () => {
-      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
-        import("../lib/client/motion"),
-        import("../lib/client/textReveal"),
-      ]);
-      const { gsap, reducedMotion } = await getMotionSystem();
-      const textRevealCleanup = await initTextReveal(
-        document.querySelector(".certifications-container") ?? document,
-        [
-          {
-            selector: ".certifications-container .intro .header",
-            mode: "lines",
-            scroll: true,
-          },
-        ],
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            observer.disconnect();
+            void boot();
+          }
+        },
+        { rootMargin: "250px 0px" },
       );
 
-      onCleanup(() => {
-        textRevealCleanup?.();
-        if (mouseTimeout) {
-          clearTimeout(mouseTimeout);
-        }
-        awardPreview.replaceChildren();
-      });
-
-      if (isTouchDevice()) {
-        awardsElements.forEach((award) => {
-          award.addEventListener(
-            "touchstart",
-            () => {
-              awardsElements.forEach((a) => a.classList.remove("touch-active"));
-              award.classList.add("touch-active");
+      const boot = async () => {
+        const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
+          import("../lib/client/motion"),
+          import("../lib/client/textReveal"),
+        ]);
+        const { gsap, reducedMotion } = await getMotionSystem();
+        const textRevealCleanup = await initTextReveal(
+          document.querySelector(".certifications-container") ?? document,
+          [
+            {
+              selector: ".certifications-container .intro .header",
+              mode: "lines",
+              scroll: true,
             },
-            { passive: true, signal },
-          );
-        });
-        return;
-      }
+          ],
+        );
 
-      const animatePreview = () => {
-        const awardsListRect = awardsList.getBoundingClientRect();
-        if (
-          lastMousePosition.x < awardsListRect.left ||
-          lastMousePosition.x > awardsListRect.right ||
-          lastMousePosition.y < awardsListRect.top ||
-          lastMousePosition.y > awardsListRect.bottom
-        ) {
-          const previewImages = awardPreview.querySelectorAll("img");
-          previewImages.forEach((img) => {
-            gsap.to(img, {
-              scale: 0,
-              duration: 0.4,
-              ease: "power2.out",
-              onComplete: () => img.remove(),
-            });
-          });
-        }
-      };
-
-      const updateAwards = () => {
-        animatePreview();
-
-        if (activeAward) {
-          const rect = activeAward.getBoundingClientRect();
-          const isStillOver =
-            lastMousePosition.x >= rect.left &&
-            lastMousePosition.x <= rect.right &&
-            lastMousePosition.y >= rect.top &&
-            lastMousePosition.y <= rect.bottom;
-
-          if (!isStillOver) {
-            const wrapper = activeAward.querySelector(".award-wrapper");
-            const leavingFromTop =
-              lastMousePosition.y < rect.top + rect.height / 2;
-
-            gsap.to(wrapper, {
-              y: leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM,
-              duration: 0.4,
-              ease: "power2.out",
-            });
-            activeAward = null;
-          }
-        }
-
-        awardsElements.forEach((award) => {
-          if (award === activeAward) return;
-
-          const rect = award.getBoundingClientRect();
-          const isMouseOver =
-            lastMousePosition.x >= rect.left &&
-            lastMousePosition.x <= rect.right &&
-            lastMousePosition.y >= rect.top &&
-            lastMousePosition.y <= rect.bottom;
-
-          if (isMouseOver) {
-            const wrapper = award.querySelector(".award-wrapper");
-
-            gsap.to(wrapper, {
-              y: POSITIONS.MIDDLE,
-              duration: 0.4,
-              ease: "power2.out",
-            });
-            activeAward = award;
-          }
-        });
-
-        ticking = false;
-      };
-
-      awardsList.addEventListener(
-        "pointermove",
-        (e: PointerEvent) => {
-          lastMousePosition.x = e.clientX;
-          lastMousePosition.y = e.clientY;
-
+        onCleanup(() => {
+          textRevealCleanup?.();
           if (mouseTimeout) {
             clearTimeout(mouseTimeout);
           }
+          awardPreview.replaceChildren();
+        });
 
-          mouseTimeout = setTimeout(() => {
-            const images = awardPreview.querySelectorAll("img");
-            if (images.length > 1) {
-              const lastImage = images[images.length - 1];
-              images.forEach((img) => {
-                if (img !== lastImage) {
-                  gsap.to(img, {
-                    scale: 0,
-                    duration: 0.4,
-                    ease: "power2.out",
-                    onComplete: () => img.remove(),
-                  });
-                }
+        if (isTouchDevice()) {
+          awardsElements.forEach((award) => {
+            award.addEventListener(
+              "touchstart",
+              () => {
+                awardsElements.forEach((a) =>
+                  a.classList.remove("touch-active"),
+                );
+                award.classList.add("touch-active");
+              },
+              { passive: true, signal },
+            );
+          });
+          return;
+        }
+
+        const animatePreview = () => {
+          const awardsListRect = awardsList.getBoundingClientRect();
+          if (
+            lastMousePosition.x < awardsListRect.left ||
+            lastMousePosition.x > awardsListRect.right ||
+            lastMousePosition.y < awardsListRect.top ||
+            lastMousePosition.y > awardsListRect.bottom
+          ) {
+            const previewImages = awardPreview.querySelectorAll("img");
+            previewImages.forEach((img) => {
+              gsap.to(img, {
+                scale: 0,
+                duration: 0.4,
+                ease: "power2.out",
+                onComplete: () => img.remove(),
               });
-            }
-          }, 2000);
-
-          animatePreview();
-        },
-        { passive: true, signal },
-      );
-
-      document.addEventListener(
-        "scroll",
-        () => {
-          if (!ticking) {
-            requestAnimationFrame(() => {
-              updateAwards();
             });
-            ticking = true;
           }
-        },
-        { passive: true, signal },
-      );
+        };
 
-      awardsElements.forEach((award) => {
-        const wrapper = award.querySelector(".award-wrapper");
-        const awardImage = award.dataset.awardImage;
-        const awardName = award.dataset.awardName ?? "";
-        let currentPosition = POSITIONS.TOP;
+        const updateAwards = () => {
+          animatePreview();
 
-        award.addEventListener(
-          "mouseenter",
-          (e: MouseEvent) => {
-            activeAward = award;
+          if (activeAward) {
+            const rect = activeAward.getBoundingClientRect();
+            const isStillOver =
+              lastMousePosition.x >= rect.left &&
+              lastMousePosition.x <= rect.right &&
+              lastMousePosition.y >= rect.top &&
+              lastMousePosition.y <= rect.bottom;
+
+            if (!isStillOver) {
+              const wrapper = activeAward.querySelector(".award-wrapper");
+              const leavingFromTop =
+                lastMousePosition.y < rect.top + rect.height / 2;
+
+              gsap.to(wrapper, {
+                y: leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM,
+                duration: 0.4,
+                ease: "power2.out",
+              });
+              activeAward = null;
+            }
+          }
+
+          awardsElements.forEach((award) => {
+            if (award === activeAward) return;
+
             const rect = award.getBoundingClientRect();
-            const enterFromTop = e.clientY < rect.top + rect.height / 2;
+            const isMouseOver =
+              lastMousePosition.x >= rect.left &&
+              lastMousePosition.x <= rect.right &&
+              lastMousePosition.y >= rect.top &&
+              lastMousePosition.y <= rect.bottom;
 
-            if (enterFromTop || currentPosition === POSITIONS.BOTTOM) {
-              currentPosition = POSITIONS.MIDDLE;
+            if (isMouseOver) {
+              const wrapper = award.querySelector(".award-wrapper");
+
               gsap.to(wrapper, {
                 y: POSITIONS.MIDDLE,
                 duration: 0.4,
                 ease: "power2.out",
               });
+              activeAward = award;
+            }
+          });
+
+          ticking = false;
+        };
+
+        awardsList.addEventListener(
+          "pointermove",
+          (e: PointerEvent) => {
+            lastMousePosition.x = e.clientX;
+            lastMousePosition.y = e.clientY;
+
+            if (mouseTimeout) {
+              clearTimeout(mouseTimeout);
             }
 
-            if (!awardImage) return;
+            mouseTimeout = setTimeout(() => {
+              const images = awardPreview.querySelectorAll("img");
+              if (images.length > 1) {
+                const lastImage = images[images.length - 1];
+                images.forEach((img) => {
+                  if (img !== lastImage) {
+                    gsap.to(img, {
+                      scale: 0,
+                      duration: 0.4,
+                      ease: "power2.out",
+                      onComplete: () => img.remove(),
+                    });
+                  }
+                });
+              }
+            }, 2000);
 
-            const img = document.createElement("img");
-            img.src = awardImage;
-            img.alt = awardName;
-            img.loading = "lazy";
-            img.decoding = "async";
-            img.style.position = "absolute";
-            img.style.top = "0";
-            img.style.left = "0";
-            img.style.scale = reducedMotion ? "1" : "0";
-            img.style.zIndex = Date.now().toString();
+            animatePreview();
+          },
+          { passive: true, signal },
+        );
 
-            awardPreview.appendChild(img);
+        document.addEventListener(
+          "scroll",
+          () => {
+            if (!ticking) {
+              requestAnimationFrame(() => {
+                updateAwards();
+              });
+              ticking = true;
+            }
+          },
+          { passive: true, signal },
+        );
 
-            if (!reducedMotion) {
-              gsap.to(img, {
-                scale: 1,
+        awardsElements.forEach((award) => {
+          const wrapper = award.querySelector(".award-wrapper");
+          const awardImage = award.dataset.awardImage;
+          const awardName = award.dataset.awardName ?? "";
+          let currentPosition = POSITIONS.TOP;
+
+          award.addEventListener(
+            "mouseenter",
+            (e: MouseEvent) => {
+              activeAward = award;
+              const rect = award.getBoundingClientRect();
+              const enterFromTop = e.clientY < rect.top + rect.height / 2;
+
+              if (enterFromTop || currentPosition === POSITIONS.BOTTOM) {
+                currentPosition = POSITIONS.MIDDLE;
+                gsap.to(wrapper, {
+                  y: POSITIONS.MIDDLE,
+                  duration: 0.4,
+                  ease: "power2.out",
+                });
+              }
+
+              if (!awardImage) return;
+
+              const img = document.createElement("img");
+              img.src = awardImage;
+              img.alt = awardName;
+              img.loading = "lazy";
+              img.decoding = "async";
+              img.style.position = "absolute";
+              img.style.top = "0";
+              img.style.left = "0";
+              img.style.scale = reducedMotion ? "1" : "0";
+              img.style.zIndex = Date.now().toString();
+
+              awardPreview.appendChild(img);
+
+              if (!reducedMotion) {
+                gsap.to(img, {
+                  scale: 1,
+                  duration: 0.4,
+                  ease: "power2.out",
+                });
+              }
+            },
+            { signal },
+          );
+
+          award.addEventListener(
+            "mouseleave",
+            (e: MouseEvent) => {
+              activeAward = null;
+              const rect = award.getBoundingClientRect();
+              const leavingFromTop = e.clientY < rect.top + rect.height / 2;
+
+              currentPosition = leavingFromTop
+                ? POSITIONS.TOP
+                : POSITIONS.BOTTOM;
+              gsap.to(wrapper, {
+                y: currentPosition,
                 duration: 0.4,
                 ease: "power2.out",
               });
-            }
-          },
-          { signal },
-        );
+            },
+            { signal },
+          );
+        });
+      };
 
-        award.addEventListener(
-          "mouseleave",
-          (e: MouseEvent) => {
-            activeAward = null;
-            const rect = award.getBoundingClientRect();
-            const leavingFromTop = e.clientY < rect.top + rect.height / 2;
-
-            currentPosition = leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM;
-            gsap.to(wrapper, {
-              y: currentPosition,
-              duration: 0.4,
-              ease: "power2.out",
-            });
-          },
-          { signal },
-        );
-      });
-    };
-
-    observer.observe(awardsList);
-    onCleanup(() => observer.disconnect());
+      observer.observe(awardsList);
+      onCleanup(() => observer.disconnect());
     });
 
   document.addEventListener("astro:page-load", initCertifications);
@@ -335,10 +348,10 @@ import { certifications as awards } from "../data/certifications";
   }
 
   .certifications-container h1 {
-    font-size: 72px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    line-height: 0.9;
+    font-size: clamp(3.5rem, 5vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1;
   }
 
   .certifications-container :global(.award-title) {
@@ -434,48 +447,49 @@ import { certifications as awards } from "../data/certifications";
 
   @media (max-width: 768px) {
     .certifications-container section {
-      height: 20vh;
+      height: auto;
+      min-height: 15vh;
+      padding-top: 4vh;
     }
 
     .certifications-container h1 {
-      font-size: 5em;
-
-      letter-spacing: -0.5px;
-      line-height: 1;
+      font-size: clamp(2.5rem, 8vw, 3.5rem);
+      letter-spacing: -0.3px;
+      line-height: 1.05;
     }
 
     .certifications-container :global(.award-title) {
-      font-size: clamp(26px, 7vw, 36px);
+      font-size: clamp(18px, 5vw, 24px);
     }
 
     .certifications-container :global(.award) {
-      height: 64px;
+      height: 52px;
     }
 
     .awards {
-      min-height: 60vh;
+      min-height: auto;
     }
 
     .certifications-container :global(.award-wrapper) {
-      height: 192px;
-      transform: translateY(-128px);
+      height: 156px;
+      transform: translateY(-104px);
     }
 
     .certifications-container :global(.award-name),
     .certifications-container :global(.award-project) {
-      height: 64px;
-      padding: 4px 16px;
-      gap: 8px;
+      height: 52px;
+      padding: 6px 20px;
+      gap: 12px;
     }
 
     .certifications-container :global(.award-type-inline) {
       display: inline-block;
       font-family: var(--font-melodrame);
-      font-size: clamp(11px, 3vw, 14px);
+      font-size: clamp(10px, 3vw, 12px);
       font-weight: 400;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       white-space: nowrap;
-      opacity: 0.55;
+      opacity: 0.6;
       flex-shrink: 0;
     }
 
@@ -490,12 +504,35 @@ import { certifications as awards } from "../data/certifications";
 
   @media (max-width: 400px) {
     .certifications-container h1 {
-      font-size: clamp(18px, 5.5vw, 26px);
+      font-size: clamp(2rem, 7vw, 2.5rem);
+    }
+
+    .certifications-container :global(.award-title) {
+      font-size: clamp(16px, 5.5vw, 20px);
+    }
+
+    .certifications-container :global(.award) {
+      height: 48px;
+    }
+
+    .certifications-container :global(.award-wrapper) {
+      height: 144px;
+      transform: translateY(-96px);
     }
 
     .certifications-container :global(.award-name),
     .certifications-container :global(.award-project) {
-      padding: 4px 12px;
+      height: 48px;
+      padding: 6px 16px;
+      gap: 8px;
+    }
+
+    .header {
+      font-size: 4rem !important;
+    }
+
+    .certifications-container :global(.award-type-inline) {
+      font-size: clamp(9px, 2.8vw, 11px);
     }
   }
 </style>
