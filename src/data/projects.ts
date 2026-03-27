@@ -327,44 +327,44 @@ export const projects: Project[] = [
       "/tech/tailwind.svg",
     ],
   },
-  {
-    id: "notesploy",
-    name: "Notesploy",
-    description:
-      "A rich note-taking app with a block-based editor, live code execution, and real-time collaboration.",
-    img: "/projects/notesploy.png",
-    route: "/notesploy",
-    fullDescription:
-      "Notesploy is a modern note-taking application that combines the flexibility of a block-based editor with powerful developer-focused features like live code execution and real-time collaboration. It's designed to be the single workspace for developers to capture, organize, and share knowledge.",
-    role: "Lead Developer",
-    timeline: "2023 - 2024",
-    status: "In Progress",
-    technologies: ["Next.js", "Supabase", "PostgreSQL", "Redis", "WebSockets"],
-    features: [
-      "Block-based editor with slash commands",
-      "Live code execution in the browser",
-      "Real-time collaborative editing",
-      "Markdown and rich text support",
-      "Team workspaces with permissions",
-      "Version history with branching",
-    ],
-    links: {
-      demo: "https://notesploy.com",
-      github: "https://github.com/notesploy/",
-    },
-    highlights: [
-      "Built WebContainer integration for secure code execution",
-      "Achieved sub-50ms sync latency for collaboration",
-      "Designed extensible block plugin architecture",
-    ],
-    techImages: [
-      "/tech/nextjs.svg",
-      "/tech/supabase.svg",
-      "/tech/postgresql.svg",
-      "/tech/redis.svg",
-      "/tech/websockets.svg",
-    ],
-  },
+  // {
+  //   id: "notesploy",
+  //   name: "Notesploy",
+  //   description:
+  //     "A rich note-taking app with a block-based editor, live code execution, and real-time collaboration.",
+  //   img: "/projects/notesploy.png",
+  //   route: "/notesploy",
+  //   fullDescription:
+  //     "Notesploy is a modern note-taking application that combines the flexibility of a block-based editor with powerful developer-focused features like live code execution and real-time collaboration. It's designed to be the single workspace for developers to capture, organize, and share knowledge.",
+  //   role: "Lead Developer",
+  //   timeline: "2023 - 2024",
+  //   status: "In Progress",
+  //   technologies: ["Next.js", "Supabase", "PostgreSQL", "Redis", "WebSockets"],
+  //   features: [
+  //     "Block-based editor with slash commands",
+  //     "Live code execution in the browser",
+  //     "Real-time collaborative editing",
+  //     "Markdown and rich text support",
+  //     "Team workspaces with permissions",
+  //     "Version history with branching",
+  //   ],
+  //   links: {
+  //     demo: "https://notesploy.com",
+  //     github: "https://github.com/notesploy/",
+  //   },
+  //   highlights: [
+  //     "Built WebContainer integration for secure code execution",
+  //     "Achieved sub-50ms sync latency for collaboration",
+  //     "Designed extensible block plugin architecture",
+  //   ],
+  //   techImages: [
+  //     "/tech/nextjs.svg",
+  //     "/tech/supabase.svg",
+  //     "/tech/postgresql.svg",
+  //     "/tech/redis.svg",
+  //     "/tech/websockets.svg",
+  //   ],
+  // },
   {
     id: "h5ptopptx",
     name: "H5PtoPPTX",
