@@ -524,240 +524,244 @@
 
   const initAboutCardsMotion = () =>
     runPageScript("about-cards-motion", ({ onCleanup }) => {
-    const intro = document.querySelector(".intro");
-    const cardInners =
-      document.querySelectorAll<HTMLElement>(".cards .card-inner");
+      const intro = document.querySelector(".intro");
+      const cardInners =
+        document.querySelectorAll<HTMLElement>(".cards .card-inner");
 
-    if (!intro) return;
-
-    cardInners.forEach((element) => {
-      element.style.visibility = "hidden";
-    });
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          void boot();
-        }
-      },
-      { rootMargin: "250px 0px" },
-    );
-
-    const boot = async () => {
-      const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
-        import("../lib/client/motion"),
-        import("../lib/client/textReveal"),
-      ]);
-      const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
-      const cards = gsap.utils.toArray<HTMLElement>(".card");
-      const triggers: Array<ReturnType<typeof ScrollTrigger.create>> = [];
-      const tweens: Array<ReturnType<typeof gsap.to>> = [];
-      const registerTrigger = (trigger: ReturnType<typeof ScrollTrigger.create>) => {
-        triggers.push(trigger);
-        return trigger;
-      };
-      const registerTween = (tween: ReturnType<typeof gsap.to>) => {
-        tweens.push(tween);
-        return tween;
-      };
-      const textRevealCleanup = await initTextReveal(document, [
-        {
-          selector: ".intro .header",
-          mode: "lines",
-          scroll: true,
-        },
-        {
-          selector: ".card-content h1",
-          mode: "lines",
-          scroll: true,
-        },
-        {
-          selector: ".card-content p",
-          mode: "fade",
-          scroll: true,
-          y: 18,
-        },
-        {
-          selector: ".outro .header",
-          mode: "lines",
-          scroll: true,
-        },
-      ]);
-
-      onCleanup(() => {
-        textRevealCleanup?.();
-        tweens.forEach((tween) => tween.kill());
-        triggers.forEach((trigger) => trigger.kill());
-      });
+      if (!intro) return;
 
       cardInners.forEach((element) => {
-        element.style.visibility = "visible";
+        element.style.visibility = "hidden";
       });
 
-      if (cards.length === 0) return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            observer.disconnect();
+            void boot();
+          }
+        },
+        { rootMargin: "250px 0px" },
+      );
 
-      if (reducedMotion) {
-        document
-          .querySelectorAll<HTMLElement>(".cards .tech-icon")
-          .forEach((element) => {
-            element.style.transform = "translate(-50%, -50%)";
-          });
-        document
-          .querySelectorAll<HTMLElement>(".cards .grid-item")
-          .forEach((element) => {
-            element.style.opacity = "1";
-          });
-        return;
-      }
+      const boot = async () => {
+        const [{ getMotionSystem }, { initTextReveal }] = await Promise.all([
+          import("../lib/client/motion"),
+          import("../lib/client/textReveal"),
+        ]);
+        const { gsap, ScrollTrigger, reducedMotion } = await getMotionSystem();
+        const cards = gsap.utils.toArray<HTMLElement>(".card");
+        const triggers: Array<ReturnType<typeof ScrollTrigger.create>> = [];
+        const tweens: Array<ReturnType<typeof gsap.to>> = [];
+        const registerTrigger = (
+          trigger: ReturnType<typeof ScrollTrigger.create>,
+        ) => {
+          triggers.push(trigger);
+          return trigger;
+        };
+        const registerTween = (tween: ReturnType<typeof gsap.to>) => {
+          tweens.push(tween);
+          return tween;
+        };
+        const textRevealCleanup = await initTextReveal(document, [
+          {
+            selector: ".intro .header",
+            mode: "lines",
+            scroll: true,
+          },
+          {
+            selector: ".card-content h1",
+            mode: "lines",
+            scroll: true,
+          },
+          {
+            selector: ".card-content p",
+            mode: "fade",
+            scroll: true,
+            y: 18,
+          },
+          {
+            selector: ".outro .header",
+            mode: "lines",
+            scroll: true,
+          },
+        ]);
 
-      cards.forEach((card) => {
-        const gridItems = Array.from(
-          card.querySelectorAll<HTMLElement>(".grid-item"),
-        );
-        const icons = Array.from(card.querySelectorAll<HTMLElement>(".tech-icon"));
+        onCleanup(() => {
+          textRevealCleanup?.();
+          tweens.forEach((tween) => tween.kill());
+          triggers.forEach((trigger) => trigger.kill());
+        });
 
-        if (!gridItems.length || !icons.length) {
+        cardInners.forEach((element) => {
+          element.style.visibility = "visible";
+        });
+
+        if (cards.length === 0) return;
+
+        if (reducedMotion) {
+          document
+            .querySelectorAll<HTMLElement>(".cards .tech-icon")
+            .forEach((element) => {
+              element.style.transform = "translate(-50%, -50%)";
+            });
+          document
+            .querySelectorAll<HTMLElement>(".cards .grid-item")
+            .forEach((element) => {
+              element.style.opacity = "1";
+            });
           return;
         }
 
-        gsap.set(gridItems, {
-          opacity: 0,
+        cards.forEach((card) => {
+          const gridItems = Array.from(
+            card.querySelectorAll<HTMLElement>(".grid-item"),
+          );
+          const icons = Array.from(
+            card.querySelectorAll<HTMLElement>(".tech-icon"),
+          );
+
+          if (!gridItems.length || !icons.length) {
+            return;
+          }
+
+          gsap.set(gridItems, {
+            opacity: 0,
+          });
+          gsap.set(icons, {
+            xPercent: -50,
+            yPercent: 85,
+            force3D: true,
+          });
+
+          registerTrigger(
+            ScrollTrigger.create({
+              trigger: card,
+              start: "top 78%",
+              once: true,
+              onEnter: () => {
+                registerTween(
+                  gsap.to(gridItems, {
+                    opacity: 1,
+                    duration: 0.18,
+                    stagger: 0.08,
+                    ease: "power2.out",
+                    overwrite: "auto",
+                  }),
+                );
+
+                registerTween(
+                  gsap.to(icons, {
+                    xPercent: -50,
+                    yPercent: -50,
+                    duration: 0.82,
+                    stagger: 0.12,
+                    ease: "power3.out",
+                    overwrite: "auto",
+                  }),
+                );
+              },
+            }),
+          );
         });
-        gsap.set(icons, {
-          xPercent: -50,
-          yPercent: 85,
-          force3D: true,
-        });
 
-        registerTrigger(
-          ScrollTrigger.create({
-            trigger: card,
-            start: "top 78%",
-            once: true,
-            onEnter: () => {
-              registerTween(
-                gsap.to(gridItems, {
-                  opacity: 1,
-                  duration: 0.18,
-                  stagger: 0.08,
-                  ease: "power2.out",
-                  overwrite: "auto",
-                }),
-              );
+        const mm = gsap.matchMedia();
 
-              registerTween(
-                gsap.to(icons, {
-                  xPercent: -50,
-                  yPercent: -50,
-                  duration: 0.82,
-                  stagger: 0.12,
-                  ease: "power3.out",
-                  overwrite: "auto",
-                }),
-              );
-            },
-          }),
-        );
-      });
+        onCleanup(() => mm.revert());
 
-      const mm = gsap.matchMedia();
+        mm.add("(min-width: 901px)", () => {
+          registerTrigger(
+            ScrollTrigger.create({
+              trigger: cards[0],
+              start: "top 80%",
+              endTrigger: cards[cards.length - 1],
+              end: "top 30%",
+              pin: ".intro",
+              pinSpacing: false,
+            }),
+          );
 
-      onCleanup(() => mm.revert());
+          cards.forEach((card: HTMLElement, index: number) => {
+            const isLastCard = index === cards.length - 1;
+            const cardInner = card.querySelector(".card-inner");
 
-      mm.add("(min-width: 901px)", () => {
-        registerTrigger(
-          ScrollTrigger.create({
-            trigger: cards[0],
-            start: "top 80%",
-            endTrigger: cards[cards.length - 1],
-            end: "top 30%",
-            pin: ".intro",
-            pinSpacing: false,
-          }),
-        );
-
-        cards.forEach((card: HTMLElement, index: number) => {
-          const isLastCard = index === cards.length - 1;
-          const cardInner = card.querySelector(".card-inner");
-
-          if (!isLastCard) {
-            registerTrigger(
-              ScrollTrigger.create({
-                trigger: card,
-                start: "top 25%",
-                endTrigger: ".outro",
-                end: "top 65%",
-                pin: true,
-                pinSpacing: false,
-              }),
-            );
-
-            registerTween(
-              gsap.to(cardInner, {
-                y: `-${(cards.length - index) * 14}vh`,
-                ease: "none",
-                scrollTrigger: {
+            if (!isLastCard) {
+              registerTrigger(
+                ScrollTrigger.create({
                   trigger: card,
                   start: "top 25%",
                   endTrigger: ".outro",
                   end: "top 65%",
-                  scrub: true,
-                },
-              }),
-            );
-          }
+                  pin: true,
+                  pinSpacing: false,
+                }),
+              );
+
+              registerTween(
+                gsap.to(cardInner, {
+                  y: `-${(cards.length - index) * 14}vh`,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: card,
+                    start: "top 25%",
+                    endTrigger: ".outro",
+                    end: "top 65%",
+                    scrub: true,
+                  },
+                }),
+              );
+            }
+          });
         });
-      });
 
-      mm.add("(max-width: 900px)", () => {
-        registerTrigger(
-          ScrollTrigger.create({
-            trigger: cards[0],
-            start: "top 60%",
-            endTrigger: cards[cards.length - 1],
-            end: "top 40%",
-            pin: ".intro",
-            pinSpacing: false,
-          }),
-        );
+        mm.add("(max-width: 900px)", () => {
+          registerTrigger(
+            ScrollTrigger.create({
+              trigger: cards[0],
+              start: "top 60%",
+              endTrigger: cards[cards.length - 1],
+              end: "top 40%",
+              pin: ".intro",
+              pinSpacing: false,
+            }),
+          );
 
-        cards.forEach((card: HTMLElement, index: number) => {
-          const isLastCard = index === cards.length - 1;
-          const cardInner = card.querySelector(".card-inner");
+          cards.forEach((card: HTMLElement, index: number) => {
+            const isLastCard = index === cards.length - 1;
+            const cardInner = card.querySelector(".card-inner");
 
-          if (!isLastCard) {
-            registerTrigger(
-              ScrollTrigger.create({
-                trigger: card,
-                start: "top 22%",
-                endTrigger: ".outro",
-                end: "top 65%",
-                pin: true,
-                pinSpacing: false,
-              }),
-            );
-
-            registerTween(
-              gsap.to(cardInner, {
-                y: `-${(cards.length - index) * 6}vh`,
-                ease: "none",
-                scrollTrigger: {
+            if (!isLastCard) {
+              registerTrigger(
+                ScrollTrigger.create({
                   trigger: card,
                   start: "top 22%",
                   endTrigger: ".outro",
                   end: "top 65%",
-                  scrub: true,
-                },
-              }),
-            );
-          }
-        });
-      });
-    };
+                  pin: true,
+                  pinSpacing: false,
+                }),
+              );
 
-    observer.observe(intro);
-    onCleanup(() => observer.disconnect());
+              registerTween(
+                gsap.to(cardInner, {
+                  y: `-${(cards.length - index) * 6}vh`,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: card,
+                    start: "top 22%",
+                    endTrigger: ".outro",
+                    end: "top 65%",
+                    scrub: true,
+                  },
+                }),
+              );
+            }
+          });
+        });
+      };
+
+      observer.observe(intro);
+      onCleanup(() => observer.disconnect());
     });
 
   document.addEventListener("astro:page-load", initAboutCardsMotion);
@@ -768,70 +772,70 @@
 
   const initAboutCardsGrid = () =>
     runPageScript("about-cards-grid", ({ signal }) => {
-    const cards = document.querySelectorAll(".card");
+      const cards = document.querySelectorAll(".card");
 
-    cards.forEach((card) => {
-      const grid = card.querySelector(".grid");
-      const highlight = card.querySelector(".highlight");
-      const firstItem = card.querySelector(".grid-item");
-      const cardInner = card.querySelector<HTMLElement>(".card-inner");
+      cards.forEach((card) => {
+        const grid = card.querySelector(".grid");
+        const highlight = card.querySelector(".highlight");
+        const firstItem = card.querySelector(".grid-item");
+        const cardInner = card.querySelector<HTMLElement>(".card-inner");
 
-      if (!grid || !highlight || !firstItem) return;
+        if (!grid || !highlight || !firstItem) return;
 
-      const isDarkBackground = (() => {
-        if (!cardInner) return false;
-        const bg = getComputedStyle(cardInner).backgroundColor;
-        const [r, g, b] = bg
-          .match(/\d+/g)
-          ?.map((n) => parseInt(n, 10))
-          .slice(0, 3) || [255, 255, 255];
-        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        return luminance < 0.35;
-      })();
+        const isDarkBackground = (() => {
+          if (!cardInner) return false;
+          const bg = getComputedStyle(cardInner).backgroundColor;
+          const [r, g, b] = bg
+            .match(/\d+/g)
+            ?.map((n) => parseInt(n, 10))
+            .slice(0, 3) || [255, 255, 255];
+          const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          return luminance < 0.35;
+        })();
 
-      if (isDarkBackground && cardInner) {
-        cardInner.classList.add("dark-card");
-      }
-
-      grid.querySelectorAll<HTMLElement>(".grid-item").forEach((item) => {
-        const color = item.dataset.color || "#000";
-        item.style.setProperty("--item-color", color);
-        const textColor = item.dataset.textColor;
-        if (textColor) {
-          item.style.setProperty("--text-color", textColor);
+        if (isDarkBackground && cardInner) {
+          cardInner.classList.add("dark-card");
         }
+
+        grid.querySelectorAll<HTMLElement>(".grid-item").forEach((item) => {
+          const color = item.dataset.color || "#000";
+          item.style.setProperty("--item-color", color);
+          const textColor = item.dataset.textColor;
+          if (textColor) {
+            item.style.setProperty("--text-color", textColor);
+          }
+        });
+
+        const moveToElement = (element: Element | null) => {
+          if (element && highlight && grid) {
+            const rect = element.getBoundingClientRect();
+            const gridRect = grid.getBoundingClientRect();
+
+            (highlight as HTMLElement).style.transform = `translate(${
+              rect.left - gridRect.left
+            }px, ${rect.top - gridRect.top}px)`;
+            (highlight as HTMLElement).style.width = `${rect.width}px`;
+            (highlight as HTMLElement).style.height = `${rect.height}px`;
+            (highlight as HTMLElement).style.backgroundColor =
+              (element as HTMLElement).dataset.color || "white";
+          }
+        };
+
+        moveToElement(firstItem);
+
+        (grid as HTMLElement).addEventListener(
+          "mousemove",
+          (e: MouseEvent) => {
+            const hoveredElement =
+              (e.target as Element | null)?.closest(".grid-item") ?? null;
+            moveToElement(hoveredElement);
+          },
+          {
+            passive: true,
+            signal,
+          },
+        );
       });
-
-      const moveToElement = (element: Element | null) => {
-        if (element && highlight && grid) {
-          const rect = element.getBoundingClientRect();
-          const gridRect = grid.getBoundingClientRect();
-
-          (highlight as HTMLElement).style.transform = `translate(${
-            rect.left - gridRect.left
-          }px, ${rect.top - gridRect.top}px)`;
-          (highlight as HTMLElement).style.width = `${rect.width}px`;
-          (highlight as HTMLElement).style.height = `${rect.height}px`;
-          (highlight as HTMLElement).style.backgroundColor =
-            (element as HTMLElement).dataset.color || "white";
-        }
-      };
-
-      moveToElement(firstItem);
-
-      (grid as HTMLElement).addEventListener(
-        "mousemove",
-        (e: MouseEvent) => {
-          const hoveredElement =
-            (e.target as Element | null)?.closest(".grid-item") ?? null;
-          moveToElement(hoveredElement);
-        },
-        {
-          passive: true,
-          signal,
-        },
-      );
-    });
     });
 
   document.addEventListener("astro:page-load", initAboutCardsGrid);
