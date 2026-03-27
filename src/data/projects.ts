@@ -328,7 +328,7 @@ export const projects: Project[] = [
     name: "H5PtoPPTX",
     description:
       "Windows desktop application to convert H5P interactive content to PowerPoint.",
-    img: "/projects/h5ptopptx.png",
+    img: "/projects/h5ptopptx.jpg",
     route: "/h5ptopptx",
     fullDescription:
       "H5PtoPPTX is a C# Windows desktop application designed to streamline educational content management. It extracts images from packaged .h5p files and seamlessly auto-generates a .pptx PowerPoint presentation, placing each image on an individual slide.",
