@@ -406,4 +406,56 @@ const pageTitle = `Contact | ${SITE.name}`;
       display: none;
     }
   }
+
+  @media (max-width: 480px) {
+    .col-info,
+    .col-form {
+      padding: clamp(1.5rem, 3vw, 2rem) clamp(1.25rem, 3vw, 1.5rem);
+    }
+
+    .col-info__heading {
+      font-size: clamp(2.2rem, 10vw, 3rem);
+    }
+
+    .form__title {
+      font-size: clamp(1.6rem, 6vw, 2rem);
+    }
+
+    .form__header {
+      margin-bottom: 1.25rem;
+    }
+
+    .field input,
+    .field textarea {
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      padding: 1.75rem 0 0.65rem;
+      min-height: 44px;
+    }
+
+    .field textarea {
+      min-height: 70px;
+    }
+
+    .form__submit {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .form__note {
+      text-align: center;
+    }
+
+    .submit-btn {
+      justify-content: center;
+    }
+
+    .col-info__details {
+      gap: 1.25rem;
+    }
+
+    .footer__socials {
+      gap: 1rem;
+    }
+  }
 </style>

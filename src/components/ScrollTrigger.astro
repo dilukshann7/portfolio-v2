@@ -195,6 +195,32 @@
       height: 30px;
     }
   }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 14vw;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+
+    .animated-text {
+      font-size: clamp(1.5rem, 5vw, 3rem);
+      padding: 0 0.5rem;
+    }
+
+    .placeholder-icon {
+      width: 22px;
+      height: 22px;
+      margin-top: -3px;
+    }
+
+    .animated-icons {
+      max-width: 280px;
+      gap: 0.5rem;
+    }
+  }
 </style>
 <script>
   // @ts-ignore

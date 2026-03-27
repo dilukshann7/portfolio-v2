@@ -263,12 +263,7 @@
 </section>
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Space Grotesk", sans-serif;
-  }
+
 
   h1 {
     font-size: 4rem;
@@ -278,7 +273,8 @@
   }
 
   .header {
-    font-size: 5rem;
+    font-size: clamp(3.5rem, 5vw, 4.5rem);
+    letter-spacing: -0.5px;
   }
 
   p {
@@ -483,14 +479,14 @@
 
     .intro,
     .outro {
-      padding-top: 4rem;
+      padding-top: 3rem;
       padding-left: 1rem;
       padding-right: 1rem;
-      height: 60vh;
+      height: 50vh;
     }
 
     .outro {
-      height: 20vh;
+      height: 18vh;
     }
 
     .card-inner {

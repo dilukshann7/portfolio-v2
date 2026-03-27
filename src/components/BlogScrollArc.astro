@@ -423,7 +423,8 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
   .blog-template__count {
     position: relative;
     width: min(1200px, calc(100vw - 4rem));
-    height: 76px;
+    font-size: clamp(3.5rem, 8vw, 4.5rem);
+    height: 1.05em;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
     overflow: hidden;
   }
@@ -439,8 +440,9 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     position: relative;
     margin: 0;
     font-family: var(--font-melodrame);
-    font-weight: 300;
-    font-size: 72px;
+    font-weight: 400;
+    font-size: 1em;
+    letter-spacing: -0.5px;
     text-align: left;
     line-height: 1;
     will-change: transform;
@@ -454,17 +456,6 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
   @media (max-width: 900px) {
     .blog-template__nav {
       padding: 1rem;
-    }
-
-    .blog-template__counter-title,
-    .blog-template__count {
-      height: 42px;
-    }
-
-    .blog-template__counter-title h3,
-    .blog-template__count h3 {
-      font-size: 42px;
-      line-height: 1;
     }
 
     .blog-template__count {
@@ -483,6 +474,36 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
     .blog-template__card-copy h4 {
       font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .blog-template__step-counter {
+      margin: 1rem;
+    }
+
+    .blog-template__counter-title,
+    .blog-template__count {
+      width: min(1200px, calc(100vw - 2rem));
+    }
+
+    .blog-template__card {
+      width: min(320px, calc(100vw - 1rem));
+      height: 440px;
+      margin-left: calc(min(320px, calc(100vw - 1rem)) / -2);
+    }
+
+    .blog-template__card-copy h4 {
+      font-size: 1.1rem;
+    }
+
+    .blog-template__card-copy p {
+      font-size: 0.88rem;
+    }
+
+    .fancy {
+      padding: 1em 1.5em;
+      font-size: 11px;
     }
   }
 </style>

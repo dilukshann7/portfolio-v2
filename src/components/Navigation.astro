@@ -115,14 +115,16 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
 <style>
   .navigation-container {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     z-index: 100;
+    pointer-events: none;
   }
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  .navigation-container > :global(*) {
+    pointer-events: auto;
   }
 
   /* logos */
@@ -330,28 +332,6 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     font-weight: 300;
     letter-spacing: -1.5px;
     line-height: 125%;
-  }
-
-  .video-wrapper {
-    width: 100%;
-    flex-shrink: 0;
-    min-height: 220px;
-    max-height: 320px;
-    background-color: #1d1d1d;
-    clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
-    overflow: hidden;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .video-wrapper img {
-    display: block;
-    width: 100%;
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
   }
 
   .socials {
