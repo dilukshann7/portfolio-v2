@@ -7,7 +7,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     client:load
     className="menu-toggle closed"
     width="var(--menu-toggle-width, 120px)"
-    height="60px"
+    height="var(--menu-toggle-height, 60px)"
     borderRadius={999}
     borderWidth={0.08}
     displace={0.5}
@@ -152,6 +152,9 @@ import GlassSurface from "./ui/GlassSurface.tsx";
   /* menu toggle btn */
   :global(.menu-toggle) {
     --menu-toggle-width: 120px;
+    --menu-toggle-height: 60px;
+    --menu-toggle-open-width: 60px;
+    --menu-toggle-icon-size: 60px;
     position: fixed;
     top: 1.2em;
     right: 1.5em;
@@ -165,7 +168,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
   }
 
   :global(.menu-toggle.opened) {
-    --menu-toggle-width: 60px;
+    --menu-toggle-width: var(--menu-toggle-open-width);
   }
 
   :global(.menu-toggle .glass-surface__content) {
@@ -215,8 +218,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
   :global(.menu-toggle .menu-toggle-icon) {
     position: absolute;
     right: 0;
-    width: 60px;
-    height: 60px;
+    width: var(--menu-toggle-icon-size);
+    height: var(--menu-toggle-icon-size);
     border-radius: 100%;
     clip-path: circle(10% at 50% 50%);
     background: rgba(255, 245, 232, 0.72);
