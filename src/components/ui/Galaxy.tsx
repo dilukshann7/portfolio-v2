@@ -1,6 +1,22 @@
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Galaxy.css";
+
+const DEFAULT_MOBILE_FALLBACK_SRC = "/fallbacks/galaxy.jpg";
+
+function canUseWebGL() {
+  if (typeof window === "undefined") return false;
+
+  try {
+    const canvas = document.createElement("canvas");
+    return Boolean(
+      window.WebGLRenderingContext &&
+        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")),
+    );
+  } catch {
+    return false;
+  }
+}
 
 const vertexShader = `
 attribute vec2 uv;
@@ -188,6 +204,9 @@ interface GalaxyProps {
   autoCenterRepulsion?: number;
   transparent?: boolean;
   globalPointer?: boolean;
+  mobileFallbackSrc?: string;
+  mobileFallbackAlt?: string;
+  mobileBreakpoint?: number;
 }
 
 export default function Galaxy({
@@ -208,6 +227,9 @@ export default function Galaxy({
   autoCenterRepulsion = 0,
   transparent = true,
   globalPointer = false,
+  mobileFallbackSrc = DEFAULT_MOBILE_FALLBACK_SRC,
+  mobileFallbackAlt = "",
+  mobileBreakpoint = 900,
   ...rest
 }: GalaxyProps) {
   const ctnDom = useRef<HTMLDivElement>(null);
@@ -216,15 +238,57 @@ export default function Galaxy({
   const targetMouseActive = useRef(0.0);
   const smoothMouseActive = useRef(0.0);
   const visibleRef = useRef(true);
+  const [prefersImageFallback, setPrefersImageFallback] = useState<
+    boolean | null
+  >(null);
+  const [webglFailed, setWebglFailed] = useState(false);
+  const shouldUseFallback =
+    prefersImageFallback === null ? null : prefersImageFallback || webglFailed;
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
+    const syncMode = () => {
+      setPrefersImageFallback(mediaQuery.matches || !canUseWebGL());
+    };
+
+    syncMode();
+
+    if ("addEventListener" in mediaQuery) {
+      mediaQuery.addEventListener("change", syncMode);
+      return () => mediaQuery.removeEventListener("change", syncMode);
+    }
+
+    const legacyMediaQuery = mediaQuery as MediaQueryList & {
+      addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+      removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+    };
+    legacyMediaQuery.addListener?.(syncMode);
+    return () => legacyMediaQuery.removeListener?.(syncMode);
+  }, [mobileBreakpoint]);
+
+  useEffect(() => {
+    if (shouldUseFallback !== false) return;
     if (!ctnDom.current) return;
     const ctn = ctnDom.current;
-    const renderer = new Renderer({
-      alpha: transparent,
-      premultipliedAlpha: false,
-      dpr: typeof window !== "undefined" && window.innerWidth < 768 ? Math.min(window.devicePixelRatio || 1, 1) : Math.min(window.devicePixelRatio || 1, 1.5)
-    });
+    let renderer: Renderer;
+
+    try {
+      renderer = new Renderer({
+        alpha: transparent,
+        premultipliedAlpha: false,
+        dpr:
+          typeof window !== "undefined" && window.innerWidth < 768
+            ? Math.min(window.devicePixelRatio || 1, 1)
+            : Math.min(window.devicePixelRatio || 1, 1.5),
+      });
+      setWebglFailed(false);
+    } catch (error) {
+      console.warn("Galaxy WebGL initialization failed:", error);
+      setWebglFailed(true);
+      return;
+    }
     const gl = renderer.gl;
 
     if (transparent) {
@@ -386,7 +450,20 @@ export default function Galaxy({
     autoCenterRepulsion,
     transparent,
     globalPointer,
+    shouldUseFallback,
   ]);
 
-  return <div ref={ctnDom} className="galaxy-container" {...rest} />;
+  return (
+    <div ref={ctnDom} className="galaxy-container" {...rest}>
+      {shouldUseFallback ? (
+        <img
+          className="galaxy-fallback"
+          src={mobileFallbackSrc}
+          alt={mobileFallbackAlt}
+          aria-hidden={mobileFallbackAlt ? undefined : true}
+          draggable={false}
+        />
+      ) : null}
+    </div>
+  );
 }
