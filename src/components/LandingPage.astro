@@ -485,13 +485,14 @@ import ColorBends from "./ui/ColorBends";
     }
 
     .landing-page .col-right {
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     .landing-page .col-right .right-copy {
       align-items: flex-start;
       margin-inline: 0;
       width: 100%;
+      min-height: 9.5rem;
     }
 
     .landing-page .col-right .header {
@@ -499,15 +500,17 @@ import ColorBends from "./ui/ColorBends";
       font-size: clamp(2.5rem, 14vw, 4.2rem);
       width: auto;
       max-width: 8ch;
+      min-height: 2.75em;
     }
 
     :global(.left-glass) {
-      min-height: clamp(15rem, 38svh, 22rem);
+      min-height: clamp(13.5rem, 34svh, 20rem);
       border-radius: 1.25rem;
     }
 
     :global(.left-glass .header) {
       font-size: clamp(2.2rem, 12vw, 3.8rem); /* Prevent clipping */
+      min-height: 2.1em;
       margin-bottom: 0.75rem;
     }
 
@@ -515,6 +518,7 @@ import ColorBends from "./ui/ColorBends";
       max-width: 100%;
       font-size: 0.95rem;
       line-height: 1.5;
+      min-height: 4.6em;
     }
 
     .landing-page .loader-text {
