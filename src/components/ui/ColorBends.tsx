@@ -127,7 +127,7 @@ export default function ColorBends({
   mouseInfluence = 1,
   parallax = 0.5,
   noise = 0.1,
-  globalPointer = false
+  globalPointer = false,
 }: ColorBendsProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -147,7 +147,10 @@ export default function ColorBends({
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     const geometry = new THREE.PlaneGeometry(2, 2);
-    const uColorsArray = Array.from({ length: MAX_COLORS }, () => new THREE.Vector3(0, 0, 0));
+    const uColorsArray = Array.from(
+      { length: MAX_COLORS },
+      () => new THREE.Vector3(0, 0, 0),
+    );
     const material = new THREE.ShaderMaterial({
       vertexShader: vert,
       fragmentShader: frag,
@@ -165,10 +168,10 @@ export default function ColorBends({
         uPointer: { value: new THREE.Vector2(0, 0) },
         uMouseInfluence: { value: mouseInfluence },
         uParallax: { value: parallax },
-        uNoise: { value: noise }
+        uNoise: { value: noise },
       },
       premultipliedAlpha: true,
-      transparent: true
+      transparent: true,
     });
     materialRef.current = material;
 
@@ -302,7 +305,7 @@ export default function ColorBends({
     parallax,
     noise,
     colors,
-    transparent
+    transparent,
   ]);
 
   useEffect(() => {
@@ -317,12 +320,21 @@ export default function ColorBends({
     };
 
     const target: HTMLElement | Window = globalPointer ? window : container;
-    target.addEventListener('pointermove', handlePointerMove as EventListener);
+    target.addEventListener("pointermove", handlePointerMove as EventListener);
 
     return () => {
-      target.removeEventListener('pointermove', handlePointerMove as EventListener);
+      target.removeEventListener(
+        "pointermove",
+        handlePointerMove as EventListener,
+      );
     };
   }, [globalPointer]);
 
-  return <div ref={containerRef} className={`color-bends-container ${className}`} style={style} />;
+  return (
+    <div
+      ref={containerRef}
+      className={`color-bends-container ${className}`}
+      style={style}
+    />
+  );
 }
