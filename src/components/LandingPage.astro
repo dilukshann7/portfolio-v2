@@ -47,15 +47,6 @@ import ColorBends from "./ui/ColorBends";
       </div>
     </div>
   </div>
-  <div class="loader-text-wrapper block">
-    <h1 class="loader-text">Welcome to Dilukshan's Portfolio</h1>
-  </div>
-  <div class="pre-loader block">
-    <div class="loader-wrapper">
-      <div class="loader"></div>
-    </div>
-  </div>
-  <div class="revealer"></div>
 </div>
 
 <style>
@@ -522,11 +513,7 @@ import ColorBends from "./ui/ColorBends";
     }
 
     .landing-page .loader-text {
-      font-size: clamp(
-        1.2rem,
-        6vw,
-        2.4rem
-      ); /* Kept text safe inside screen bounds */
+      font-size: clamp(1.2rem, 6vw, 2.4rem);
       letter-spacing: 0.09em;
       word-break: break-word;
     }
@@ -567,13 +554,19 @@ import ColorBends from "./ui/ColorBends";
             : Promise.resolve();
 
         const settleDelay = new Promise((resolve) =>
-          window.setTimeout(resolve, prefersReducedMotion ? 80 : isMobile ? 420 : 560),
+          window.setTimeout(
+            resolve,
+            prefersReducedMotion ? 80 : isMobile ? 420 : 560,
+          ),
         );
 
         await Promise.race([
           Promise.all([fontReady, settleDelay]),
           new Promise((resolve) =>
-            window.setTimeout(resolve, prefersReducedMotion ? 180 : isMobile ? 950 : 1400),
+            window.setTimeout(
+              resolve,
+              prefersReducedMotion ? 180 : isMobile ? 950 : 1400,
+            ),
           ),
         ]);
       };
@@ -671,8 +664,16 @@ import ColorBends from "./ui/ColorBends";
         await waitForStableHero();
 
         const loaderDelay = prefersReducedMotion ? 0.05 : isMobile ? 0.12 : 0.2;
-        const revealDelay = prefersReducedMotion ? 0.14 : isMobile ? 0.28 : 0.45;
-        const contentDelay = prefersReducedMotion ? 0.24 : isMobile ? 0.54 : 0.8;
+        const revealDelay = prefersReducedMotion
+          ? 0.14
+          : isMobile
+            ? 0.28
+            : 0.45;
+        const contentDelay = prefersReducedMotion
+          ? 0.24
+          : isMobile
+            ? 0.54
+            : 0.8;
 
         gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
           scale: 1.5,
