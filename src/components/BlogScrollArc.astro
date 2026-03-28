@@ -410,6 +410,13 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     line-height: 1.45;
   }
 
+  .blog-template__card-copy > p:last-child {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+  }
+
   .blog-template__step-counter {
     position: absolute;
     display: flex;
