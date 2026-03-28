@@ -529,23 +529,21 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
   @media (max-width: 480px) {
     :global(.menu-toggle) {
-      --menu-toggle-width: 80px;
-      height: 44px;
+      --menu-toggle-width: 104px;
+      --menu-toggle-height: 52px;
+      --menu-toggle-open-width: 52px;
+      --menu-toggle-icon-size: 52px;
       top: 0.75em;
       right: 0.75em;
     }
 
-    :global(.menu-toggle .menu-toggle-icon) {
-      width: 40px;
-      height: 40px;
-    }
-
     :global(.menu-toggle .menu-copy) {
-      left: 14px;
+      left: 16px;
     }
 
     :global(.menu-toggle .menu-copy p) {
-      font-size: 9px;
+      font-size: 10.5px;
+      letter-spacing: 0.11em;
     }
 
     .col {
@@ -558,11 +556,12 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .menu-logo a {
-      font-size: 24px;
+      font-size: 52px;
+      line-height: 0.9;
     }
 
     .link a {
-      font-size: 1.75rem;
+      font-size: 2.15rem;
     }
 
     .links {
@@ -570,7 +569,16 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .socials .sub-col p {
-      font-size: 13px;
+      font-size: 15px;
+    }
+
+    .col-2 .socials .sub-col p:first-child {
+      font-size: 2rem;
+    }
+
+    .col-2 .socials .sub-col p:not(:first-child) {
+      font-size: 1.2rem;
+      line-height: 1.36;
     }
 
     .col-2 {
