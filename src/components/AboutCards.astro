@@ -732,9 +732,9 @@
               registerTrigger(
                 ScrollTrigger.create({
                   trigger: card,
-                  start: "top 22%",
+                  start: "top 15%",
                   endTrigger: ".outro",
-                  end: "top 65%",
+                  end: "top 75%",
                   pin: true,
                   pinSpacing: false,
                 }),
@@ -742,13 +742,13 @@
 
               registerTween(
                 gsap.to(cardInner, {
-                  y: `-${(cards.length - index) * 6}vh`,
+                  y: `-${(cards.length - index) * 5}vh`,
                   ease: "none",
                   scrollTrigger: {
                     trigger: card,
-                    start: "top 22%",
+                    start: "top 15%",
                     endTrigger: ".outro",
-                    end: "top 65%",
+                    end: "top 75%",
                     scrub: true,
                   },
                 }),
