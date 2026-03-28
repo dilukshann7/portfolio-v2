@@ -47,15 +47,6 @@ import ColorBends from "./ui/ColorBends";
       </div>
     </div>
   </div>
-  <div class="loader-text-wrapper block">
-    <h1 class="loader-text">Welcome to Dilukshan's Portfolio</h1>
-  </div>
-  <div class="pre-loader block">
-    <div class="loader-wrapper">
-      <div class="loader"></div>
-    </div>
-  </div>
-  <div class="revealer"></div>
 </div>
 
 <style>
@@ -64,20 +55,18 @@ import ColorBends from "./ui/ColorBends";
     position: relative;
     width: 100%;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     min-height: 100svh;
-    min-height: 100dvh;
     overflow: hidden;
     background-color: #000;
   }
-
-
 
   .landing-page .container {
     position: relative;
     width: 100%;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     min-height: 100svh;
-    min-height: 100dvh;
     display: flex;
     overflow: hidden;
   }
@@ -86,11 +75,10 @@ import ColorBends from "./ui/ColorBends";
     position: absolute;
     width: 100%;
     min-height: 100vh;
-    min-height: 100svh;
-    min-height: 100dvh;
+    min-height: 100lvh;
     inset: 0;
     overflow: hidden;
-    pointer-events: none; /* Allows interactions to pass through if needed */
+    pointer-events: none;
   }
 
   .landing-page .hero-img :global(.color-bends-container) {
@@ -108,7 +96,6 @@ import ColorBends from "./ui/ColorBends";
     width: 50%;
     min-height: 100vh;
     min-height: 100svh;
-    min-height: 100dvh;
   }
 
   .landing-page .col-right {
@@ -132,7 +119,7 @@ import ColorBends from "./ui/ColorBends";
     justify-content: center;
     align-items: flex-start;
     gap: 1rem;
-    will-change: transform, opacity, filter; /* GPU Acceleration */
+    will-change: transform, opacity, filter;
   }
 
   .landing-page .col-right .header {
@@ -156,7 +143,7 @@ import ColorBends from "./ui/ColorBends";
     left: 0%;
     padding: 0;
     overflow: hidden;
-    will-change: transform; /* GPU Acceleration */
+    will-change: transform;
   }
 
   :global(.left-glass) {
@@ -188,7 +175,7 @@ import ColorBends from "./ui/ColorBends";
     width: min(100%, 34rem);
     gap: 1.2rem;
     padding-left: 1.5rem;
-    will-change: transform, opacity, filter; /* GPU Acceleration */
+    will-change: transform, opacity, filter;
   }
 
   :global(.left-glass .copy::before) {
@@ -251,7 +238,7 @@ import ColorBends from "./ui/ColorBends";
   /* 900px Breakpoint */
   @media (max-width: 900px) {
     .landing-page {
-      overflow: clip; /* Better than hidden for preventing mobile overscroll */
+      overflow: clip;
       --hero-nav-offset: 5rem;
     }
 
@@ -287,10 +274,9 @@ import ColorBends from "./ui/ColorBends";
       grid-template-columns: minmax(0, 1fr);
       align-content: end;
       justify-content: stretch;
-      gap: 1rem;
+      gap: 1.5rem;
       min-height: 100vh;
-      min-height: 100svh;
-      min-height: 100dvh;
+      min-height: 100svh; /* Locks mobile height */
       padding: calc(env(safe-area-inset-top, 0px) + var(--hero-nav-offset))
         1.25rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
     }
@@ -315,24 +301,28 @@ import ColorBends from "./ui/ColorBends";
       width: min(100%, 34rem);
       justify-content: flex-start;
       align-items: stretch;
-      padding: 1.4rem 1.25rem 1.25rem;
+      padding: 1.8rem 1.5rem;
       min-height: clamp(14rem, 34svh, 20rem);
-      background:
-        linear-gradient(180deg, rgba(18, 18, 18, 0.22), rgba(0, 0, 0, 0.1)),
-        radial-gradient(circle at top left, rgba(0, 0, 0, 0.2), transparent 38%);
-      backdrop-filter: blur(12px) saturate(120%);
-      -webkit-backdrop-filter: blur(12px) saturate(120%);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.02) 100%
+      );
+      backdrop-filter: blur(24px) saturate(140%);
+      -webkit-backdrop-filter: blur(24px) saturate(140%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 1.75rem;
       box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.12),
-        0 1.5rem 3rem rgba(0, 0, 0, 0.2);
+        inset 0 1px 1px rgba(255, 255, 255, 0.15),
+        0 1rem 3rem rgba(0, 0, 0, 0.35);
     }
 
     :global(.left-glass .copy) {
       width: 100%;
       align-items: flex-start;
-      padding-left: 1.1rem;
+      padding-left: 1.25rem;
       gap: 0.8rem;
     }
 
@@ -380,12 +370,16 @@ import ColorBends from "./ui/ColorBends";
     }
 
     .landing-page .col-right .header {
-      width: min(8ch, 100%);
-      font-size: clamp(3rem, 13vw, 5.1rem); /* Tuned lower bound */
-      line-height: 0.9;
+      width: 100%;
+      font-size: clamp(3.8rem, 15vw, 6rem);
+      line-height: 0.85;
+      letter-spacing: -0.01em;
       text-wrap: balance;
       min-height: 2.7em;
       text-align: left;
+      text-shadow:
+        0 0.1em 0.25em rgba(0, 0, 0, 0.4),
+        0 0 2rem rgba(255, 255, 255, 0.1);
     }
   }
 
@@ -396,7 +390,6 @@ import ColorBends from "./ui/ColorBends";
     width: 100%;
     min-height: 100vh;
     min-height: 100svh;
-    min-height: 100dvh;
     pointer-events: none;
   }
 
@@ -409,7 +402,6 @@ import ColorBends from "./ui/ColorBends";
     width: 100%;
     min-height: 100vh;
     min-height: 100svh;
-    min-height: 100dvh;
     will-change: transform, opacity;
   }
 
@@ -476,10 +468,9 @@ import ColorBends from "./ui/ColorBends";
     );
     will-change: top;
   }
-
   @media (max-width: 640px) {
     .landing-page .cols {
-      gap: 0.75rem;
+      gap: 1rem;
       padding: calc(env(safe-area-inset-top, 0px) + 4.5rem) 1rem
         calc(env(safe-area-inset-bottom, 0px) + 2rem);
     }
@@ -489,29 +480,31 @@ import ColorBends from "./ui/ColorBends";
     }
 
     .landing-page .col-right .right-copy {
-      align-items: flex-start;
+      align-items: center;
       margin-inline: 0;
       width: 100%;
       min-height: 9.5rem;
     }
 
     .landing-page .col-right .header {
-      text-align: left;
-      font-size: clamp(2.5rem, 14vw, 4.2rem);
+      text-align: center;
+      font-size: clamp(6rem, 7vw, 6rem);
+      line-height: 0.85;
       width: auto;
-      max-width: 8ch;
+      max-width: 100%;
       min-height: 2.75em;
     }
 
     :global(.left-glass) {
       min-height: clamp(13.5rem, 34svh, 20rem);
-      border-radius: 1.25rem;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
     }
 
     :global(.left-glass .header) {
       font-size: clamp(2.2rem, 12vw, 3.8rem); /* Prevent clipping */
       min-height: 2.1em;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
     }
 
     :global(.left-glass .info) {
@@ -522,11 +515,7 @@ import ColorBends from "./ui/ColorBends";
     }
 
     .landing-page .loader-text {
-      font-size: clamp(
-        1.2rem,
-        6vw,
-        2.4rem
-      ); /* Kept text safe inside screen bounds */
+      font-size: clamp(1.2rem, 6vw, 2.4rem);
       letter-spacing: 0.09em;
       word-break: break-word;
     }
@@ -567,13 +556,19 @@ import ColorBends from "./ui/ColorBends";
             : Promise.resolve();
 
         const settleDelay = new Promise((resolve) =>
-          window.setTimeout(resolve, prefersReducedMotion ? 80 : isMobile ? 420 : 560),
+          window.setTimeout(
+            resolve,
+            prefersReducedMotion ? 80 : isMobile ? 420 : 560,
+          ),
         );
 
         await Promise.race([
           Promise.all([fontReady, settleDelay]),
           new Promise((resolve) =>
-            window.setTimeout(resolve, prefersReducedMotion ? 180 : isMobile ? 950 : 1400),
+            window.setTimeout(
+              resolve,
+              prefersReducedMotion ? 180 : isMobile ? 950 : 1400,
+            ),
           ),
         ]);
       };
@@ -671,8 +666,16 @@ import ColorBends from "./ui/ColorBends";
         await waitForStableHero();
 
         const loaderDelay = prefersReducedMotion ? 0.05 : isMobile ? 0.12 : 0.2;
-        const revealDelay = prefersReducedMotion ? 0.14 : isMobile ? 0.28 : 0.45;
-        const contentDelay = prefersReducedMotion ? 0.24 : isMobile ? 0.54 : 0.8;
+        const revealDelay = prefersReducedMotion
+          ? 0.14
+          : isMobile
+            ? 0.28
+            : 0.45;
+        const contentDelay = prefersReducedMotion
+          ? 0.24
+          : isMobile
+            ? 0.54
+            : 0.8;
 
         gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
           scale: 1.5,

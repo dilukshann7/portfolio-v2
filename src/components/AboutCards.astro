@@ -397,7 +397,8 @@
     opacity: 1;
   }
 
-  .grid-item:hover .tech-icon {
+  .grid-item:hover .tech-icon,
+  .grid-item:active .tech-icon {
     opacity: 0;
   }
 
@@ -417,7 +418,8 @@
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
   }
 
-  .grid-item:hover .tech-name {
+  .grid-item:hover .tech-name,
+  .grid-item:active .tech-name {
     color: var(--text-color, var(--item-color, #000));
     opacity: 1;
   }
@@ -511,10 +513,6 @@
     .tech-icon {
       width: 36px;
       height: 36px;
-    }
-
-    .highlight {
-      display: none;
     }
   }
 </style>
@@ -734,9 +732,9 @@
               registerTrigger(
                 ScrollTrigger.create({
                   trigger: card,
-                  start: "top 22%",
+                  start: "top 15%",
                   endTrigger: ".outro",
-                  end: "top 65%",
+                  end: "top 75%",
                   pin: true,
                   pinSpacing: false,
                 }),
@@ -744,13 +742,13 @@
 
               registerTween(
                 gsap.to(cardInner, {
-                  y: `-${(cards.length - index) * 6}vh`,
+                  y: `-${(cards.length - index) * 5}vh`,
                   ease: "none",
                   scrollTrigger: {
                     trigger: card,
-                    start: "top 22%",
+                    start: "top 15%",
                     endTrigger: ".outro",
-                    end: "top 65%",
+                    end: "top 75%",
                     scrub: true,
                   },
                 }),
@@ -823,18 +821,47 @@
 
         moveToElement(firstItem);
 
-        (grid as HTMLElement).addEventListener(
-          "mousemove",
-          (e: MouseEvent) => {
-            const hoveredElement =
-              (e.target as Element | null)?.closest(".grid-item") ?? null;
+        // Touch & Mouse Event Handler
+        const handleInteraction = (e: Event) => {
+          let clientX, clientY;
+
+          if (e.type.includes("touch")) {
+            const touchEvent = e as TouchEvent;
+            clientX = touchEvent.touches[0].clientX;
+            clientY = touchEvent.touches[0].clientY;
+          } else {
+            const mouseEvent = e as MouseEvent;
+            clientX = mouseEvent.clientX;
+            clientY = mouseEvent.clientY;
+          }
+
+          const target = document.elementFromPoint(clientX, clientY);
+          const hoveredElement = target?.closest(".grid-item") ?? null;
+
+          if (hoveredElement) {
             moveToElement(hoveredElement);
-          },
+          }
+        };
+
+        (grid as HTMLElement).addEventListener("mousemove", handleInteraction, {
+          passive: true,
+          signal,
+        });
+
+        // Added Touch Support
+        (grid as HTMLElement).addEventListener(
+          "touchstart",
+          handleInteraction,
           {
             passive: true,
             signal,
           },
         );
+
+        (grid as HTMLElement).addEventListener("touchmove", handleInteraction, {
+          passive: true,
+          signal,
+        });
       });
     });
 
