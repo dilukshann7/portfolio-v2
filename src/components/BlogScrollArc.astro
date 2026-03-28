@@ -628,14 +628,22 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
         if (!stickySection || !cards.length || !countContainer) return;
 
-        const stickyHeight = window.innerHeight * 7;
+        const getStickyHeight = () => {
+          if (window.innerWidth < 480) return window.innerHeight * 3.1;
+          if (window.innerWidth < 900) return window.innerHeight * 3.6;
+          return window.innerHeight * 7;
+        };
+
+        let stickyHeight = getStickyHeight();
         const totalCards = cards.length;
         const arcAngle = Math.PI * 0.4;
         const startAngle = Math.PI / 2 - arcAngle / 2;
 
         const getRadius = () =>
           window.innerWidth < 900
-            ? window.innerWidth * 7.0
+            ? window.innerWidth < 480
+              ? window.innerWidth * 4.2
+              : window.innerWidth * 5.2
             : window.innerWidth * 3.0;
 
         const getCountStep = () => {
@@ -705,7 +713,11 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
             positionCards(self.progress);
 
             if (cta) {
-              const ctaOpacity = Math.max(0, (self.progress - 0.8) / 0.15);
+              const ctaOpacity = Math.max(
+                0,
+                (self.progress - (window.innerWidth < 900 ? 0.72 : 0.8)) /
+                  (window.innerWidth < 900 ? 0.12 : 0.15),
+              );
               gsap.set(cta, {
                 opacity: ctaOpacity,
                 zIndex: ctaOpacity > 0.5 ? 10 : -10,
@@ -741,6 +753,8 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
         });
 
         const onResize = () => {
+          stickyHeight = getStickyHeight();
+          trigger.vars.end = `+=${stickyHeight}px`;
           gsap.set(countContainer, {
             y: getCountStep() - currentCardIndex * getCountStep(),
           });
