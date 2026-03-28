@@ -60,6 +60,7 @@ import ColorBends from "./ui/ColorBends";
 
 <style>
   .landing-page {
+    --hero-nav-offset: 5.75rem;
     position: relative;
     width: 100%;
     min-height: 100vh;
@@ -77,6 +78,7 @@ import ColorBends from "./ui/ColorBends";
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
+    display: flex;
     overflow: hidden;
   }
 
@@ -99,6 +101,7 @@ import ColorBends from "./ui/ColorBends";
   .landing-page .cols {
     width: 100%;
     display: flex;
+    min-height: inherit;
   }
 
   .landing-page .col {
@@ -122,9 +125,11 @@ import ColorBends from "./ui/ColorBends";
   .landing-page .col-right .right-copy {
     position: relative;
     width: min(34rem, 100%);
+    min-height: clamp(15rem, 30vw, 24rem);
     margin-left: auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: flex-start;
     gap: 1rem;
     will-change: transform, opacity, filter; /* GPU Acceleration */
@@ -140,6 +145,7 @@ import ColorBends from "./ui/ColorBends";
     text-transform: none;
     text-wrap: balance;
     color: rgba(255, 246, 238, 0.98);
+    min-height: 2.45em;
     text-shadow:
       0 0.04em 0.12em rgba(0, 0, 0, 0.22),
       0 0 1rem rgba(255, 255, 255, 0.04);
@@ -215,6 +221,7 @@ import ColorBends from "./ui/ColorBends";
     margin: 0;
     border: none;
     max-width: 8ch;
+    min-height: 1.95em;
     text-shadow: 0 0.04em 0.16em rgba(0, 0, 0, 0.18);
   }
 
@@ -226,6 +233,7 @@ import ColorBends from "./ui/ColorBends";
     text-transform: uppercase;
     text-align: left;
     color: rgba(255, 255, 255, 0.68);
+    min-height: 1.3em;
   }
 
   :global(.left-glass .info) {
@@ -237,16 +245,19 @@ import ColorBends from "./ui/ColorBends";
     text-align: left;
     color: rgba(255, 255, 255, 0.8);
     margin-top: 0.35rem;
+    min-height: 4.8em;
   }
 
   /* 900px Breakpoint */
   @media (max-width: 900px) {
     .landing-page {
       overflow: clip; /* Better than hidden for preventing mobile overscroll */
+      --hero-nav-offset: 5rem;
     }
 
     .landing-page .container {
       overflow: visible;
+      display: block;
     }
 
     .landing-page .container::before {
