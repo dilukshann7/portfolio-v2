@@ -560,6 +560,23 @@ import ColorBends from "./ui/ColorBends";
       );
       const textWrapper = document.querySelector(".landing-page .loader-text");
       let revealCleanup: (() => void) | undefined;
+      const waitForStableHero = async () => {
+        const fontReady =
+          "fonts" in document
+            ? document.fonts.ready.catch(() => undefined)
+            : Promise.resolve();
+
+        const settleDelay = new Promise((resolve) =>
+          window.setTimeout(resolve, prefersReducedMotion ? 80 : isMobile ? 420 : 560),
+        );
+
+        await Promise.race([
+          Promise.all([fontReady, settleDelay]),
+          new Promise((resolve) =>
+            window.setTimeout(resolve, prefersReducedMotion ? 180 : isMobile ? 950 : 1400),
+          ),
+        ]);
+      };
 
       const runHeroTextReveal = async () => {
         if (!heroScope) return;
@@ -638,10 +655,6 @@ import ColorBends from "./ui/ColorBends";
         }
       }
 
-      const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 1.0 : 2;
-      const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.4 : 3;
-      const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.85 : 4.5;
-
       gsap.from(".landing-page .loader-wrapper", {
         scale: 0.8,
         ease: "power1.inOut",
@@ -654,73 +667,82 @@ import ColorBends from "./ui/ColorBends";
         duration: prefersReducedMotion ? 0.2 : isMobile ? 1.2 : 2,
       });
 
-      gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
-        scale: 1.5,
-        opacity: 0,
-        display: "none",
-        ease: "power2.inOut",
-        delay: loaderDelay,
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.65 : 1,
-      });
+      void (async () => {
+        await waitForStableHero();
 
-      gsap.from(".landing-page .revealer", {
-        width: "0%",
-        ease: "power2.inOut",
-        delay: revealDelay,
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.65 : 1,
-      });
+        const loaderDelay = prefersReducedMotion ? 0.05 : isMobile ? 0.12 : 0.2;
+        const revealDelay = prefersReducedMotion ? 0.14 : isMobile ? 0.28 : 0.45;
+        const contentDelay = prefersReducedMotion ? 0.24 : isMobile ? 0.54 : 0.8;
 
-      gsap.to(".landing-page .revealer", {
-        left: "100%",
-        ease: "power2.inOut",
-        delay: revealDelay + (isMobile ? 0.55 : 1),
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.55 : 0.8,
-      });
-
-      gsap.to(".landing-page .loader-text-wrapper", {
-        opacity: 0,
-        display: "none",
-        ease: "power3.inOut",
-        delay: revealDelay + (isMobile ? 0.4 : 1),
-        duration: 0.2,
-      });
-
-      gsap.from(".landing-page .col-left", {
-        left: "-110%",
-        ease: "power2.inOut",
-        delay: contentDelay,
-        duration: prefersReducedMotion ? 0.2 : isMobile ? 0.85 : 1,
-      });
-
-      gsap.from(".landing-page .left-glass .copy", {
-        x: "-28",
-        opacity: 0,
-        filter: "blur(8px)",
-        ease: "power3.out",
-        delay: contentDelay + 0.14,
-        duration: prefersReducedMotion ? 0.24 : isMobile ? 0.72 : 1.02,
-      });
-
-      gsap.from(".landing-page .col-right .right-copy", {
-        x: "24",
-        opacity: 0,
-        filter: "blur(8px)",
-        ease: "power3.out",
-        delay: contentDelay + 0.18,
-        duration: prefersReducedMotion ? 0.24 : isMobile ? 0.76 : 1.08,
-      });
-
-      if (prefersReducedMotion) {
-        heroTextTargets.forEach((element) => {
-          element.style.visibility = "visible";
+        gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
+          scale: 1.5,
+          opacity: 0,
+          display: "none",
+          ease: "power2.inOut",
+          delay: loaderDelay,
+          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.45 : 0.7,
         });
-      } else {
-        const delayedReveal = gsap.delayedCall(contentDelay + 0.22, () => {
+
+        gsap.from(".landing-page .revealer", {
+          width: "0%",
+          ease: "power2.inOut",
+          delay: revealDelay,
+          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.42 : 0.72,
+        });
+
+        gsap.to(".landing-page .revealer", {
+          left: "100%",
+          ease: "power2.inOut",
+          delay: revealDelay + (isMobile ? 0.38 : 0.65),
+          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.38 : 0.56,
+        });
+
+        gsap.to(".landing-page .loader-text-wrapper", {
+          opacity: 0,
+          display: "none",
+          ease: "power3.inOut",
+          delay: revealDelay + (isMobile ? 0.26 : 0.5),
+          duration: 0.2,
+        });
+
+        gsap.from(".landing-page .col-left", {
+          left: "-110%",
+          ease: "power2.inOut",
+          delay: contentDelay,
+          duration: prefersReducedMotion ? 0.2 : isMobile ? 0.6 : 0.82,
+        });
+
+        gsap.from(".landing-page .left-glass .copy", {
+          x: "-28",
+          opacity: 0,
+          filter: "blur(8px)",
+          ease: "power3.out",
+          delay: contentDelay + 0.08,
+          duration: prefersReducedMotion ? 0.24 : isMobile ? 0.56 : 0.82,
+        });
+
+        gsap.from(".landing-page .col-right .right-copy", {
+          x: "24",
+          opacity: 0,
+          filter: "blur(8px)",
+          ease: "power3.out",
+          delay: contentDelay + 0.12,
+          duration: prefersReducedMotion ? 0.24 : isMobile ? 0.6 : 0.9,
+        });
+
+        if (prefersReducedMotion) {
+          heroTextTargets.forEach((element) => {
+            element.style.visibility = "visible";
+          });
+          return;
+        }
+
+        const delayedReveal = gsap.delayedCall(contentDelay + 0.14, () => {
           void runHeroTextReveal();
         });
 
         onCleanup(() => delayedReveal.kill());
-      }
+      })();
 
       onCleanup(() => {
         revealCleanup?.();
