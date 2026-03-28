@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
-import './ColorBends.css';
+import React, { useEffect, useRef } from "react";
+import * as THREE from "three";
+import "./ColorBends.css";
 
 type ColorBendsProps = {
   className?: string;
