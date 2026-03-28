@@ -186,8 +186,8 @@ export default function ColorBends({
     rendererRef.current = renderer;
     (renderer as any).outputColorSpace = (THREE as any).SRGBColorSpace;
 
-    // Cap pixel ratio at 1.5 to save battery/performance on mobile devices
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    // Cap pixel ratio at 1 on mobile, 1.5 on desktop, to save battery/performance
+    renderer.setPixelRatio(typeof window !== "undefined" && window.innerWidth < 768 ? Math.min(window.devicePixelRatio || 1, 1) : Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";

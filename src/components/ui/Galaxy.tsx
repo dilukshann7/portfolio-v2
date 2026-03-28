@@ -223,6 +223,7 @@ export default function Galaxy({
     const renderer = new Renderer({
       alpha: transparent,
       premultipliedAlpha: false,
+      dpr: typeof window !== "undefined" && window.innerWidth < 768 ? Math.min(window.devicePixelRatio || 1, 1) : Math.min(window.devicePixelRatio || 1, 1.5)
     });
     const gl = renderer.gl;
 
