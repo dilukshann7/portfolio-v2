@@ -55,20 +55,18 @@ import ColorBends from "./ui/ColorBends";
     position: relative;
     width: 100%;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     min-height: 100svh;
-    min-height: 100dvh;
     overflow: hidden;
     background-color: #000;
   }
-
-
 
   .landing-page .container {
     position: relative;
     width: 100%;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     min-height: 100svh;
-    min-height: 100dvh;
     display: flex;
     overflow: hidden;
   }
@@ -77,11 +75,10 @@ import ColorBends from "./ui/ColorBends";
     position: absolute;
     width: 100%;
     min-height: 100vh;
-    min-height: 100svh;
-    min-height: 100dvh;
+    min-height: 100lvh;
     inset: 0;
     overflow: hidden;
-    pointer-events: none; /* Allows interactions to pass through if needed */
+    pointer-events: none;
   }
 
   .landing-page .hero-img :global(.color-bends-container) {
@@ -99,7 +96,6 @@ import ColorBends from "./ui/ColorBends";
     width: 50%;
     min-height: 100vh;
     min-height: 100svh;
-    min-height: 100dvh;
   }
 
   .landing-page .col-right {
@@ -278,10 +274,9 @@ import ColorBends from "./ui/ColorBends";
       grid-template-columns: minmax(0, 1fr);
       align-content: end;
       justify-content: stretch;
-      gap: 1rem;
+      gap: 1.5rem;
       min-height: 100vh;
-      min-height: 100svh;
-      min-height: 100dvh;
+      min-height: 100svh; /* Locks mobile height */
       padding: calc(env(safe-area-inset-top, 0px) + var(--hero-nav-offset))
         1.25rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
     }
@@ -387,7 +382,6 @@ import ColorBends from "./ui/ColorBends";
     width: 100%;
     min-height: 100vh;
     min-height: 100svh;
-    min-height: 100dvh;
     pointer-events: none;
   }
 
@@ -400,7 +394,6 @@ import ColorBends from "./ui/ColorBends";
     width: 100%;
     min-height: 100vh;
     min-height: 100svh;
-    min-height: 100dvh;
     will-change: transform, opacity;
   }
 
