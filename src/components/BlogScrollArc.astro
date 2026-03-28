@@ -410,6 +410,13 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     line-height: 1.45;
   }
 
+  .blog-template__card-copy > p:last-child {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+  }
+
   .blog-template__step-counter {
     position: absolute;
     display: flex;
@@ -454,8 +461,22 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
   }
 
   @media (max-width: 900px) {
+    .blog-template {
+      padding-top: 4.5em !important;
+    }
+
     .blog-template__nav {
       padding: 1rem;
+    }
+
+    .blog-template__intro,
+    .blog-template__steps,
+    .blog-template__outro {
+      height: 100dvh;
+    }
+
+    .blog-template__step-counter {
+      margin: 1.25rem;
     }
 
     .blog-template__count {
@@ -463,17 +484,39 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     }
 
     .blog-template__cards {
-      top: 27.5%;
+      top: 30%;
+      width: 100vw;
+      height: 470px;
     }
 
     .blog-template__card {
-      width: min(375px, calc(100vw - 1.5rem));
-      height: 500px;
-      margin-left: calc(min(375px, calc(100vw - 1.5rem)) / -2);
+      width: min(360px, calc(100vw - 2rem));
+      height: 400px;
+      margin-left: calc(min(360px, calc(100vw - 2rem)) / -2);
+      gap: 0.8rem;
+    }
+
+    .blog-template__card-copy {
+      min-height: 0;
     }
 
     .blog-template__card-copy h4 {
+      margin: 0.3rem 0 0.45rem;
       font-size: 1.25rem;
+    }
+
+    .blog-template__card-copy p {
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .blog-template__card-copy > p:last-child {
+      -webkit-line-clamp: 2;
+    }
+
+    .blog-template__cta {
+      top: 82%;
+      width: calc(100vw - 2rem);
     }
   }
 
@@ -487,10 +530,15 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
       width: min(1200px, calc(100vw - 2rem));
     }
 
+    .blog-template__cards {
+      top: 31%;
+      height: 430px;
+    }
+
     .blog-template__card {
-      width: min(320px, calc(100vw - 1rem));
-      height: 440px;
-      margin-left: calc(min(320px, calc(100vw - 1rem)) / -2);
+      width: min(320px, calc(100vw - 1.5rem));
+      height: 360px;
+      margin-left: calc(min(320px, calc(100vw - 1.5rem)) / -2);
     }
 
     .blog-template__card-copy h4 {
@@ -498,12 +546,17 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     }
 
     .blog-template__card-copy p {
-      font-size: 0.88rem;
+      font-size: 0.84rem;
     }
 
     .fancy {
-      padding: 1em 1.5em;
+      width: 100%;
+      padding: 0.95em 1.25em;
       font-size: 11px;
+    }
+
+    .fancy .text {
+      padding-left: 1.7em;
     }
   }
 </style>
@@ -575,14 +628,22 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
         if (!stickySection || !cards.length || !countContainer) return;
 
-        const stickyHeight = window.innerHeight * 7;
+        const getStickyHeight = () => {
+          if (window.innerWidth < 480) return window.innerHeight * 3.1;
+          if (window.innerWidth < 900) return window.innerHeight * 3.6;
+          return window.innerHeight * 7;
+        };
+
+        let stickyHeight = getStickyHeight();
         const totalCards = cards.length;
         const arcAngle = Math.PI * 0.4;
         const startAngle = Math.PI / 2 - arcAngle / 2;
 
         const getRadius = () =>
           window.innerWidth < 900
-            ? window.innerWidth * 7.0
+            ? window.innerWidth < 480
+              ? window.innerWidth * 4.2
+              : window.innerWidth * 5.2
             : window.innerWidth * 3.0;
 
         const getCountStep = () => {
@@ -652,7 +713,11 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
             positionCards(self.progress);
 
             if (cta) {
-              const ctaOpacity = Math.max(0, (self.progress - 0.8) / 0.15);
+              const ctaOpacity = Math.max(
+                0,
+                (self.progress - (window.innerWidth < 900 ? 0.72 : 0.8)) /
+                  (window.innerWidth < 900 ? 0.12 : 0.15),
+              );
               gsap.set(cta, {
                 opacity: ctaOpacity,
                 zIndex: ctaOpacity > 0.5 ? 10 : -10,
@@ -688,6 +753,8 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
         });
 
         const onResize = () => {
+          stickyHeight = getStickyHeight();
+          trigger.vars.end = `+=${stickyHeight}px`;
           gsap.set(countContainer, {
             y: getCountStep() - currentCardIndex * getCountStep(),
           });

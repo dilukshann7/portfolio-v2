@@ -24,7 +24,7 @@ export const projects: Project[] = [
     id: "noxhd-ui",
     name: "NoxHD UI",
     description: "Beautifully Designed UI Library for Next.js",
-    img: "/projects/noxhd.png",
+    img: "/projects/noxhdui.jpg",
     route: "/noxhd-ui",
     fullDescription:
       "NoxHD UI is a comprehensive design system and component library built specifically for Next.js applications. It provides a collection of beautifully crafted, accessible, and customizable UI components that help developers build modern web applications faster.",
@@ -69,7 +69,7 @@ export const projects: Project[] = [
     name: "LegisDex",
     description:
       "AI-powered FIDIC contract assistant for architects, engineers, and quantity surveyors.",
-    img: "/projects/legisdex.png",
+    img: "/projects/legisdex.jpg",
     route: "/legisdex",
     fullDescription:
       "LegisDex is a production-grade SaaS AI assistant that makes FIDIC contracts and construction law accessible to AEC professionals. Built on an advanced agentic RAG pipeline, it combines vector search, full-text search, and structured clause matching to ensure answers are grounded in real contract text rather than model hallucinations.",
@@ -153,8 +153,8 @@ export const projects: Project[] = [
     id: "census-ms",
     name: "Census Management System",
     description:
-      "A SvelteKit-based census data collection and admin review system.",
-    img: "/projects/census.png",
+      "A SvelteKit-based census data collection and admin review system built for a local government initiative.",
+    img: "/projects/census.jpg",
     route: "/census-ms",
     fullDescription:
       "A complete platform built to collect family census submissions from a public form and securely store them in PostgreSQL. It includes a protected admin console for reviewing, approving, rejecting, and editing records.",
@@ -237,55 +237,13 @@ export const projects: Project[] = [
       "/tech/tailwind.svg",
     ],
   },
-  {
-    id: "lankanbook",
-    name: "LankanBook",
-    description:
-      "A community-driven platform documenting establishments in Sri Lanka that discriminate against local residents.",
-    img: "/projects/lankanbook.png",
-    route: "/lankanbook",
-    fullDescription:
-      "Inspired by the historic Green Book, LankanBook is a crowd-sourced platform empowering communities to verify experiences of discrimination, dual pricing, or denial of entry. It relies on community upvoting to build a credible, transparent record of establishments.",
-    role: "Founder & Lead Developer",
-    timeline: "2026",
-    status: "Live",
-    technologies: [
-      "Next.js 16",
-      "PostgreSQL",
-      "Drizzle ORM",
-      "Tailwind CSS",
-      "Vercel Blob",
-    ],
-    features: [
-      "Searchable database by province, name, or location",
-      "Community testimony submissions with evidence gallery",
-      "Automated verification scoring via upvote algorithms",
-      "Strict API rate-limiting and browser-based tracking to prevent spam",
-    ],
-    links: {
-      demo: "https://lankanbook.vercel.app",
-      github: "https://github.com/dilukshann7/lankanbook",
-      website: "https://lankanbook.vercel.app",
-    },
-    highlights: [
-      "Custom tracking mechanism limits submissions to prevent bot spam",
-      "High-security architecture featuring CSP, HSTS, and X-Frame-Options",
-      "Scalable media handling using @vercel/blob",
-    ],
-    techImages: [
-      "/tech/nextjs.svg",
-      "/tech/postgresql.svg",
-      "/tech/drizzle.svg",
-      "/tech/tailwind.svg",
-      "/tech/vercel.svg",
-    ],
-  },
+
   {
     id: "distributor-ms",
-    name: "ADP Namasinghe DMS",
+    name: "Distribution Management System",
     description:
-      "A full-stack distribution management system with role-based dashboards.",
-    img: "/projects/distributor.png",
+      "A full-stack distribution management system with role-based dashboards built for ADP Namasinghe (Pvt) Ltd.",
+    img: "/projects/dms.jpg",
     route: "/distributor-ms",
     fullDescription:
       "An academic project turned full-stack business solution providing a comprehensive distribution management system. Features include robust inventory tracking, order management, deliveries workflows, payments, and automated PDF reporting inside an Electron shell.",
@@ -327,50 +285,50 @@ export const projects: Project[] = [
       "/tech/tailwind.svg",
     ],
   },
-  {
-    id: "notesploy",
-    name: "Notesploy",
-    description:
-      "A rich note-taking app with a block-based editor, live code execution, and real-time collaboration.",
-    img: "/projects/notesploy.png",
-    route: "/notesploy",
-    fullDescription:
-      "Notesploy is a modern note-taking application that combines the flexibility of a block-based editor with powerful developer-focused features like live code execution and real-time collaboration. It's designed to be the single workspace for developers to capture, organize, and share knowledge.",
-    role: "Lead Developer",
-    timeline: "2023 - 2024",
-    status: "In Progress",
-    technologies: ["Next.js", "Supabase", "PostgreSQL", "Redis", "WebSockets"],
-    features: [
-      "Block-based editor with slash commands",
-      "Live code execution in the browser",
-      "Real-time collaborative editing",
-      "Markdown and rich text support",
-      "Team workspaces with permissions",
-      "Version history with branching",
-    ],
-    links: {
-      demo: "https://notesploy.com",
-      github: "https://github.com/notesploy/",
-    },
-    highlights: [
-      "Built WebContainer integration for secure code execution",
-      "Achieved sub-50ms sync latency for collaboration",
-      "Designed extensible block plugin architecture",
-    ],
-    techImages: [
-      "/tech/nextjs.svg",
-      "/tech/supabase.svg",
-      "/tech/postgresql.svg",
-      "/tech/redis.svg",
-      "/tech/websockets.svg",
-    ],
-  },
+  // {
+  //   id: "notesploy",
+  //   name: "Notesploy",
+  //   description:
+  //     "A rich note-taking app with a block-based editor, live code execution, and real-time collaboration.",
+  //   img: "/projects/notesploy.png",
+  //   route: "/notesploy",
+  //   fullDescription:
+  //     "Notesploy is a modern note-taking application that combines the flexibility of a block-based editor with powerful developer-focused features like live code execution and real-time collaboration. It's designed to be the single workspace for developers to capture, organize, and share knowledge.",
+  //   role: "Lead Developer",
+  //   timeline: "2023 - 2024",
+  //   status: "In Progress",
+  //   technologies: ["Next.js", "Supabase", "PostgreSQL", "Redis", "WebSockets"],
+  //   features: [
+  //     "Block-based editor with slash commands",
+  //     "Live code execution in the browser",
+  //     "Real-time collaborative editing",
+  //     "Markdown and rich text support",
+  //     "Team workspaces with permissions",
+  //     "Version history with branching",
+  //   ],
+  //   links: {
+  //     demo: "https://notesploy.com",
+  //     github: "https://github.com/notesploy/",
+  //   },
+  //   highlights: [
+  //     "Built WebContainer integration for secure code execution",
+  //     "Achieved sub-50ms sync latency for collaboration",
+  //     "Designed extensible block plugin architecture",
+  //   ],
+  //   techImages: [
+  //     "/tech/nextjs.svg",
+  //     "/tech/supabase.svg",
+  //     "/tech/postgresql.svg",
+  //     "/tech/redis.svg",
+  //     "/tech/websockets.svg",
+  //   ],
+  // },
   {
     id: "h5ptopptx",
     name: "H5PtoPPTX",
     description:
       "Windows desktop application to convert H5P interactive content to PowerPoint.",
-    img: "/projects/h5ptopptx.png",
+    img: "/projects/h5ptopptx.jpg",
     route: "/h5ptopptx",
     fullDescription:
       "H5PtoPPTX is a C# Windows desktop application designed to streamline educational content management. It extracts images from packaged .h5p files and seamlessly auto-generates a .pptx PowerPoint presentation, placing each image on an individual slide.",

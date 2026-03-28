@@ -60,6 +60,7 @@ import ColorBends from "./ui/ColorBends";
 
 <style>
   .landing-page {
+    --hero-nav-offset: 5.75rem;
     position: relative;
     width: 100%;
     min-height: 100vh;
@@ -77,6 +78,7 @@ import ColorBends from "./ui/ColorBends";
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
+    display: flex;
     overflow: hidden;
   }
 
@@ -99,6 +101,7 @@ import ColorBends from "./ui/ColorBends";
   .landing-page .cols {
     width: 100%;
     display: flex;
+    min-height: inherit;
   }
 
   .landing-page .col {
@@ -122,9 +125,11 @@ import ColorBends from "./ui/ColorBends";
   .landing-page .col-right .right-copy {
     position: relative;
     width: min(34rem, 100%);
+    min-height: clamp(15rem, 30vw, 24rem);
     margin-left: auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: flex-start;
     gap: 1rem;
     will-change: transform, opacity, filter; /* GPU Acceleration */
@@ -140,6 +145,7 @@ import ColorBends from "./ui/ColorBends";
     text-transform: none;
     text-wrap: balance;
     color: rgba(255, 246, 238, 0.98);
+    min-height: 2.45em;
     text-shadow:
       0 0.04em 0.12em rgba(0, 0, 0, 0.22),
       0 0 1rem rgba(255, 255, 255, 0.04);
@@ -215,6 +221,7 @@ import ColorBends from "./ui/ColorBends";
     margin: 0;
     border: none;
     max-width: 8ch;
+    min-height: 1.95em;
     text-shadow: 0 0.04em 0.16em rgba(0, 0, 0, 0.18);
   }
 
@@ -226,6 +233,7 @@ import ColorBends from "./ui/ColorBends";
     text-transform: uppercase;
     text-align: left;
     color: rgba(255, 255, 255, 0.68);
+    min-height: 1.3em;
   }
 
   :global(.left-glass .info) {
@@ -237,16 +245,19 @@ import ColorBends from "./ui/ColorBends";
     text-align: left;
     color: rgba(255, 255, 255, 0.8);
     margin-top: 0.35rem;
+    min-height: 4.8em;
   }
 
   /* 900px Breakpoint */
   @media (max-width: 900px) {
     .landing-page {
       overflow: clip; /* Better than hidden for preventing mobile overscroll */
+      --hero-nav-offset: 5rem;
     }
 
     .landing-page .container {
       overflow: visible;
+      display: block;
     }
 
     .landing-page .container::before {
@@ -270,14 +281,18 @@ import ColorBends from "./ui/ColorBends";
     .landing-page .cols {
       position: relative;
       z-index: 1;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 1.25rem;
+      width: min(100%, 42rem);
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-content: end;
+      justify-content: stretch;
+      gap: 1rem;
       min-height: 100vh;
       min-height: 100svh;
       min-height: 100dvh;
-      padding: calc(env(safe-area-inset-top, 0px) + 5.5rem) 1.25rem
-        calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+      padding: calc(env(safe-area-inset-top, 0px) + var(--hero-nav-offset))
+        1.25rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
     }
 
     .landing-page .col {
@@ -293,6 +308,7 @@ import ColorBends from "./ui/ColorBends";
     .landing-page .col-left {
       display: flex;
       align-items: flex-start;
+      width: 100%;
     }
 
     :global(.left-glass) {
@@ -300,7 +316,7 @@ import ColorBends from "./ui/ColorBends";
       justify-content: flex-start;
       align-items: stretch;
       padding: 1.4rem 1.25rem 1.25rem;
-      min-height: clamp(15rem, 38vh, 22rem);
+      min-height: clamp(14rem, 34svh, 20rem);
       background:
         linear-gradient(180deg, rgba(18, 18, 18, 0.22), rgba(0, 0, 0, 0.1)),
         radial-gradient(circle at top left, rgba(0, 0, 0, 0.2), transparent 38%);
@@ -346,18 +362,20 @@ import ColorBends from "./ui/ColorBends";
     .landing-page .col-right {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 1.5rem 1.25rem 2rem;
-      text-align: center;
+      justify-content: flex-start;
+      padding: 1rem 0 0.5rem;
+      text-align: left;
     }
 
     .landing-page .col-right .right-copy {
       position: relative;
-      width: min(22rem, 100%);
-      margin-inline: auto;
+      width: min(24rem, 100%);
+      min-height: clamp(10rem, 22svh, 14rem);
+      margin-inline: 0;
       display: flex;
       flex-direction: column;
-      align-items: center; /* Center items within the copy flex container */
+      align-items: flex-start;
+      justify-content: flex-end;
       gap: 0.8rem;
     }
 
@@ -366,7 +384,8 @@ import ColorBends from "./ui/ColorBends";
       font-size: clamp(3rem, 13vw, 5.1rem); /* Tuned lower bound */
       line-height: 0.9;
       text-wrap: balance;
-      text-align: center;
+      min-height: 2.7em;
+      text-align: left;
     }
   }
 
@@ -466,13 +485,14 @@ import ColorBends from "./ui/ColorBends";
     }
 
     .landing-page .col-right {
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     .landing-page .col-right .right-copy {
       align-items: flex-start;
       margin-inline: 0;
       width: 100%;
+      min-height: 9.5rem;
     }
 
     .landing-page .col-right .header {
@@ -480,15 +500,17 @@ import ColorBends from "./ui/ColorBends";
       font-size: clamp(2.5rem, 14vw, 4.2rem);
       width: auto;
       max-width: 8ch;
+      min-height: 2.75em;
     }
 
     :global(.left-glass) {
-      min-height: clamp(15rem, 38svh, 22rem);
+      min-height: clamp(13.5rem, 34svh, 20rem);
       border-radius: 1.25rem;
     }
 
     :global(.left-glass .header) {
       font-size: clamp(2.2rem, 12vw, 3.8rem); /* Prevent clipping */
+      min-height: 2.1em;
       margin-bottom: 0.75rem;
     }
 
@@ -496,6 +518,7 @@ import ColorBends from "./ui/ColorBends";
       max-width: 100%;
       font-size: 0.95rem;
       line-height: 1.5;
+      min-height: 4.6em;
     }
 
     .landing-page .loader-text {
@@ -537,6 +560,23 @@ import ColorBends from "./ui/ColorBends";
       );
       const textWrapper = document.querySelector(".landing-page .loader-text");
       let revealCleanup: (() => void) | undefined;
+      const waitForStableHero = async () => {
+        const fontReady =
+          "fonts" in document
+            ? document.fonts.ready.catch(() => undefined)
+            : Promise.resolve();
+
+        const settleDelay = new Promise((resolve) =>
+          window.setTimeout(resolve, prefersReducedMotion ? 80 : isMobile ? 420 : 560),
+        );
+
+        await Promise.race([
+          Promise.all([fontReady, settleDelay]),
+          new Promise((resolve) =>
+            window.setTimeout(resolve, prefersReducedMotion ? 180 : isMobile ? 950 : 1400),
+          ),
+        ]);
+      };
 
       const runHeroTextReveal = async () => {
         if (!heroScope) return;
@@ -615,10 +655,6 @@ import ColorBends from "./ui/ColorBends";
         }
       }
 
-      const loaderDelay = prefersReducedMotion ? 0.15 : isMobile ? 1.0 : 2;
-      const revealDelay = prefersReducedMotion ? 0.3 : isMobile ? 1.4 : 3;
-      const contentDelay = prefersReducedMotion ? 0.45 : isMobile ? 1.85 : 4.5;
-
       gsap.from(".landing-page .loader-wrapper", {
         scale: 0.8,
         ease: "power1.inOut",
@@ -631,73 +667,82 @@ import ColorBends from "./ui/ColorBends";
         duration: prefersReducedMotion ? 0.2 : isMobile ? 1.2 : 2,
       });
 
-      gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
-        scale: 1.5,
-        opacity: 0,
-        display: "none",
-        ease: "power2.inOut",
-        delay: loaderDelay,
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.65 : 1,
-      });
+      void (async () => {
+        await waitForStableHero();
 
-      gsap.from(".landing-page .revealer", {
-        width: "0%",
-        ease: "power2.inOut",
-        delay: revealDelay,
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.65 : 1,
-      });
+        const loaderDelay = prefersReducedMotion ? 0.05 : isMobile ? 0.12 : 0.2;
+        const revealDelay = prefersReducedMotion ? 0.14 : isMobile ? 0.28 : 0.45;
+        const contentDelay = prefersReducedMotion ? 0.24 : isMobile ? 0.54 : 0.8;
 
-      gsap.to(".landing-page .revealer", {
-        left: "100%",
-        ease: "power2.inOut",
-        delay: revealDelay + (isMobile ? 0.55 : 1),
-        duration: prefersReducedMotion ? 0.15 : isMobile ? 0.55 : 0.8,
-      });
-
-      gsap.to(".landing-page .loader-text-wrapper", {
-        opacity: 0,
-        display: "none",
-        ease: "power3.inOut",
-        delay: revealDelay + (isMobile ? 0.4 : 1),
-        duration: 0.2,
-      });
-
-      gsap.from(".landing-page .col-left", {
-        left: "-110%",
-        ease: "power2.inOut",
-        delay: contentDelay,
-        duration: prefersReducedMotion ? 0.2 : isMobile ? 0.85 : 1,
-      });
-
-      gsap.from(".landing-page .left-glass .copy", {
-        x: "-28",
-        opacity: 0,
-        filter: "blur(8px)",
-        ease: "power3.out",
-        delay: contentDelay + 0.14,
-        duration: prefersReducedMotion ? 0.24 : isMobile ? 0.72 : 1.02,
-      });
-
-      gsap.from(".landing-page .col-right .right-copy", {
-        x: "24",
-        opacity: 0,
-        filter: "blur(8px)",
-        ease: "power3.out",
-        delay: contentDelay + 0.18,
-        duration: prefersReducedMotion ? 0.24 : isMobile ? 0.76 : 1.08,
-      });
-
-      if (prefersReducedMotion) {
-        heroTextTargets.forEach((element) => {
-          element.style.visibility = "visible";
+        gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
+          scale: 1.5,
+          opacity: 0,
+          display: "none",
+          ease: "power2.inOut",
+          delay: loaderDelay,
+          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.45 : 0.7,
         });
-      } else {
-        const delayedReveal = gsap.delayedCall(contentDelay + 0.22, () => {
+
+        gsap.from(".landing-page .revealer", {
+          width: "0%",
+          ease: "power2.inOut",
+          delay: revealDelay,
+          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.42 : 0.72,
+        });
+
+        gsap.to(".landing-page .revealer", {
+          left: "100%",
+          ease: "power2.inOut",
+          delay: revealDelay + (isMobile ? 0.38 : 0.65),
+          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.38 : 0.56,
+        });
+
+        gsap.to(".landing-page .loader-text-wrapper", {
+          opacity: 0,
+          display: "none",
+          ease: "power3.inOut",
+          delay: revealDelay + (isMobile ? 0.26 : 0.5),
+          duration: 0.2,
+        });
+
+        gsap.from(".landing-page .col-left", {
+          left: "-110%",
+          ease: "power2.inOut",
+          delay: contentDelay,
+          duration: prefersReducedMotion ? 0.2 : isMobile ? 0.6 : 0.82,
+        });
+
+        gsap.from(".landing-page .left-glass .copy", {
+          x: "-28",
+          opacity: 0,
+          filter: "blur(8px)",
+          ease: "power3.out",
+          delay: contentDelay + 0.08,
+          duration: prefersReducedMotion ? 0.24 : isMobile ? 0.56 : 0.82,
+        });
+
+        gsap.from(".landing-page .col-right .right-copy", {
+          x: "24",
+          opacity: 0,
+          filter: "blur(8px)",
+          ease: "power3.out",
+          delay: contentDelay + 0.12,
+          duration: prefersReducedMotion ? 0.24 : isMobile ? 0.6 : 0.9,
+        });
+
+        if (prefersReducedMotion) {
+          heroTextTargets.forEach((element) => {
+            element.style.visibility = "visible";
+          });
+          return;
+        }
+
+        const delayedReveal = gsap.delayedCall(contentDelay + 0.14, () => {
           void runHeroTextReveal();
         });
 
         onCleanup(() => delayedReveal.kill());
-      }
+      })();
 
       onCleanup(() => {
         revealCleanup?.();
