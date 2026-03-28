@@ -180,16 +180,21 @@ export default function ColorBends({
 
     const renderer = new THREE.WebGLRenderer({
       antialias: false,
-      powerPreference: 'high-performance',
-      alpha: true
+      powerPreference: "high-performance",
+      alpha: true,
     });
     rendererRef.current = renderer;
     (renderer as any).outputColorSpace = (THREE as any).SRGBColorSpace;
+
+    // Cap pixel ratio at 1.5 to save battery/performance on mobile devices
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
-    renderer.domElement.style.width = '100%';
-    renderer.domElement.style.height = '100%';
-    renderer.domElement.style.display = 'block';
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
+
+    // Prevent mobile browsers from trying to handle touch actions on the canvas
+    renderer.domElement.style.touchAction = "none";
     container.appendChild(renderer.domElement);
 
     const clock = new THREE.Clock();
@@ -197,26 +202,44 @@ export default function ColorBends({
       visibleRef.current = entry?.isIntersecting ?? true;
     });
     intersectionObserver.observe(container);
+
     const handleVisibilityChange = () => {
       visibleRef.current = !document.hidden;
     };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Track previous dimensions to prevent unnecessary WebGL resize calculations
+    let prevWidth = 0;
+    let prevHeight = 0;
 
     const handleResize = () => {
       const w = container.clientWidth || 1;
       const h = container.clientHeight || 1;
+
+      // MOBILE OPTIMIZATION: Ignore vertical shifts under 150px if width is identical.
+      // This prevents the canvas from aggressively resizing every time the mobile URL bar hides/shows.
+      const isMobileUrlBarShift =
+        prevWidth === w && Math.abs(prevHeight - h) < 150;
+
+      if (prevWidth !== 0 && isMobileUrlBarShift) {
+        return;
+      }
+
+      prevWidth = w;
+      prevHeight = h;
+
       renderer.setSize(w, h, false);
       (material.uniforms.uCanvas.value as THREE.Vector2).set(w, h);
     };
 
     handleResize();
 
-    if ('ResizeObserver' in window) {
+    if ("ResizeObserver" in window) {
       const ro = new ResizeObserver(handleResize);
       ro.observe(container);
       resizeObserverRef.current = ro;
     } else {
-      (window as Window).addEventListener('resize', handleResize);
+      (window as Window).addEventListener("resize", handleResize);
     }
 
     const loop = () => {
@@ -247,14 +270,17 @@ export default function ColorBends({
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
-      else (window as Window).removeEventListener('resize', handleResize);
+      else (window as Window).removeEventListener("resize", handleResize);
       intersectionObserver.disconnect();
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       geometry.dispose();
       material.dispose();
       renderer.dispose();
       renderer.forceContextLoss();
-      if (renderer.domElement && renderer.domElement.parentElement === container) {
+      if (
+        renderer.domElement &&
+        renderer.domElement.parentElement === container
+      ) {
         container.removeChild(renderer.domElement);
       }
     };
