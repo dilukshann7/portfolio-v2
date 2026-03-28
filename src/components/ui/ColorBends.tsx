@@ -1,6 +1,22 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import "./ColorBends.css";
+
+const DEFAULT_MOBILE_FALLBACK_SRC = "/fallbacks/color-bends.jpg";
+
+function canUseWebGL() {
+  if (typeof window === "undefined") return false;
+
+  try {
+    const canvas = document.createElement("canvas");
+    return Boolean(
+      window.WebGLRenderingContext &&
+        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")),
+    );
+  } catch {
+    return false;
+  }
+}
 
 type ColorBendsProps = {
   className?: string;
@@ -17,6 +33,9 @@ type ColorBendsProps = {
   parallax?: number;
   noise?: number;
   globalPointer?: boolean;
+  mobileFallbackSrc?: string;
+  mobileFallbackAlt?: string;
+  mobileBreakpoint?: number;
 };
 
 const MAX_COLORS = 8 as const;
@@ -128,6 +147,9 @@ export default function ColorBends({
   parallax = 0.5,
   noise = 0.1,
   globalPointer = false,
+  mobileFallbackSrc = DEFAULT_MOBILE_FALLBACK_SRC,
+  mobileFallbackAlt = "",
+  mobileBreakpoint = 900,
 }: ColorBendsProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -140,8 +162,39 @@ export default function ColorBends({
   const pointerCurrentRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
   const pointerSmoothRef = useRef<number>(8);
   const visibleRef = useRef<boolean>(true);
+  const [prefersImageFallback, setPrefersImageFallback] = useState<
+    boolean | null
+  >(null);
+  const [webglFailed, setWebglFailed] = useState(false);
+  const shouldUseFallback =
+    prefersImageFallback === null ? null : prefersImageFallback || webglFailed;
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
+    const syncMode = () => {
+      setPrefersImageFallback(mediaQuery.matches || !canUseWebGL());
+    };
+
+    syncMode();
+
+    if ("addEventListener" in mediaQuery) {
+      mediaQuery.addEventListener("change", syncMode);
+      return () => mediaQuery.removeEventListener("change", syncMode);
+    }
+
+    const legacyMediaQuery = mediaQuery as MediaQueryList & {
+      addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+      removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+    };
+    legacyMediaQuery.addListener?.(syncMode);
+    return () => legacyMediaQuery.removeListener?.(syncMode);
+  }, [mobileBreakpoint]);
+
+  useEffect(() => {
+    if (shouldUseFallback !== false) return;
+
     const container = containerRef.current!;
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -178,16 +231,29 @@ export default function ColorBends({
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      powerPreference: "high-performance",
-      alpha: true,
-    });
+    let renderer: THREE.WebGLRenderer;
+
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        powerPreference: "high-performance",
+        alpha: true,
+      });
+      setWebglFailed(false);
+    } catch (error) {
+      console.warn("ColorBends WebGL initialization failed:", error);
+      setWebglFailed(true);
+      return;
+    }
     rendererRef.current = renderer;
     (renderer as any).outputColorSpace = (THREE as any).SRGBColorSpace;
 
     // Cap pixel ratio at 1 on mobile, 1.5 on desktop, to save battery/performance
-    renderer.setPixelRatio(typeof window !== "undefined" && window.innerWidth < 768 ? Math.min(window.devicePixelRatio || 1, 1) : Math.min(window.devicePixelRatio || 1, 1.5));
+    renderer.setPixelRatio(
+      typeof window !== "undefined" && window.innerWidth < 768
+        ? Math.min(window.devicePixelRatio || 1, 1)
+        : Math.min(window.devicePixelRatio || 1, 1.5),
+    );
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
@@ -285,7 +351,7 @@ export default function ColorBends({
         container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [shouldUseFallback]);
 
   useEffect(() => {
     const material = materialRef.current;
@@ -370,6 +436,16 @@ export default function ColorBends({
       ref={containerRef}
       className={`color-bends-container ${className}`}
       style={style}
-    />
+    >
+      {shouldUseFallback ? (
+        <img
+          className="color-bends-fallback"
+          src={mobileFallbackSrc}
+          alt={mobileFallbackAlt}
+          aria-hidden={mobileFallbackAlt ? undefined : true}
+          draggable={false}
+        />
+      ) : null}
+    </div>
   );
 }
