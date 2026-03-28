@@ -629,9 +629,9 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
         if (!stickySection || !cards.length || !countContainer) return;
 
         const getStickyHeight = () => {
-          if (window.innerWidth < 480) return window.innerHeight * 3.1;
-          if (window.innerWidth < 900) return window.innerHeight * 3.6;
-          return window.innerHeight * 7;
+          if (window.innerWidth < 480) return window.innerHeight * 1.5;
+          if (window.innerWidth < 900) return window.innerHeight * 2.0;
+          return window.innerHeight * 4.0;
         };
 
         let stickyHeight = getStickyHeight();
@@ -673,6 +673,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
               y: -y + radius,
               rotation: -rotation,
               transformOrigin: "center center",
+              force3D: true, // Forces hardware acceleration on mobile
             });
           });
         }
@@ -752,18 +753,34 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
           },
         });
 
+        let resizeTimer: NodeJS.Timeout;
+        let lastWidth = window.innerWidth;
+
         const onResize = () => {
-          stickyHeight = getStickyHeight();
-          trigger.vars.end = `+=${stickyHeight}px`;
-          gsap.set(countContainer, {
-            y: getCountStep() - currentCardIndex * getCountStep(),
-          });
-          positionCards(trigger.progress);
-          ScrollTrigger.refresh();
+          clearTimeout(resizeTimer);
+
+          resizeTimer = setTimeout(() => {
+            const currentWidth = window.innerWidth;
+
+            if (currentWidth !== lastWidth) {
+              lastWidth = currentWidth;
+              stickyHeight = getStickyHeight();
+              trigger.vars.end = `+=${stickyHeight}px`;
+              gsap.set(countContainer, {
+                y: getCountStep() - currentCardIndex * getCountStep(),
+              });
+              positionCards(trigger.progress);
+              ScrollTrigger.refresh();
+            }
+          }, 150);
         };
 
         window.addEventListener("resize", onResize, { signal });
-        onCleanup(() => trigger.kill());
+
+        onCleanup(() => {
+          clearTimeout(resizeTimer);
+          trigger.kill();
+        });
       };
 
       observer.observe(section);
