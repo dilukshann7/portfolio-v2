@@ -388,27 +388,25 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
   @media (max-width: 900px) {
     :global(.menu-toggle) {
-      --menu-toggle-width: 90px;
+      --menu-toggle-width: 98px;
+      --menu-toggle-height: 54px;
+      --menu-toggle-open-width: 54px;
+      --menu-toggle-icon-size: 54px;
       top: 1em;
       right: 1em;
     }
 
     :global(.menu-toggle .menu-copy) {
-      left: 18px;
+      left: 16px;
     }
 
     :global(.menu-toggle .menu-copy p) {
-      font-size: 10px;
+      font-size: 10.5px;
       letter-spacing: 0.12em;
     }
 
     :global(.menu-toggle:hover .menu-copy) {
       left: 14px;
-    }
-
-    :global(.menu-toggle .menu-toggle-icon) {
-      width: 48px;
-      height: 48px;
     }
 
     :global(.menu-toggle .hamburger) {
@@ -447,7 +445,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .menu-logo a {
-      font-size: 28px;
+      font-size: 60px;
+      line-height: 0.9;
     }
 
     .links {
@@ -461,9 +460,9 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .link a {
-      font-size: 2rem;
+      font-size: 2.45rem;
       letter-spacing: -0.5px;
-      line-height: 1.15;
+      line-height: 1.08;
     }
 
     .socials-left {
@@ -476,9 +475,20 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .socials .sub-col p {
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.6;
       transform: translateY(16px);
+    }
+
+    .col-2 .socials .sub-col p:first-child {
+      font-size: 2.4rem;
+      line-height: 0.98;
+      letter-spacing: 0.01em;
+    }
+
+    .col-2 .socials .sub-col p:not(:first-child) {
+      font-size: 1.35rem;
+      line-height: 1.38;
     }
 
     .socials .sub-col p br {
