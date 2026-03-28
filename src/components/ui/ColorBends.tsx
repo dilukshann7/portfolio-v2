@@ -262,6 +262,7 @@ export default function ColorBends({
       const amt = Math.min(1, dt * pointerSmoothRef.current);
       cur.lerp(tgt, amt);
       (material.uniforms.uPointer.value as THREE.Vector2).copy(cur);
+
       renderer.render(scene, camera);
       rafRef.current = requestAnimationFrame(loop);
     };
@@ -302,11 +303,19 @@ export default function ColorBends({
     material.uniforms.uNoise.value = noise;
 
     const toVec3 = (hex: string) => {
-      const h = hex.replace('#', '').trim();
+      const h = hex.replace("#", "").trim();
       const v =
         h.length === 3
-          ? [parseInt(h[0] + h[0], 16), parseInt(h[1] + h[1], 16), parseInt(h[2] + h[2], 16)]
-          : [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+          ? [
+              parseInt(h[0] + h[0], 16),
+              parseInt(h[1] + h[1], 16),
+              parseInt(h[2] + h[2], 16),
+            ]
+          : [
+              parseInt(h.slice(0, 2), 16),
+              parseInt(h.slice(2, 4), 16),
+              parseInt(h.slice(4, 6), 16),
+            ];
       return new THREE.Vector3(v[0] / 255, v[1] / 255, v[2] / 255);
     };
 
