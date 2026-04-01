@@ -1,6 +1,8 @@
 export const prerender = false;
 
 import { getAllBlogPosts, getPostUrl } from "../lib/blog";
+import { projects } from "../data/projects";
+import { SITE } from "../lib/site";
 
 export function GET({ url }: { url: URL }) {
   return buildSitemap(url);
@@ -12,24 +14,37 @@ async function buildSitemap(url: URL) {
     import.meta.env.PUBLIC_SITE_URL ||
     (import.meta.env.CF_PAGES_URL
       ? `https://${import.meta.env.CF_PAGES_URL}`
-      : url.origin);
+      : SITE.url || url.origin);
   const posts = await getAllBlogPosts();
-  const lastModified = posts[0]
+  const latestPostModified = posts[0]
     ? (posts[0].data.updatedDate ?? posts[0].data.publishDate).toISOString()
     : new Date().toISOString();
+  const buildModified = new Date().toISOString();
   const routes = [
     {
       loc: `${siteOrigin}/`,
-      lastmod: lastModified,
+      lastmod: latestPostModified,
       changefreq: "weekly",
       priority: "1.0",
     },
     {
+      loc: `${siteOrigin}/contact`,
+      lastmod: buildModified,
+      changefreq: "monthly",
+      priority: "0.7",
+    },
+    {
       loc: `${siteOrigin}/blog/`,
-      lastmod: lastModified,
+      lastmod: latestPostModified,
       changefreq: "weekly",
       priority: "0.9",
     },
+    ...projects.map((project) => ({
+      loc: `${siteOrigin}${project.route}`,
+      lastmod: buildModified,
+      changefreq: "monthly",
+      priority: "0.8",
+    })),
     ...posts.map((post) => ({
       loc: `${siteOrigin}${getPostUrl(post.id)}`,
       lastmod: (post.data.updatedDate ?? post.data.publishDate).toISOString(),
