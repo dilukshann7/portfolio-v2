@@ -1,10 +1,16 @@
 {
   "name": "Dilukshan Niranjan Portfolio",
   "short_name": "Dilukshan",
+  "description": "Portfolio of Dilukshan Niranjan, a full-stack developer and AI engineer building web apps, AI systems, and polished digital products.",
+  "id": "/",
+  "lang": "en",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#050505",
   "theme_color": "#050505",
+  "categories": ["portfolio", "developer", "technology"],
   "icons": [
     {
       "src": "/favicon.svg",
