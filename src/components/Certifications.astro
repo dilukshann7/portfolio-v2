@@ -339,11 +339,12 @@ import { certifications as awards } from "../data/certifications";
 </script>
 
 <style>
-  .certifications-container :global(img) {
+  .award-preview :global(img) {
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     will-change: transform;
   }
 
@@ -443,6 +444,11 @@ import { certifications as awards } from "../data/certifications";
     width: 30%;
     height: 30%;
     z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    pointer-events: none;
   }
 
   @media (max-width: 768px) {
