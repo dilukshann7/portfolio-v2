@@ -227,16 +227,16 @@ import { technologies } from "../data/technologies";
       // On touch devices, show tech names directly (no hover)
       if (isTouchDevice) {
         highlight.style.display = "none";
-        grid.querySelectorAll<HTMLElement>(".tech-section .tech-name").forEach(
-          (name) => {
+        grid
+          .querySelectorAll<HTMLElement>(".tech-section .tech-name")
+          .forEach((name) => {
             name.style.opacity = "1";
-          },
-        );
-        grid.querySelectorAll<HTMLElement>(".tech-section .tech-icon").forEach(
-          (icon) => {
+          });
+        grid
+          .querySelectorAll<HTMLElement>(".tech-section .tech-icon")
+          .forEach((icon) => {
             icon.style.opacity = "0";
-          },
-        );
+          });
         return;
       }
 
@@ -262,7 +262,8 @@ import { technologies } from "../data/technologies";
         (e: Event) => {
           const mouseEvent = e as MouseEvent;
           const hoveredElement =
-            (mouseEvent.target as Element | null)?.closest(".grid-item") ?? null;
+            (mouseEvent.target as Element | null)?.closest(".grid-item") ??
+            null;
           if (hoveredElement) {
             moveToElement(hoveredElement);
           }
