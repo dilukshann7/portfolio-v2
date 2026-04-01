@@ -1,0 +1,4 @@
+Contact: mailto:info@dilukshan.dev
+Preferred-Languages: en
+Canonical: https://dilukshan.dev/.well-known/security.txt
+Policy: https://dilukshan.dev/contact/

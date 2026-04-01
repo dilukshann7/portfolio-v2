@@ -1,0 +1,8 @@
+/* TEAM */
+Owner: Dilukshan Niranjan
+Role: Full-Stack Developer & AI Engineer
+Site: https://dilukshan.dev
+Contact: info@dilukshan.dev
+
+/* TECHNOLOGY */
+Stack: Astro, TypeScript, React, Tailwind CSS, GSAP, Cloudflare
