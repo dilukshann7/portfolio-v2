@@ -19,12 +19,12 @@ const { technologies = [], techImages = [] } = Astro.props;
   </div>
 
   <div class="profile-names">
-    <div class="name default"><h1>Tech Stack</h1></div>
+    <div class="name default"><p class="name-label">Tech Stack</p></div>
 
     {
       technologies.map((tech: string) => (
         <div class="name">
-          <h1>{tech}</h1>
+          <p class="name-label">{tech}</p>
         </div>
       ))
     }
@@ -87,7 +87,7 @@ const { technologies = [], techImages = [] } = Astro.props;
       const profileImagesContainer = document.querySelector(".profile-images");
       const profileImages = document.querySelectorAll(".profile-images .img");
       const nameElements = document.querySelectorAll(".profile-names .name");
-      const nameHeadings = document.querySelectorAll(".profile-names .name h1");
+      const nameHeadings = document.querySelectorAll(".profile-names .name .name-label");
 
       if (!profileImagesContainer || !profileImages.length || !nameElements.length) return;
 
@@ -273,7 +273,7 @@ const { technologies = [], techImages = [] } = Astro.props;
     overflow: hidden;
   }
 
-  .name :global(h1) {
+  .name :global(.name-label) {
     position: absolute;
     width: 100%;
     text-align: center;
@@ -287,12 +287,12 @@ const { technologies = [], techImages = [] } = Astro.props;
     transform: translateY(100%);
   }
 
-  .name.default :global(h1) {
+  .name.default :global(.name-label) {
     color: #000000;
     transform: translateY(-100%);
   }
 
-  .name :global(h1 .letter) {
+  .name :global(.name-label .letter) {
     position: relative;
     transform: translateY(0%);
     will-change: transform;
@@ -319,7 +319,7 @@ const { technologies = [], techImages = [] } = Astro.props;
       height: 4rem;
     }
 
-    .name :global(h1) {
+    .name :global(.name-label) {
       font-size: 4rem;
       letter-spacing: 0;
     }
