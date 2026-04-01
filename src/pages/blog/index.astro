@@ -67,11 +67,12 @@ const marqueeTopics = [
 ---
 
 <BaseLayout
-  title={`${SITE.author} — Journal`}
+  title={`Engineering Blog by ${SITE.author} | Astro, AI & Full-Stack`}
   description={SITE.blogDescription}
   image={featuredPost?.data.heroImage ?? SITE.socialImage}
   imageAlt={featuredPost?.data.heroImageAlt ?? SITE.blogTitle}
   keywords={keywords}
+  schemaType="CollectionPage"
   structuredData={structuredData}
   themeColor="#ffffff"
   colorScheme="light"

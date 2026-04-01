@@ -93,14 +93,16 @@ const structuredData = [
 ---
 
 <BaseLayout
-  title={`${post.data.title} | ${SITE.author}`}
+  title={`${post.data.title} | ${SITE.author} Blog`}
   description={post.data.description}
   image={post.data.heroImage ?? SITE.socialImage}
   imageAlt={post.data.heroImageAlt ?? post.data.title}
   keywords={[...post.data.tags, post.data.category, "blog post"]}
   pageType="article"
+  schemaType="Article"
   publishedTime={post.data.publishDate}
   modifiedTime={post.data.updatedDate ?? post.data.publishDate}
+  articleSection={post.data.category}
   structuredData={structuredData}
   themeColor="#ffffff"
   colorScheme="light"

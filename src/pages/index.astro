@@ -3,18 +3,54 @@ export const prerender = true;
 
 import AboutCards from "../components/AboutCards.astro";
 import LandingPage from "../components/LandingPage.astro";
-import Projects from "../components/Projects.astro";
+import ProjectsSection from "../components/Projects.astro";
 import Certifications from "../components/Certifications.astro";
 import Footer from "../components/Footer.astro";
 import Blog from "../components/Blog.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../lib/site";
+import { projects } from "../data/projects";
+
+const pageDescription =
+  "Explore the portfolio of Dilukshan Niranjan, a Sri Lankan full-stack developer and AI engineer building scalable web apps, AI products, and performance-focused digital experiences.";
+const homeKeywords = [
+  ...SITE.keywords,
+  "AI systems engineer",
+  "full-stack portfolio",
+  "web application developer",
+  "software case studies",
+];
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin;
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Featured Projects",
+    itemListElement: projects.slice(0, 6).map((project, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: new URL(project.route, siteOrigin).toString(),
+      name: project.name,
+      image: new URL(project.img, siteOrigin).toString(),
+    })),
+  },
+];
 ---
 
-<BaseLayout>
-  <LandingPage />
-  <AboutCards />
-  <Projects />
-  <Certifications />
-  <Blog />
-  <Footer />
+<BaseLayout
+  title={SITE.title}
+  description={pageDescription}
+  keywords={homeKeywords}
+  pageType="profile"
+  schemaType="ProfilePage"
+  structuredData={structuredData}
+>
+  <main id="main-content">
+    <LandingPage />
+    <AboutCards />
+    <ProjectsSection />
+    <Certifications />
+    <Blog />
+    <Footer />
+  </main>
 </BaseLayout>

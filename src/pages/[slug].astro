@@ -58,11 +58,17 @@ const structuredData = [
 ---
 
 <BaseLayout
-  title={`${project.name} — Project by ${SITE.author}`}
+  title={`${project.name} Case Study | ${SITE.author}`}
   description={project.description}
   image={project.img}
   imageAlt={`Screenshot of ${project.name}`}
-  pageType="article"
+  keywords={[
+    project.name,
+    "software case study",
+    "portfolio project",
+    ...project.technologies,
+  ]}
+  schemaType="WebPage"
   structuredData={structuredData}
 >
   <div class="pp">

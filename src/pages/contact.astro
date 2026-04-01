@@ -2,10 +2,53 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE } from "../lib/site";
 
-const pageTitle = `Contact | ${SITE.name}`;
+const pageTitle = `Contact ${SITE.name} | Hire a Full-Stack Developer & AI Engineer`;
+const pageDescription =
+  "Get in touch with Dilukshan Niranjan for full-stack development, AI engineering, product builds, and technical collaborations.";
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin;
+const contactUrl = new URL("/contact", siteOrigin).toString();
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: pageTitle,
+    description: pageDescription,
+    url: contactUrl,
+    mainEntity: {
+      "@type": "Person",
+      name: SITE.author,
+      url: siteOrigin,
+      email: `mailto:${SITE.email}`,
+      jobTitle: SITE.profession,
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: SITE.location,
+      },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "business inquiries",
+          email: SITE.email,
+          availableLanguage: ["English"],
+        },
+      ],
+    },
+  },
+];
 ---
 
-<BaseLayout title={pageTitle} description={SITE.description}>
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={[
+    ...SITE.keywords,
+    "contact Dilukshan Niranjan",
+    "hire AI engineer",
+    "hire full-stack developer",
+  ]}
+  schemaType="ContactPage"
+  structuredData={structuredData}
+>
   <div class="page">
     <div class="col-info">
       <div>
@@ -20,7 +63,7 @@ const pageTitle = `Contact | ${SITE.name}`;
         <div>
           <p class="detail__label">Get in touch</p>
           <p class="detail__value">
-            <a href="mailto:info@dilukshan.dev">info@dilukshan.dev</a>
+            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
           </p>
         </div>
         <div>
