@@ -10,39 +10,50 @@ interface Props {
   description?: string;
   image?: string;
   imageAlt?: string;
+  canonical?: string;
   noindex?: boolean;
   keywords?: string[];
-  pageType?: "website" | "article";
+  pageType?: "website" | "article" | "profile";
+  schemaType?: string;
   publishedTime?: string | Date;
   modifiedTime?: string | Date;
   structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
   themeColor?: string;
   colorScheme?: "light" | "dark";
+  articleSection?: string;
 }
 
 const {
   title = SITE.title,
   description = SITE.description,
   image = SITE.socialImage,
-  imageAlt = `${SITE.name} portfolio preview`,
+  imageAlt = SITE.socialImageAlt,
+  canonical,
   noindex = false,
   keywords = [],
   pageType = "website",
+  schemaType = pageType === "article" ? "Article" : "WebPage",
   publishedTime,
   modifiedTime,
   structuredData,
   themeColor = SITE.themeColor,
   colorScheme = "dark",
+  articleSection,
 } = Astro.props;
 
-const publicOrigin = Astro.site?.origin ?? Astro.url.origin;
-const canonicalUrl = new URL(Astro.url.pathname, publicOrigin);
+const publicOrigin = Astro.site?.origin ?? SITE.url ?? Astro.url.origin;
+const canonicalUrl = new URL(canonical ?? Astro.url.pathname, publicOrigin);
 const socialImageUrl = new URL(image, publicOrigin);
 const keywordList = [...new Set([...SITE.keywords, ...keywords])];
 const normalizeDate = (value?: string | Date) =>
   value ? new Date(value).toISOString() : undefined;
 const publishedTimeValue = normalizeDate(publishedTime);
 const modifiedTimeValue = normalizeDate(modifiedTime);
+const ogImageType = socialImageUrl.pathname.endsWith(".png")
+  ? "image/png"
+  : socialImageUrl.pathname.endsWith(".svg")
+    ? "image/svg+xml"
+    : "image/jpeg";
 const robots = noindex
   ? "noindex, nofollow"
   : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
@@ -50,18 +61,50 @@ const structuredDataItems = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${publicOrigin}/#website`,
     name: SITE.name,
     url: publicOrigin,
     description: SITE.description,
-    inLanguage: "en",
+    inLanguage: SITE.language,
+    publisher: {
+      "@id": `${publicOrigin}/#person`,
+    },
   },
   {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": `${publicOrigin}/#person`,
     name: SITE.author,
     url: publicOrigin,
-    jobTitle: "Fullstack Developer & AI Engineer",
+    image: new URL(SITE.socialImage, publicOrigin).toString(),
+    description: SITE.description,
+    jobTitle: SITE.profession,
+    email: `mailto:${SITE.email}`,
+    homeLocation: SITE.location,
+    knowsAbout: keywordList,
     sameAs: SITE.sameAs,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": schemaType,
+    "@id": `${canonicalUrl.toString()}#webpage`,
+    url: canonicalUrl.toString(),
+    name: title,
+    description,
+    inLanguage: SITE.language,
+    isPartOf: {
+      "@id": `${publicOrigin}/#website`,
+    },
+    about: {
+      "@id": `${publicOrigin}/#person`,
+    },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: socialImageUrl.toString(),
+      caption: imageAlt,
+    },
+    datePublished: publishedTimeValue,
+    dateModified: modifiedTimeValue,
   },
   ...(Array.isArray(structuredData)
     ? structuredData
@@ -86,14 +129,18 @@ const structuredDataItems = [
     <meta name="theme-color" content={themeColor} />
     <meta name="color-scheme" content={colorScheme} />
     <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
       name="format-detection"
       content="telephone=no, address=no, email=no"
     />
-    <link rel="canonical" href={canonicalUrl} />
+    <link rel="canonical" href={canonicalUrl.toString()} />
+    <link rel="sitemap" href="/sitemap.xml" type="application/xml" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content={SITE.name} />
+    {SITE.sameAs.map((profile) => <link rel="me" href={profile} />)}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       rel="preconnect"
@@ -109,9 +156,12 @@ const structuredDataItems = [
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:url" content={canonicalUrl.toString()} />
     <meta property="og:locale" content={SITE.locale} />
-    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image" content={socialImageUrl.toString()} />
+    <meta property="og:image:url" content={socialImageUrl.toString()} />
+    <meta property="og:image:secure_url" content={socialImageUrl.toString()} />
+    <meta property="og:image:type" content={ogImageType} />
     <meta property="og:image:alt" content={imageAlt} />
     {
       publishedTimeValue && (
@@ -123,6 +173,7 @@ const structuredDataItems = [
         <meta property="article:modified_time" content={modifiedTimeValue} />
       )
     }
+    {articleSection && <meta property="article:section" content={articleSection} />}
     {
       pageType === "article" &&
         keywordList.map((keyword) => (
@@ -133,7 +184,7 @@ const structuredDataItems = [
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image" content={socialImageUrl.toString()} />
     <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="twitter:creator" content={SITE.twitterHandle} />
     <meta name="twitter:site" content={SITE.twitterHandle} />
