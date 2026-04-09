@@ -3,9 +3,9 @@ import { env } from "cloudflare:workers";
 import { Resend } from "resend";
 
 const CONTACT_EMAIL = "info@dilukshan.dev";
-const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CONTACT_DOMAIN = CONTACT_EMAIL.split("@")[1] ?? "dilukshan.dev";
+const DEFAULT_FROM_EMAIL = `contact@${CONTACT_DOMAIN}`;
 
 const extractEmailAddress = (value: string) => {
   const match = value.match(/<([^>]+)>/);
