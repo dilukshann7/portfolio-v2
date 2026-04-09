@@ -206,6 +206,10 @@ const socialLinks = [
     margin-top: 0.2rem;
   }
 
+  .landing-page.landing-copy-pending .hero-copy {
+    opacity: 0;
+  }
+
   :global(.central-glass .hero-actions) {
     display: flex;
     flex-wrap: wrap;
@@ -446,36 +450,42 @@ const socialLinks = [
 
       const runHeroTextReveal = async () => {
         if (!heroScope) return;
-        const { initTextReveal } = await import("../lib/client/textReveal");
 
-        revealCleanup = await initTextReveal(heroScope, [
-          {
-            selector: ".central-glass .header",
-            mode: "lines",
-            scroll: false,
-            duration: isMobile ? 0.92 : 1.08,
-            stagger: isMobile ? 0.1 : 0.12,
-          },
-          {
-            selector: ".central-glass .sub-header",
-            mode: "fade",
-            scroll: false,
-            delay: isMobile ? 0.1 : 0.14,
-            duration: isMobile ? 0.7 : 0.8,
-            y: 18,
-          },
-          {
-            selector: ".central-glass .info",
-            mode: "fade",
-            scroll: false,
-            delay: isMobile ? 0.2 : 0.26,
-            duration: isMobile ? 0.82 : 0.95,
-            y: 22,
-          },
-        ]);
+        try {
+          const { initTextReveal } = await import("../lib/client/textReveal");
+
+          revealCleanup = await initTextReveal(heroScope, [
+            {
+              selector: ".central-glass .header",
+              mode: "lines",
+              scroll: false,
+              duration: isMobile ? 0.92 : 1.08,
+              stagger: isMobile ? 0.1 : 0.12,
+            },
+            {
+              selector: ".central-glass .sub-header",
+              mode: "fade",
+              scroll: false,
+              delay: isMobile ? 0.1 : 0.14,
+              duration: isMobile ? 0.7 : 0.8,
+              y: 18,
+            },
+            {
+              selector: ".central-glass .info",
+              mode: "fade",
+              scroll: false,
+              delay: isMobile ? 0.2 : 0.26,
+              duration: isMobile ? 0.82 : 0.95,
+              y: 22,
+            },
+          ]);
+        } finally {
+          heroScope.classList.remove("landing-copy-pending");
+        }
       };
 
       if (!prefersReducedMotion) {
+        heroScope?.classList.add("landing-copy-pending");
         gsap.set(".central-glass", { visibility: "hidden" });
       }
 
@@ -597,6 +607,7 @@ const socialLinks = [
       })();
 
       onCleanup(() => {
+        heroScope?.classList.remove("landing-copy-pending");
         revealCleanup?.();
         gsap.killTweensOf(".landing-page *");
       });
