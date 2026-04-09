@@ -1,4 +1,5 @@
 ---
+import { actions } from "astro:actions";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE } from "../lib/site";
 
@@ -7,6 +8,18 @@ const pageDescription =
   "Get in touch with Dilukshan Niranjan for full-stack development, AI engineering, product builds, and technical collaborations.";
 const siteOrigin = Astro.site?.origin ?? Astro.url.origin;
 const contactUrl = new URL("/contact", siteOrigin).toString();
+const contactAction = actions.send;
+const actionResult = Astro.getActionResult(contactAction);
+const initialStatus = actionResult?.error
+  ? actionResult.error.message
+  : actionResult?.data
+    ? "Message sent. I’ll get back to you soon."
+    : "";
+const initialTone = actionResult?.error
+  ? "error"
+  : initialStatus
+    ? "default"
+    : undefined;
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -96,7 +109,13 @@ const structuredData = [
         <h2 class="form__title">Tell me about<br />your project.</h2>
       </div>
 
-      <form class="form__fields" novalidate data-contact-form>
+      <form
+        class="form__fields"
+        method="POST"
+        action={contactAction}
+        novalidate
+        data-contact-form
+      >
         <div class="field">
           <label class="field__label" for="f-name">Name</label>
           <input
@@ -136,7 +155,14 @@ const structuredData = [
             <span>Send it</span>
             <span class="submit-btn__arrow" aria-hidden="true">→</span>
           </button>
-          <p class="form__status" data-contact-status aria-live="polite"></p>
+          <p
+            class="form__status"
+            data-contact-status
+            data-tone={initialTone}
+            aria-live="polite"
+          >
+            {initialStatus}
+          </p>
         </div>
       </form>
     </div>
@@ -164,6 +190,7 @@ const structuredData = [
 </BaseLayout>
 
 <script>
+  import { actions } from "astro:actions";
   import { runPageScript } from "../lib/client/spa";
 
   const initContactForm = () =>
@@ -207,27 +234,11 @@ const structuredData = [
           submitButton.dataset.loading = "true";
           setStatus("Sending message...");
 
-          void fetch("/api/contact", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name,
-              email,
-              message,
-            }),
-          })
-            .then(async (response) => {
-              const result = (await response.json()) as {
-                ok?: boolean;
-                message?: string;
-              };
-
-              if (!response.ok || !result.ok) {
-                throw new Error(
-                  result.message ?? "Could not send the message right now.",
-                );
+          void actions
+            .send(new FormData(form))
+            .then((result: any) => {
+              if (result.error) {
+                throw result.error;
               }
 
               form.reset();
