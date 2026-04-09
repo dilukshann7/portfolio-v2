@@ -636,12 +636,20 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       };
       splitTextIntoSpans(".header h1");
 
+      menuToggle.setAttribute("role", "button");
+      menuToggle.setAttribute("tabindex", "0");
+      menuToggle.setAttribute("aria-haspopup", "true");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation menu");
+
       const openMenu = () => {
         if (isAnimating) return;
 
         if (menuToggle.classList.contains("closed")) {
           menuToggle.classList.remove("closed");
           menuToggle.classList.add("opened");
+          menuToggle.setAttribute("aria-expanded", "true");
+          menuToggle.setAttribute("aria-label", "Close navigation menu");
 
           isAnimating = true;
 
@@ -706,6 +714,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
         menuToggle.classList.remove("opened");
         menuToggle.classList.add("closed");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
 
         isAnimating = true;
 
@@ -761,6 +771,33 @@ import GlassSurface from "./ui/GlassSurface.tsx";
           }
         },
         { passive: false, signal },
+      );
+
+      menuToggle.addEventListener(
+        "keydown",
+        (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+
+          if (isAnimating) return;
+
+          if (menuToggle.classList.contains("closed")) {
+            openMenu();
+          } else {
+            closeMenu();
+          }
+        },
+        { signal },
+      );
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if (event.key === "Escape" && menuToggle.classList.contains("opened")) {
+            closeMenu();
+          }
+        },
+        { signal },
       );
 
       navLinks.forEach((link) => {
