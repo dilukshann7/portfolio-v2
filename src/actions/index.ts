@@ -1,11 +1,18 @@
 import { ActionError, defineAction } from "astro:actions";
+import { env } from "cloudflare:workers";
 import { Resend } from "resend";
-
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
 const CONTACT_EMAIL = "info@dilukshan.dev";
 const DEFAULT_FROM_EMAIL = "Portfolio Contact <onboarding@resend.dev>";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const getResendApiKey = () =>
+  env.RESEND_API_KEY ?? import.meta.env.RESEND_API_KEY;
+
+const getFromEmail = () =>
+  env.CONTACT_FROM_EMAIL ??
+  import.meta.env.CONTACT_FROM_EMAIL ??
+  DEFAULT_FROM_EMAIL;
 
 const escapeHtml = (value: string) =>
   value
