@@ -216,9 +216,20 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     margin: 0;
     padding: 0;
     color: rgba(255, 255, 255, 0.96);
-    text-shadow:
-      0 0.2em 0.35em rgba(0, 0, 0, 0.18),
-      0 0 0.8em rgba(255, 255, 255, 0.12);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.18);
+    transition:
+      color 180ms ease,
+      text-shadow 180ms ease;
+  }
+
+  :global(.menu-toggle.menu-toggle--dark-copy .menu-copy p) {
+    color: rgba(12, 12, 12, 0.92);
+    text-shadow: 0 1px 10px rgba(255, 255, 255, 0.2);
+  }
+
+  :global(.menu-toggle:focus-visible) {
+    outline: 2px solid rgba(20, 20, 20, 0.85);
+    outline-offset: 4px;
   }
 
   :global(.menu-toggle:hover .menu-copy) {
@@ -634,8 +645,146 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       const navLinks =
         document.querySelectorAll<HTMLElement>("[data-nav-target]");
       let isAnimating = false;
+      let contrastFrame = 0;
+      const contrastTimeouts: number[] = [];
 
       if (!menuToggle || !menu) return;
+
+      const parseColor = (value: string) => {
+        if (!value || value === "transparent") {
+          return { r: 0, g: 0, b: 0, a: 0 };
+        }
+
+        const match = value.match(/rgba?\(([^)]+)\)/i);
+        if (!match) return null;
+
+        const [r = "0", g = "0", b = "0", a = "1"] = match[1]
+          .split(",")
+          .map((part) => part.trim());
+
+        return {
+          r: Number.parseFloat(r),
+          g: Number.parseFloat(g),
+          b: Number.parseFloat(b),
+          a: Number.parseFloat(a),
+        };
+      };
+
+      const compositeColors = (
+        foreground: { r: number; g: number; b: number; a: number },
+        background: { r: number; g: number; b: number; a: number },
+      ) => {
+        const alpha = foreground.a + background.a * (1 - foreground.a);
+
+        if (alpha <= 0) {
+          return { r: 255, g: 255, b: 255, a: 0 };
+        }
+
+        return {
+          r:
+            (foreground.r * foreground.a +
+              background.r * background.a * (1 - foreground.a)) /
+            alpha,
+          g:
+            (foreground.g * foreground.a +
+              background.g * background.a * (1 - foreground.a)) /
+            alpha,
+          b:
+            (foreground.b * foreground.a +
+              background.b * background.a * (1 - foreground.a)) /
+            alpha,
+          a: alpha,
+        };
+      };
+
+      const resolveBackdropColor = (element: Element | null) => {
+        const bodyColor = parseColor(
+          window.getComputedStyle(document.body).backgroundColor,
+        ) ?? { r: 255, g: 255, b: 255, a: 1 };
+
+        let current = element;
+        let resolvedColor =
+          bodyColor.a > 0 ? bodyColor : { r: 255, g: 255, b: 255, a: 1 };
+
+        while (current) {
+          const backgroundColor = parseColor(
+            window.getComputedStyle(current).backgroundColor,
+          );
+
+          if (backgroundColor && backgroundColor.a > 0) {
+            resolvedColor = compositeColors(backgroundColor, resolvedColor);
+
+            if (resolvedColor.a >= 0.98) {
+              break;
+            }
+          }
+
+          current = current.parentElement;
+        }
+
+        return resolvedColor;
+      };
+
+      const getRelativeLuminance = ({
+        r,
+        g,
+        b,
+      }: {
+        r: number;
+        g: number;
+        b: number;
+      }) => {
+        const toLinear = (channel: number) => {
+          const normalized = channel / 255;
+          return normalized <= 0.03928
+            ? normalized / 12.92
+            : ((normalized + 0.055) / 1.055) ** 2.4;
+        };
+
+        const red = toLinear(r);
+        const green = toLinear(g);
+        const blue = toLinear(b);
+
+        return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+      };
+
+      const updateMenuCopyContrast = () => {
+        if (menuToggle.classList.contains("opened")) {
+          menuToggle.classList.remove("menu-toggle--dark-copy");
+          return;
+        }
+
+        const rect = menuToggle.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+
+        const sampleX = Math.min(
+          Math.max(rect.left + rect.width * 0.35, 1),
+          window.innerWidth - 1,
+        );
+        const sampleY = Math.min(
+          Math.max(rect.top + rect.height * 0.5, 1),
+          window.innerHeight - 1,
+        );
+
+        const previousVisibility = menuToggle.style.visibility;
+        menuToggle.style.visibility = "hidden";
+        const underlyingElement = document.elementFromPoint(sampleX, sampleY);
+        menuToggle.style.visibility = previousVisibility;
+
+        const backdropColor = resolveBackdropColor(underlyingElement);
+        const isLightBackdrop = getRelativeLuminance(backdropColor) > 0.42;
+
+        menuToggle.classList.toggle("menu-toggle--dark-copy", isLightBackdrop);
+      };
+
+      const scheduleMenuCopyContrast = () => {
+        if (contrastFrame) return;
+
+        contrastFrame = window.requestAnimationFrame(() => {
+          contrastFrame = 0;
+          updateMenuCopyContrast();
+        });
+      };
 
       const splitTextIntoSpans = (selector: string) => {
         const elements = document.querySelectorAll<HTMLElement>(selector);
@@ -657,6 +806,32 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       menuToggle.setAttribute("aria-haspopup", "true");
       menuToggle.setAttribute("aria-expanded", "false");
       menuToggle.setAttribute("aria-label", "Open navigation menu");
+      scheduleMenuCopyContrast();
+      contrastTimeouts.push(window.setTimeout(scheduleMenuCopyContrast, 240));
+      contrastTimeouts.push(window.setTimeout(scheduleMenuCopyContrast, 1800));
+
+      window.addEventListener("scroll", scheduleMenuCopyContrast, {
+        passive: true,
+        signal,
+      });
+      window.addEventListener("resize", scheduleMenuCopyContrast, {
+        passive: true,
+        signal,
+      });
+      signal.addEventListener(
+        "abort",
+        () => {
+          if (contrastFrame) {
+            window.cancelAnimationFrame(contrastFrame);
+            contrastFrame = 0;
+          }
+
+          contrastTimeouts.forEach((timeoutId) => {
+            window.clearTimeout(timeoutId);
+          });
+        },
+        { once: true },
+      );
 
       const openMenu = () => {
         if (isAnimating) return;
@@ -678,6 +853,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
             },
             onComplete: () => {
               isAnimating = false;
+              scheduleMenuCopyContrast();
             },
           });
 
@@ -757,6 +933,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
             });
 
             isAnimating = false;
+            scheduleMenuCopyContrast();
             onComplete?.();
           },
         });
