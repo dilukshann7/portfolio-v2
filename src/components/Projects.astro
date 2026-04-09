@@ -24,8 +24,13 @@ for (let index = 0; index < projects.length; index += 3) {
                 />
               </div>
               <div class="work-item-copy">
+                <div class="work-item-meta">
+                  <span>{project.status}</span>
+                  <span>{project.timeline}</span>
+                </div>
                 <h3>{project.name}</h3>
                 <p>{project.description}</p>
+                <span class="work-item-cta">Open Case Study</span>
               </div>
             </a>
           </div>
@@ -40,6 +45,53 @@ for (let index = 0; index < projects.length; index += 3) {
     color: #0f0f0f;
     font-family: "Space Grotesk", sans-serif;
     margin-top: 4rem;
+  }
+
+  .work-intro {
+    display: grid;
+    gap: 0.8rem;
+    width: min(960px, 100%);
+  }
+
+  .work-kicker,
+  .work-item-meta span,
+  .work-item-cta {
+    margin: 0;
+    font-size: 0.72rem;
+    padding-left: 3px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .work-kicker {
+    color: rgba(15, 15, 15, 0.5);
+  }
+
+  .work-intro-copy {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .work-intro h2 {
+    margin: 0;
+    font-family: var(--font-melodrame);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 0.94;
+    font-weight: 400;
+    max-width: 12ch;
+  }
+
+  .work-intro p {
+    margin: 0;
+    max-width: 42ch;
+    font-family: "DM Sans", sans-serif;
+    font-size: 1rem;
+    line-height: 1.75;
+    letter-spacing: normal;
+    color: rgba(15, 15, 15, 0.68);
+    padding-left: 0;
+    font-weight: 400;
   }
 
   .work img {
@@ -102,6 +154,29 @@ for (let index = 0; index < projects.length; index += 3) {
     color: #999;
   }
 
+  .work-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .work-item-meta span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(15, 15, 15, 0.05);
+    color: rgba(15, 15, 15, 0.58);
+  }
+
+  .work-item-cta {
+    display: inline-flex;
+    margin-top: 1rem;
+    color: #0f0f0f;
+  }
+
   .work-item-link {
     display: flex;
     flex-direction: column;
@@ -115,6 +190,11 @@ for (let index = 0; index < projects.length; index += 3) {
   .work-item-link:hover {
     text-decoration: none;
     color: inherit;
+  }
+
+  .work-item-link:hover .work-item-cta {
+    text-decoration: underline;
+    text-underline-offset: 0.22em;
   }
 
   @media (max-width: 1000px) {
