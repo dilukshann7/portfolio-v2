@@ -132,16 +132,12 @@ const structuredData = [
         </div>
 
         <div class="form__submit">
-          <p class="form__note">
-            Opens your email app<br />with a pre-filled draft.
-          </p>
-          <button type="submit" class="submit-btn">
+          <button type="submit" class="submit-btn" data-contact-submit>
             <span>Send it</span>
             <span class="submit-btn__arrow" aria-hidden="true">→</span>
           </button>
+          <p class="form__status" data-contact-status aria-live="polite"></p>
         </div>
-
-        <p class="form__status" data-contact-status aria-live="polite"></p>
       </form>
     </div>
   </div>
@@ -172,12 +168,22 @@ const structuredData = [
 
   const initContactForm = () =>
     runPageScript("contact-form", ({ signal }) => {
-      const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
-      const status = document.querySelector<HTMLElement>("[data-contact-status]");
+      const form = document.querySelector<HTMLFormElement>(
+        "[data-contact-form]",
+      );
+      const status = document.querySelector<HTMLElement>(
+        "[data-contact-status]",
+      );
+      const submitButton = document.querySelector<HTMLButtonElement>(
+        "[data-contact-submit]",
+      );
 
-      if (!form || !status) return;
+      if (!form || !status || !submitButton) return;
 
-      const setStatus = (message: string, tone: "default" | "error" = "default") => {
+      const setStatus = (
+        message: string,
+        tone: "default" | "error" = "default",
+      ) => {
         status.textContent = message;
         status.dataset.tone = tone;
       };
@@ -197,13 +203,48 @@ const structuredData = [
             return;
           }
 
-          const subject = encodeURIComponent(`Project inquiry from ${name}`);
-          const body = encodeURIComponent(
-            `Name: ${name}\nEmail: ${email}\n\nProject details:\n${message}`,
-          );
+          submitButton.disabled = true;
+          submitButton.dataset.loading = "true";
+          setStatus("Sending message...");
 
-          setStatus("Opening your email draft...");
-          window.location.href = `mailto:${"info@dilukshan.dev"}?subject=${subject}&body=${body}`;
+          void fetch("/api/contact", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name,
+              email,
+              message,
+            }),
+          })
+            .then(async (response) => {
+              const result = (await response.json()) as {
+                ok?: boolean;
+                message?: string;
+              };
+
+              if (!response.ok || !result.ok) {
+                throw new Error(
+                  result.message ?? "Could not send the message right now.",
+                );
+              }
+
+              form.reset();
+              setStatus("Message sent. I’ll get back to you soon.");
+            })
+            .catch((error: unknown) => {
+              const messageText =
+                error instanceof Error
+                  ? error.message
+                  : "Could not send the message right now.";
+
+              setStatus(messageText, "error");
+            })
+            .finally(() => {
+              submitButton.disabled = false;
+              delete submitButton.dataset.loading;
+            });
         },
         { signal },
       );
@@ -385,7 +426,8 @@ const structuredData = [
   .form__submit {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1rem;
     padding-top: 1.75rem;
   }
 
@@ -401,16 +443,22 @@ const structuredData = [
 
   .form__status {
     min-height: 1.5rem;
-    margin: 0.75rem 0 0;
+    margin: 0;
+    margin-left: auto;
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(10, 10, 8, 0.42);
+    text-align: right;
   }
 
   .form__status[data-tone="error"] {
     color: #a13b24;
+  }
+
+  .form__status[data-tone="default"] {
+    color: rgba(10, 10, 8, 0.42);
   }
 
   .submit-btn {
@@ -430,6 +478,19 @@ const structuredData = [
     transition: gap 200ms;
     position: relative;
     overflow: hidden;
+  }
+
+  .submit-btn:disabled {
+    cursor: wait;
+    opacity: 0.8;
+  }
+
+  .submit-btn[data-loading="true"] {
+    gap: 1.4rem;
+  }
+
+  .submit-btn[data-loading="true"]::before {
+    transform: scaleX(1);
   }
 
   .submit-btn::before {
@@ -550,6 +611,11 @@ const structuredData = [
       flex-direction: column;
       gap: 1rem;
       align-items: stretch;
+    }
+
+    .form__status {
+      margin-left: 0;
+      text-align: center;
     }
 
     .form__note {
