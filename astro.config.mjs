@@ -11,11 +11,13 @@ const site =
   process.env.PUBLIC_SITE_URL ||
   (process.env.CF_PAGES_URL
     ? `https://${process.env.CF_PAGES_URL}`
-    : undefined);
+    : "https://dilukshan.dev");
 
 // https://astro.build/config
 export default defineConfig({
   site,
+  output: "server",
+  adapter: cloudflare(),
   integrations: [react()],
   compressHTML: true,
   prefetch: {
@@ -47,6 +49,4 @@ export default defineConfig({
       target: "es2022",
     },
   },
-
-  adapter: cloudflare(),
 });
