@@ -356,31 +356,20 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
         "(prefers-reduced-motion: reduce)",
       ).matches;
       const heroScope = document.querySelector(".landing-page");
-      const heroTextTargets = Array.from(
-        document.querySelectorAll<HTMLElement>(
-          [
-            ".landing-page .left-glass .header",
-            ".landing-page .left-glass .sub-header",
-            ".landing-page .left-glass .info",
-            ".landing-page .col-right .header",
-          ].join(", "),
-        ),
-      );
       const textWrapper = document.querySelector(".landing-page .loader-text");
       let revealCleanup: (() => void) | undefined;
+
       const waitForStableHero = async () => {
         const fontReady =
           "fonts" in document
             ? document.fonts.ready.catch(() => undefined)
             : Promise.resolve();
-
         const settleDelay = new Promise((resolve) =>
           window.setTimeout(
             resolve,
             prefersReducedMotion ? 80 : isMobile ? 420 : 560,
           ),
         );
-
         await Promise.race([
           Promise.all([fontReady, settleDelay]),
           new Promise((resolve) =>
@@ -394,18 +383,18 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
 
       const runHeroTextReveal = async () => {
         if (!heroScope) return;
-
         const { initTextReveal } = await import("../lib/client/textReveal");
+
         revealCleanup = await initTextReveal(heroScope, [
           {
-            selector: ".left-glass .header",
+            selector: ".central-glass .header",
             mode: "lines",
             scroll: false,
             duration: isMobile ? 0.92 : 1.08,
             stagger: isMobile ? 0.1 : 0.12,
           },
           {
-            selector: ".left-glass .sub-header",
+            selector: ".central-glass .sub-header",
             mode: "fade",
             scroll: false,
             delay: isMobile ? 0.1 : 0.14,
@@ -413,28 +402,18 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
             y: 18,
           },
           {
-            selector: ".left-glass .info",
+            selector: ".central-glass .info",
             mode: "fade",
             scroll: false,
             delay: isMobile ? 0.2 : 0.26,
             duration: isMobile ? 0.82 : 0.95,
             y: 22,
           },
-          {
-            selector: ".col-right .header",
-            mode: "lines",
-            scroll: false,
-            delay: isMobile ? 0.16 : 0.2,
-            duration: isMobile ? 0.96 : 1.14,
-            stagger: isMobile ? 0.1 : 0.12,
-          },
         ]);
       };
 
       if (!prefersReducedMotion) {
-        heroTextTargets.forEach((element) => {
-          element.style.visibility = "hidden";
-        });
+        gsap.set(".central-glass", { visibility: "hidden" });
       }
 
       if (textWrapper) {
@@ -443,14 +422,10 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
             /\S/g,
             "<span class='letter'>$&</span>",
           ) || "";
-
         if (!prefersReducedMotion) {
           gsap.fromTo(
             ".landing-page .loader-text .letter",
-            {
-              x: isMobile ? 20 : 40,
-              opacity: 0,
-            },
+            { x: isMobile ? 20 : 40, opacity: 0 },
             {
               x: 0,
               opacity: 1,
@@ -462,10 +437,7 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
             },
           );
         } else {
-          gsap.set(".landing-page .loader-text .letter", {
-            x: 0,
-            opacity: 1,
-          });
+          gsap.set(".landing-page .loader-text .letter", { x: 0, opacity: 1 });
         }
       }
 
@@ -474,7 +446,6 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
         ease: "power1.inOut",
         duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
       });
-
       gsap.from(".landing-page .loader", {
         top: "100%",
         ease: "power2.inOut",
@@ -511,14 +482,12 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
           delay: revealDelay,
           duration: prefersReducedMotion ? 0.15 : isMobile ? 0.42 : 0.72,
         });
-
         gsap.to(".landing-page .revealer", {
           left: "100%",
           ease: "power2.inOut",
           delay: revealDelay + (isMobile ? 0.38 : 0.65),
           duration: prefersReducedMotion ? 0.15 : isMobile ? 0.38 : 0.56,
         });
-
         gsap.to(".landing-page .loader-text-wrapper", {
           opacity: 0,
           display: "none",
@@ -527,37 +496,35 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
           duration: 0.2,
         });
 
-        gsap.from(".landing-page .col-left", {
-          left: "-110%",
-          ease: "power2.inOut",
+        gsap.set(".central-glass", { visibility: "visible" });
+        gsap.from(".central-layout", {
+          y: 40,
+          scale: 0.95,
+          opacity: 0,
+          ease: "power3.out",
           delay: contentDelay,
-          duration: prefersReducedMotion ? 0.2 : isMobile ? 0.6 : 0.82,
+          duration: prefersReducedMotion ? 0.2 : isMobile ? 0.6 : 1,
         });
 
-        gsap.from(".landing-page .left-glass .copy", {
-          x: "-28",
+        gsap.from(".central-glass > *:not(.copy)", {
+          y: 20,
           opacity: 0,
           filter: "blur(8px)",
           ease: "power3.out",
-          delay: contentDelay + 0.08,
+          stagger: 0.1,
+          delay: contentDelay + 0.2,
           duration: prefersReducedMotion ? 0.24 : isMobile ? 0.56 : 0.82,
         });
 
-        gsap.from(".landing-page .col-right .right-copy", {
-          x: "24",
+        gsap.from(".landing-page .scroll-hint", {
           opacity: 0,
-          filter: "blur(8px)",
-          ease: "power3.out",
-          delay: contentDelay + 0.12,
-          duration: prefersReducedMotion ? 0.24 : isMobile ? 0.6 : 0.9,
+          y: 12,
+          ease: "power2.out",
+          delay: contentDelay + 0.6,
+          duration: 0.6,
         });
 
-        if (prefersReducedMotion) {
-          heroTextTargets.forEach((element) => {
-            element.style.visibility = "visible";
-          });
-          return;
-        }
+        if (prefersReducedMotion) return;
 
         const delayedReveal = gsap.delayedCall(contentDelay + 0.14, () => {
           void runHeroTextReveal();
@@ -583,10 +550,8 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
   document.addEventListener("astro:page-load", () => {
     if (!hasSeenInitialAstroPageLoad) {
       hasSeenInitialAstroPageLoad = true;
-
       if (hasBootedLandingPage) return;
     }
-
     bootLandingPage();
   });
 
@@ -594,9 +559,7 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
     document.addEventListener(
       "DOMContentLoaded",
       () => {
-        if (!hasBootedLandingPage) {
-          bootLandingPage();
-        }
+        if (!hasBootedLandingPage) bootLandingPage();
       },
       { once: true },
     );
