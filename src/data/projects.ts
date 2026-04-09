@@ -363,7 +363,7 @@ export const projects: Project[] = [
     role: "Solo Developer",
     timeline: "2024",
     status: "Completed",
-    technologies: ["Python", "OpenCV", "Windows Registry / Batch"],
+    technologies: ["Python", "OpenCV", "Shell"],
     features: [
       "Native Windows right-click context menu integration",
       "Automated foreground/background mask generation via K-means clustering",
