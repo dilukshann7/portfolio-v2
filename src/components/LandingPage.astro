@@ -1,7 +1,28 @@
 ---
 import LightRays from "./ui/LightRays";
 
-const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
+const techStack = [
+  "Next.js",
+  "Astro",
+  "SvelteKit",
+  "TypeScript",
+  "Python",
+  "C/C++",
+];
+const socialLinks = [
+  {
+    label: "GitHub",
+    href: "https://github.com/dilukshann7",
+  },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com/in/dilukshann7",
+  },
+  {
+    label: "X / Twitter",
+    href: "https://x.com/silknye",
+  },
+];
 ---
 
 <div class="landing-page" id="home">
@@ -28,9 +49,11 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
     <div class="central-layout">
       <div class="central-glass">
         <div class="copy">
-          <h1 class="header">Dilukshan N</h1>
-          <div class="sub-header">Fullstack Developer & AI Engineer</div>
-          <div class="info">
+          <h1 class="header hero-copy">Dilukshan N</h1>
+          <div class="sub-header hero-copy">
+            Fullstack Developer & AI Engineer
+          </div>
+          <div class="info hero-copy">
             Building scalable web applications, grounded AI systems, and
             polished interfaces meant to feel intuitive on first use.
           </div>
@@ -43,6 +66,16 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
           <a href="/contact/" class="hero-link hero-link-secondary">
             Start a Project
           </a>
+        </div>
+
+        <div class="hero-socials" aria-label="Social links">
+          {
+            socialLinks.map((link) => (
+              <a href={link.href} target="_blank" rel="noreferrer">
+                {link.label}
+              </a>
+            ))
+          }
         </div>
 
         <div class="divider"></div>
@@ -117,7 +150,7 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 3.5rem 2.5rem;
+    padding: 3rem 2.5rem;
     border-radius: 2rem;
     background: linear-gradient(
       180deg,
@@ -217,6 +250,32 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
     background: rgba(255, 255, 255, 0.06);
   }
 
+  .hero-socials {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .hero-socials a {
+    color: rgba(255, 255, 255, 0.68);
+    text-decoration: none;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition:
+      color 220ms ease,
+      transform 220ms ease;
+  }
+
+  .hero-socials a:hover {
+    color: rgba(255, 248, 239, 0.94);
+    transform: translateY(-1px);
+  }
+
   .divider {
     width: 100%;
     max-width: 80%;
@@ -227,7 +286,7 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
       rgba(255, 255, 255, 0.1),
       transparent
     );
-    margin: 2rem 0;
+    margin: 1rem 0;
   }
 
   .bottom-stats-container {
@@ -336,6 +395,10 @@ const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
 
     :global(.central-glass .hero-link) {
       width: 100%;
+    }
+
+    .hero-socials {
+      gap: 0.6rem 0.9rem;
     }
 
     .divider {
