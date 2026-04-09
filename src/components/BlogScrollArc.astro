@@ -687,7 +687,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
         function positionCards(progress = 0) {
           const radius = getRadius();
           const totalTravel = 1 + totalCards / 10;
-          const adjustedProgress = (progress * totalTravel - 1) * 0.75;
+          const adjustedProgress = (progress * totalTravel - 1) * 0.4;
 
           cards.forEach((card, index) => {
             const normalizedProgress = (totalCards - 1 - index) / totalCards;
