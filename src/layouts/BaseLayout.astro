@@ -173,7 +173,11 @@ const structuredDataItems = [
         <meta property="article:modified_time" content={modifiedTimeValue} />
       )
     }
-    {articleSection && <meta property="article:section" content={articleSection} />}
+    {
+      articleSection && (
+        <meta property="article:section" content={articleSection} />
+      )
+    }
     {
       pageType === "article" &&
         keywordList.map((keyword) => (
