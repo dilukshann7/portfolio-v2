@@ -986,7 +986,10 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       document.addEventListener(
         "keydown",
         (event) => {
-          if (event.key === "Escape" && menuToggle.classList.contains("opened")) {
+          if (
+            event.key === "Escape" &&
+            menuToggle.classList.contains("opened")
+          ) {
             closeMenu();
           }
         },
