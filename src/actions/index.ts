@@ -3,16 +3,37 @@ import { env } from "cloudflare:workers";
 import { Resend } from "resend";
 
 const CONTACT_EMAIL = "info@dilukshan.dev";
-const DEFAULT_FROM_EMAIL = "Portfolio Contact <onboarding@resend.dev>";
+const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONTACT_DOMAIN = CONTACT_EMAIL.split("@")[1] ?? "dilukshan.dev";
+
+const extractEmailAddress = (value: string) => {
+  const match = value.match(/<([^>]+)>/);
+  return (match?.[1] ?? value).trim();
+};
 
 const getResendApiKey = () =>
   env.RESEND_API_KEY ?? import.meta.env.RESEND_API_KEY;
 
 const getFromEmail = () =>
-  env.CONTACT_FROM_EMAIL ??
-  import.meta.env.CONTACT_FROM_EMAIL ??
-  DEFAULT_FROM_EMAIL;
+  (() => {
+    const configured = extractEmailAddress(
+      env.CONTACT_FROM_EMAIL ??
+        import.meta.env.CONTACT_FROM_EMAIL ??
+        DEFAULT_FROM_EMAIL,
+    );
+
+    if (configured.toLowerCase() === CONTACT_EMAIL.toLowerCase()) {
+      return `contact@${CONTACT_DOMAIN}`;
+    }
+
+    return configured;
+  })();
+
+const getFromLabel = (name: string) => {
+  const cleanedName = name.replace(/[<>"]/g, "").trim() || "Portfolio Contact";
+  return `${cleanedName} via dilukshan.dev <${getFromEmail()}>`;
+};
 
 const escapeHtml = (value: string) =>
   value
