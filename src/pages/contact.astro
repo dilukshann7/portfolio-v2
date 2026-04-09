@@ -96,7 +96,7 @@ const structuredData = [
         <h2 class="form__title">Tell me about<br />your project.</h2>
       </div>
 
-      <form class="form__fields" novalidate>
+      <form class="form__fields" novalidate data-contact-form>
         <div class="field">
           <label class="field__label" for="f-name">Name</label>
           <input
@@ -104,6 +104,8 @@ const structuredData = [
             type="text"
             placeholder="Your full name"
             autocomplete="name"
+            name="name"
+            required
           />
         </div>
 
@@ -114,6 +116,8 @@ const structuredData = [
             type="email"
             placeholder="your@email.com"
             autocomplete="email"
+            name="email"
+            required
           />
         </div>
 
@@ -122,18 +126,22 @@ const structuredData = [
           <textarea
             id="f-message"
             placeholder="What are you working on?"
-            rows="4"></textarea>
+            rows="4"
+            name="message"
+            required></textarea>
         </div>
 
         <div class="form__submit">
           <p class="form__note">
-            I'll get back to<br />you as soon as possible.
+            Opens your email app<br />with a pre-filled draft.
           </p>
           <button type="submit" class="submit-btn">
             <span>Send it</span>
             <span class="submit-btn__arrow" aria-hidden="true">→</span>
           </button>
         </div>
+
+        <p class="form__status" data-contact-status aria-live="polite"></p>
       </form>
     </div>
   </div>
@@ -158,6 +166,51 @@ const structuredData = [
     </div>
   </footer>
 </BaseLayout>
+
+<script>
+  import { runPageScript } from "../lib/client/spa";
+
+  const initContactForm = () =>
+    runPageScript("contact-form", ({ signal }) => {
+      const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+      const status = document.querySelector<HTMLElement>("[data-contact-status]");
+
+      if (!form || !status) return;
+
+      const setStatus = (message: string, tone: "default" | "error" = "default") => {
+        status.textContent = message;
+        status.dataset.tone = tone;
+      };
+
+      form.addEventListener(
+        "submit",
+        (event) => {
+          event.preventDefault();
+
+          const formData = new FormData(form);
+          const name = String(formData.get("name") ?? "").trim();
+          const email = String(formData.get("email") ?? "").trim();
+          const message = String(formData.get("message") ?? "").trim();
+
+          if (!name || !email || !message) {
+            setStatus("Fill out name, email, and message first.", "error");
+            return;
+          }
+
+          const subject = encodeURIComponent(`Project inquiry from ${name}`);
+          const body = encodeURIComponent(
+            `Name: ${name}\nEmail: ${email}\n\nProject details:\n${message}`,
+          );
+
+          setStatus("Opening your email draft...");
+          window.location.href = `mailto:${"info@dilukshan.dev"}?subject=${subject}&body=${body}`;
+        },
+        { signal },
+      );
+    });
+
+  document.addEventListener("astro:page-load", initContactForm);
+</script>
 
 <style>
   :global(body) {
@@ -344,6 +397,20 @@ const structuredData = [
     color: rgba(10, 10, 8, 0.45);
     max-width: 22ch;
     line-height: 1.65;
+  }
+
+  .form__status {
+    min-height: 1.5rem;
+    margin: 0.75rem 0 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(10, 10, 8, 0.42);
+  }
+
+  .form__status[data-tone="error"] {
+    color: #a13b24;
   }
 
   .submit-btn {
