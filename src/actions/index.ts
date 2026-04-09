@@ -81,7 +81,7 @@ export const server = {
       const safeMessage = escapeHtml(message).replaceAll("\n", "<br />");
 
       const { data, error } = await resend.emails.send({
-        from: getFromEmail(),
+        from: getFromLabel(name),
         to: [CONTACT_EMAIL],
         replyTo: email,
         subject: `Portfolio inquiry from ${name}`,
