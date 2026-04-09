@@ -29,6 +29,9 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
   id="blog"
   aria-labelledby="blog-template-title"
 >
+  <h2 class="blog-template__sr-only" id="blog-template-title">
+    Latest writing
+  </h2>
   <div class="blog-template__container">
     <section class="blog-template__steps" data-blog-template-steps>
       <div class="blog-template__step-counter">
@@ -108,6 +111,18 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
   .blog-template__container {
     position: relative;
+  }
+
+  .blog-template__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .blog-template__cta {
@@ -460,6 +475,15 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     pointer-events: none;
   }
 
+  .blog-template__summary {
+    width: min(32rem, calc(100vw - 4rem));
+    margin: 1rem 0 0;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: rgba(0, 0, 0, 0.62);
+  }
+
   @media (max-width: 900px) {
     .blog-template {
       padding-top: 4.5em !important;
@@ -481,6 +505,12 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
     .blog-template__count {
       top: 0;
+    }
+
+    .blog-template__summary {
+      width: min(24rem, calc(100vw - 2rem));
+      font-size: 0.88rem;
+      margin-top: 0.75rem;
     }
 
     .blog-template__cards {
