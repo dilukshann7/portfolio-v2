@@ -3,32 +3,34 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 ---
 
 <section class="navigation-container">
-  <GlassSurface
-    client:load
-    className="menu-toggle closed"
-    width="var(--menu-toggle-width, 120px)"
-    height="var(--menu-toggle-height, 60px)"
-    borderRadius={999}
-    borderWidth={0.08}
-    displace={0.5}
-    distortionScale={-180}
-    redOffset={0}
-    greenOffset={10}
-    blueOffset={20}
-    brightness={50}
-    opacity={0.93}
-    mixBlendMode="screen"
-  >
-    <div class="menu-toggle-icon">
-      <div class="hamburger">
-        <div class="menu-bar" data-position="top"></div>
-        <div class="menu-bar" data-position="bottom"></div>
+  <div class="menu-toggle closed">
+    <GlassSurface
+      client:load
+      className="menu-toggle-surface"
+      width="100%"
+      height="100%"
+      borderRadius={999}
+      borderWidth={0.08}
+      displace={0.5}
+      distortionScale={-180}
+      redOffset={0}
+      greenOffset={10}
+      blueOffset={20}
+      brightness={50}
+      opacity={0.93}
+      mixBlendMode="screen"
+    >
+      <div class="menu-toggle-icon">
+        <div class="hamburger">
+          <div class="menu-bar" data-position="top"></div>
+          <div class="menu-bar" data-position="bottom"></div>
+        </div>
       </div>
-    </div>
+    </GlassSurface>
     <div class="menu-copy">
       <p>Menu</p>
     </div>
-  </GlassSurface>
+  </div>
 
   <div class="menu">
     <div class="col col-1">
@@ -156,12 +158,14 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     --menu-toggle-open-width: 60px;
     --menu-toggle-icon-size: 60px;
     position: fixed;
+    width: var(--menu-toggle-width);
+    height: var(--menu-toggle-height);
+    border-radius: 999px;
     top: 1.2em;
     right: 1.5em;
     transition:
       width 0.5s cubic-bezier(0.075, 0.82, 0.165, 1),
-      transform 400ms cubic-bezier(0.25, 1, 0.5, 1),
-      box-shadow 400ms cubic-bezier(0.25, 1, 0.5, 1);
+      transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
     transform-origin: right;
     cursor: pointer;
     z-index: 120;
@@ -171,13 +175,23 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     --menu-toggle-width: var(--menu-toggle-open-width);
   }
 
+  :global(.menu-toggle-surface) {
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    transition: filter 400ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
   :global(.menu-toggle .glass-surface__content) {
     padding: 0;
   }
 
   :global(.menu-toggle:hover) {
     transform: scale(0.972) translateY(-1px);
-    box-shadow: 0 0.5em 1.1em rgba(0, 0, 0, 0.12);
+  }
+
+  :global(.menu-toggle:hover .menu-toggle-surface) {
+    filter: drop-shadow(0 0.5em 1.1em rgba(0, 0, 0, 0.12));
   }
 
   :global(.menu-toggle:active) {
@@ -189,9 +203,9 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     top: 50%;
     left: 30px;
     transform: translateY(-50%);
-    color: #fff;
     transition: left 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-    z-index: 1;
+    z-index: 20;
+    pointer-events: none;
   }
 
   :global(.menu-toggle .menu-copy p) {
@@ -221,25 +235,27 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     width: var(--menu-toggle-icon-size);
     height: var(--menu-toggle-icon-size);
     border-radius: 100%;
-    clip-path: circle(10% at 50% 50%);
     background: rgba(255, 245, 232, 0.72);
     backdrop-filter: blur(10px) saturate(140%);
     -webkit-backdrop-filter: blur(10px) saturate(140%);
     border: 1px solid rgba(255, 255, 255, 0.28);
-    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
     z-index: 10;
     overflow: hidden;
+    transform: scale(0.2);
+    transform-origin: center;
+    backface-visibility: hidden;
+    will-change: transform;
     box-shadow:
       inset 0 0.08em 0.16em rgba(255, 255, 255, 0.45),
       inset 0 -0.08em 0.12em rgba(0, 0, 0, 0.1);
   }
 
   :global(.menu-toggle:hover .menu-toggle-icon) {
-    clip-path: circle(35% at 50% 50%);
+    transform: scale(0.7);
   }
 
   :global(.menu-toggle.opened .menu-toggle-icon) {
-    clip-path: circle(50% at 50% 50%);
     transform: scale(1.125);
   }
 
@@ -519,11 +535,11 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     :global(.menu-toggle .menu-toggle-icon) {
-      clip-path: circle(28% at 50% 50%);
+      transform: scale(0.56);
     }
 
     :global(.menu-toggle.opened .menu-toggle-icon) {
-      clip-path: circle(50% at 50% 50%);
+      transform: scale(1.125);
     }
   }
 
