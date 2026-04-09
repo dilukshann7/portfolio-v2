@@ -1,85 +1,94 @@
 ---
-import ColorBends from "./ui/ColorBends";
+import LightRays from "./ui/LightRays";
+
+const techStack = ["Next.js", "Astro", "TypeScript", "Python", "PostgreSQL"];
 ---
 
 <div class="landing-page" id="home">
   <div class="hero-img">
-    <ColorBends
+    <LightRays
       client:load
-      colors={[]}
-      rotation={0}
-      speed={0.2}
-      scale={1}
-      frequency={1}
-      warpStrength={1}
-      mouseInfluence={1}
-      parallax={0.5}
-      noise={0.1}
-      transparent
-      autoRotate={0}
-      globalPointer
-      mobileFallbackSrc="/fallbacks/color-bends.jpg"
+      raysOrigin="top-center"
+      raysColor="#ffffff"
+      raysSpeed={1}
+      lightSpread={0.5}
+      rayLength={3}
+      followMouse={true}
+      mouseInfluence={0.1}
+      noiseAmount={0}
+      distortion={0}
+      className="custom-rays"
+      pulsating={false}
+      fadeDistance={1}
+      saturation={1}
     />
   </div>
+
   <div class="container">
-    <div class="cols">
-      <div class="col col-left">
-        <div class="left-glass">
-          <div class="copy">
-            <h1 class="header">Dilukshan<br />Niranjan</h1>
-            <div class="sub-header">CS & SE Undergrad from Sri Lanka</div>
-            <div class="info">
-              Fullstack Developer & AI Engineer passionate about building
-              scalable web applications and intelligent systems.
-            </div>
+    <div class="central-layout">
+      <div class="central-glass">
+        <div class="copy">
+          <h1 class="header">Dilukshan N</h1>
+          <div class="sub-header">Fullstack Developer & AI Engineer</div>
+          <div class="info">
+            Building scalable web applications, grounded AI systems, and
+            polished interfaces meant to feel intuitive on first use.
           </div>
         </div>
-      </div>
-      <div class="col col-right">
-        <div class="right-copy">
-          <div class="header">
-            Building
-            <br />
-            scalable
-            <br />
-            AI systems
+
+        <div class="hero-actions">
+          <a href="#projects" class="hero-link hero-link-primary">
+            Explore Projects
+          </a>
+          <a href="/contact/" class="hero-link hero-link-secondary">
+            Start a Project
+          </a>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="bottom-stats-container">
+          <div class="stack-tags">
+            {techStack.map((t) => <span class="tag">{t}</span>)}
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
 </div>
 
 <style>
   .landing-page {
-    --hero-nav-offset: 5.75rem;
     position: relative;
     width: 100%;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    min-height: 100svh;
+    height: 100dvh;
+    max-height: 100dvh;
     overflow: hidden;
     background-color: #000;
   }
 
   .landing-page .container {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    min-height: 100svh;
-    display: flex;
-    overflow: hidden;
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    z-index: 10;
   }
 
   .landing-page .hero-img {
     position: absolute;
     width: 100%;
-    min-height: 100vh;
-    min-height: 100lvh;
+    height: 100%;
     inset: 0;
     overflow: hidden;
     pointer-events: none;
+    z-index: 1;
   }
 
   .landing-page .hero-img :global(.color-bends-container) {
