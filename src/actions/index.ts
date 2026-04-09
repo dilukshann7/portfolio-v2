@@ -26,12 +26,16 @@ export const server = {
   send: defineAction({
     accept: "form",
     handler: async (formData) => {
-      if (!import.meta.env.RESEND_API_KEY) {
+      const resendApiKey = getResendApiKey();
+
+      if (!resendApiKey) {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Email service is not configured.",
         });
       }
+
+      const resend = new Resend(resendApiKey);
 
       const name = String(formData.get("name") ?? "").trim();
       const email = String(formData.get("email") ?? "").trim();
@@ -56,7 +60,7 @@ export const server = {
       const safeMessage = escapeHtml(message).replaceAll("\n", "<br />");
 
       const { data, error } = await resend.emails.send({
-        from: import.meta.env.CONTACT_FROM_EMAIL ?? DEFAULT_FROM_EMAIL,
+        from: getFromEmail(),
         to: [CONTACT_EMAIL],
         replyTo: email,
         subject: `Portfolio inquiry from ${name}`,
