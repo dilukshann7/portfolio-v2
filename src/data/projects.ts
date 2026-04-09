@@ -356,7 +356,7 @@ export const projects: Project[] = [
     name: "EasyRemoveBG",
     description:
       "Removes backgrounds from photos via a right-click context menu in Windows Explorer.",
-    img: "/projects/easyremovebg.png",
+    img: "/projects/easyremovebg.jpg",
     route: "/easyremovebg",
     fullDescription:
       "A utility tool integrating directly into the Windows OS. It allows users to instantly remove backgrounds or logos from images just by right-clicking them in Windows Explorer, leveraging background processing scripts and ML models.",
