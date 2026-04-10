@@ -1,30 +1,16 @@
-<picture>
-    <img alt="Portfolio" src="public/dilukshan.dev.jpg" width="1920">
-</picture>
+# Portfolio v2
 
-<div align="center">
+This repository contains my personal portfolio site. I use it to present my work, case studies, writing, certifications, and contact details in a more editorial and motion-heavy format than a standard portfolio grid.
 
-[![Astro](https://img.shields.io/badge/Astro-6-FF5D01?logo=astro&logoColor=white)](https://astro.build)
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![GSAP](https://img.shields.io/badge/GSAP-3.0-88CE02?logo=greensock&logoColor=white)](https://greensock.com/gsap)
-[![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?logo=cloudflare&logoColor=white)](https://cloudflare.com)
+It is built with Astro as the main framework, with React-based UI pieces where they make sense, and it is set up for deployment on Cloudflare.
 
-</div>
+## What This Site Includes
 
-### Second iteration of a personal portfolio built with Astro, React, Tailwind CSS v4, and Cloudflare. The site combines editorial-style typography, animated transitions, interactive project showcases, and motion-driven UI experiments to present work, certifications, and technical interests in a more immersive way than a standard portfolio grid.
-
-## Overview
-
-This project is a single-page portfolio for Dilukshan Niranjan. It includes:
-
-- A full-screen animated landing experience with a preloader and shader-like background effects
-- Interactive project cards rendered client-side with GSAP and Lenis-powered motion
-- A technology stack section with hover-reactive highlights
-- A certifications section with animated previews
-- Astro-first rendering with React used for visual UI components
-- Cloudflare-ready deployment via the Astro Cloudflare adapter
+- A custom home experience with animated sections for my hero, projects, blog, certifications, and profile highlights
+- Individual project pages with detailed case-study style layouts
+- A blog index and individual blog post pages
+- A contact page with a working form flow
+- Motion-driven UI and WebGL-inspired visual effects such as `LightRays`
 
 ## Tech Stack
 
@@ -33,10 +19,9 @@ This project is a single-page portfolio for Dilukshan Niranjan. It includes:
 - TypeScript
 - Tailwind CSS v4
 - GSAP
-- Anime.js
 - Lenis
 - OGL / Three.js
-- Cloudflare Workers via `@astrojs/cloudflare`
+- Cloudflare via `@astrojs/cloudflare`
 
 ## Getting Started
 
@@ -45,19 +30,19 @@ This project is a single-page portfolio for Dilukshan Niranjan. It includes:
 - Node.js `22.12.0` or newer
 - npm
 
-### Install dependencies
+### Install
 
 ```sh
 npm install
 ```
 
-### Start the development server
+### Run locally
 
 ```sh
 npm run dev
 ```
 
-Astro will start the local dev server, typically at [http://localhost:4321](http://localhost:4321).
+The site will usually be available at `http://localhost:4321`.
 
 ## Available Scripts
 
@@ -73,43 +58,47 @@ Astro will start the local dev server, typically at [http://localhost:4321](http
 
 ```text
 .
-├── public/                  # Static images, icons, model, and showcase assets
+├── public/                  # Static assets
 ├── src/
-│   ├── assets/              # Local font assets
-│   ├── components/          # Portfolio sections and interactive UI pieces
-│   ├── data/                # Static portfolio data
-│   ├── lib/                 # Small shared utilities
+│   ├── components/          # Reusable site sections and UI pieces
+│   ├── data/                # Portfolio data and content metadata
+│   ├── layouts/             # Shared page layouts
+│   ├── lib/                 # Client and server helpers
 │   ├── pages/               # Astro routes
-│   └── styles/              # Global styles
-├── astro.config.mjs         # Astro config, local font setup, Cloudflare adapter
-├── wrangler.jsonc           # Cloudflare Worker/assets configuration
+│   ├── styles/              # Global styles
+│   └── actions/             # Server actions
+├── astro.config.mjs
+├── wrangler.jsonc
 ├── package.json
 └── tsconfig.json
 ```
 
-## Key Files
+## Important Files
 
-- `src/pages/index.astro`: main page composition
-- `src/components/LandingPage.astro`: hero section, preloader, and intro animation
-- `src/components/Projects.astro`: animated projects showcase
-- `src/components/Technologies.astro`: interactive tech stack grid
-- `src/components/Certifications.astro`: certifications list with hover preview behavior
-- `src/components/ui/*`: reusable visual effects and React-based UI building blocks
+- `src/pages/index.astro`: my home page composition
+- `src/pages/[slug].astro`: individual project pages
+- `src/pages/blog/index.astro`: blog landing page
+- `src/pages/blog/[slug].astro`: individual blog post pages
+- `src/pages/contact.astro`: contact page and form UI
+- `src/components/HomeHero.astro`: main landing hero
+- `src/components/HomeProjectsSection.astro`: featured project section
+- `src/components/HomeBlogSection.astro`: blog preview section
+- `src/components/AboutCards.astro`: experience and featured work cards
+- `src/components/Certifications.astro`: certifications section
+- `src/components/ui/LightRays.tsx`: reusable WebGL-style background effect
 
 ## Deployment
 
-This project is configured for Cloudflare using the Astro Cloudflare adapter.
+This project is configured for Cloudflare deployment through the Astro Cloudflare adapter.
 
-### Build
+Build:
 
 ```sh
 npm run build
 ```
 
-### Preview locally
+Preview:
 
 ```sh
 npm run preview
 ```
-
-If you plan to deploy with Wrangler, make sure your Cloudflare account and project settings are configured appropriately for the worker defined in [`wrangler.jsonc`](/D:/Programming/Astro/portfolio-v2/wrangler.jsonc).
