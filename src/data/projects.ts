@@ -16,6 +16,17 @@ export interface Project {
     website?: string;
   };
   highlights: string[];
+  caseStudy: {
+    problem: string;
+    constraints: string[];
+    approach: string[];
+    decisions: string[];
+    outcomes: string[];
+    proofPoints: {
+      label: string;
+      value: string;
+    }[];
+  };
   techImages?: string[]; // Optional field for technology logos
 }
 
@@ -56,6 +67,35 @@ export const projects: Project[] = [
       "Used by 500+ developers in production applications",
       "Achieved 99+ Lighthouse accessibility score",
     ],
+    caseStudy: {
+      problem:
+        "Teams building Next.js products needed a component system that felt polished out of the box without forcing every product to inherit the same visual identity.",
+      constraints: [
+        "Keep components flexible enough for different product brands",
+        "Preserve accessibility and keyboard behavior while adding motion",
+        "Document usage patterns clearly for developers moving quickly",
+      ],
+      approach: [
+        "Built a typed component layer around Tailwind, motion primitives, and reusable design tokens",
+        "Designed examples around real product sections instead of isolated UI fragments",
+        "Kept customization close to the component API so teams could adapt visuals without rewriting internals",
+      ],
+      decisions: [
+        "Prioritized accessible component defaults over purely decorative interaction states",
+        "Used animation as progressive enhancement rather than as a dependency for understanding the interface",
+        "Separated the design language from the installation flow so adoption stayed developer-friendly",
+      ],
+      outcomes: [
+        "Created a reusable UI system with a clearer path from install to production usage",
+        "Gave developers a stronger starting point for polished marketing and app interfaces",
+        "Established measurable quality signals around accessibility and developer experience",
+      ],
+      proofPoints: [
+        { label: "Adoption", value: "500+ developers" },
+        { label: "Quality target", value: "99+ accessibility score" },
+        { label: "Role", value: "Creator & Maintainer" },
+      ],
+    },
     techImages: [
       "/tech/nextjs.svg",
       "/tech/typescript.svg",
@@ -103,6 +143,35 @@ export const projects: Project[] = [
       "Utilized pgvector and HNSW indexing for fast approximate searches",
       "Built a secure multi-tier user access system with robust billing integrations",
     ],
+    caseStudy: {
+      problem:
+        "AEC professionals needed a way to query dense FIDIC contract material without getting generic AI answers that were detached from real clauses.",
+      constraints: [
+        "Answers had to stay grounded in source text and contract clauses",
+        "Retrieval needed to handle both broad questions and exact clause lookups",
+        "The product needed SaaS-grade access control, billing, and shareable conversations",
+      ],
+      approach: [
+        "Combined vector search, full-text search, and exact clause matching into a hybrid retrieval pipeline",
+        "Used tool-based agentic reasoning to separate retrieval, citation, and answer construction responsibilities",
+        "Built billing, rate-limit, and public sharing flows around the assistant so it could operate as a real product",
+      ],
+      decisions: [
+        "Used Reciprocal Rank Fusion to balance semantic and keyword retrieval results",
+        "Kept citations as a product requirement rather than a UI afterthought",
+        "Chose PostgreSQL and pgvector to keep retrieval, product data, and indexing in one operational stack",
+      ],
+      outcomes: [
+        "Improved trust by making answers traceable to contract material",
+        "Supported both research-style questions and clause-specific lookup workflows",
+        "Moved the project beyond a demo into a production SaaS surface",
+      ],
+      proofPoints: [
+        { label: "System type", value: "Agentic RAG SaaS" },
+        { label: "Retrieval", value: "Vector + BM25 + clause match" },
+        { label: "Role", value: "Lead Developer & AI Engineer" },
+      ],
+    },
     techImages: [
       "/tech/nextjs.svg",
       "/tech/openai.svg",
@@ -141,6 +210,35 @@ export const projects: Project[] = [
       "Graceful 429 response handling natively communicating with Discord API",
       "Complex layout engine right in the terminal with mouse support",
     ],
+    caseStudy: {
+      problem:
+        "Discord attachment cleanup and archiving usually requires slow browser workflows or heavyweight desktop tools, even when the task is mostly batch automation.",
+      constraints: [
+        "Work directly with Discord API limits and failure modes",
+        "Keep the interface usable inside a terminal without Electron or a browser shell",
+        "Support large downloads without duplicating files or losing progress",
+      ],
+      approach: [
+        "Built a terminal-native workflow around Bun, TypeScript, and OpenTUI",
+        "Added rate-limit handling, resume behavior, and hash-based deduplication around the download pipeline",
+        "Designed a visual TUI so filtering and progress feedback stayed readable during long-running jobs",
+      ],
+      decisions: [
+        "Used a TUI instead of a desktop shell to keep the tool fast and portable for power users",
+        "Handled Discord 429 responses as a first-class control path instead of treating them as errors",
+        "Used content hashes to protect users from duplicate attachment archives",
+      ],
+      outcomes: [
+        "Turned a repetitive browser task into a focused terminal workflow",
+        "Made bulk downloads safer through resume and deduplication behavior",
+        "Demonstrated low-level UI performance work beyond standard web surfaces",
+      ],
+      proofPoints: [
+        { label: "Interface", value: "Terminal-native TUI" },
+        { label: "Reliability", value: "Rate-limit aware downloads" },
+        { label: "Role", value: "Solo Developer" },
+      ],
+    },
     techImages: [
       "/tech/bun.svg",
       "/tech/typescript.svg",
@@ -186,6 +284,35 @@ export const projects: Project[] = [
       "Robustly typed schema validations via Zod and Superforms",
       "Deployed with Vercel serverless integration",
     ],
+    caseStudy: {
+      problem:
+        "A local census workflow needed a reliable public submission path and an admin review system that could keep records organized after collection.",
+      constraints: [
+        "The public form had to be simple enough for non-technical households",
+        "Admin users needed secure review, edit, approve, and reject flows",
+        "Validation had to happen server-side to protect data quality",
+      ],
+      approach: [
+        "Built the public collection flow in SvelteKit with typed validation and server-side session checks",
+        "Designed an approval queue so staff could manage record state instead of editing raw database rows",
+        "Used PostgreSQL and Drizzle to keep the data model explicit and maintainable",
+      ],
+      decisions: [
+        "Used an email allowlist to keep admin access constrained without overcomplicating identity management",
+        "Kept validation close to the form and database schema to reduce mismatched assumptions",
+        "Optimized screens around fast review rather than decorative dashboard elements",
+      ],
+      outcomes: [
+        "Created a full collection-to-review workflow for household census records",
+        "Reduced manual coordination by separating public submission from admin approval",
+        "Improved data handling through typed validation and authenticated admin access",
+      ],
+      proofPoints: [
+        { label: "Workflow", value: "Submission to approval" },
+        { label: "Security", value: "Server-side sessions" },
+        { label: "Role", value: "Solo Developer" },
+      ],
+    },
     techImages: [
       "/tech/svelte.svg",
       "/tech/tailwind.svg",
@@ -229,6 +356,35 @@ export const projects: Project[] = [
       "Modern UI integrated with Radix UI and Tailwind CSS v4",
       "Zero external cloud dependencies - runs entirely locally",
     ],
+    caseStudy: {
+      problem:
+        "Image compression tools often force users into online workflows, which can be slow, privacy-sensitive, or awkward for batch processing.",
+      constraints: [
+        "Processing needed to run locally without cloud uploads",
+        "The UI had to make batch compression understandable for non-technical users",
+        "Packaging needed to support desktop distribution rather than only a dev build",
+      ],
+      approach: [
+        "Built a React and Electron interface around local image optimization workflows",
+        "Added batch operations, preview feedback, and quality controls to keep compression decisions visible",
+        "Moved packaging to Electron Builder to prepare the app for installer-based distribution",
+      ],
+      decisions: [
+        "Kept compression local to protect privacy and avoid external service dependencies",
+        "Used familiar UI primitives so the tool felt approachable despite being a desktop utility",
+        "Focused the first version on practical image workflows instead of broad media editing scope",
+      ],
+      outcomes: [
+        "Produced a desktop utility that handles common compression tasks without cloud dependency",
+        "Improved the path from source images to optimized output through batch controls",
+        "Created a stronger base for future multi-platform packaging",
+      ],
+      proofPoints: [
+        { label: "Runtime", value: "Local desktop app" },
+        { label: "Privacy", value: "Zero cloud upload" },
+        { label: "Role", value: "Solo Developer" },
+      ],
+    },
     techImages: [
       "/tech/electron.svg",
       "/tech/nodejs.svg",
@@ -275,6 +431,35 @@ export const projects: Project[] = [
       "Packaged as both a web application and a cross-platform desktop application",
       "Handled complex relational database schemas via Prisma",
     ],
+    caseStudy: {
+      problem:
+        "The business workflow needed a single system for inventory, orders, deliveries, payments, and reporting instead of scattered manual tracking.",
+      constraints: [
+        "Different user roles needed different levels of access and dashboard visibility",
+        "Relational data had to stay consistent across orders, stock, deliveries, and payments",
+        "Reports needed to be exportable for operational use outside the app",
+      ],
+      approach: [
+        "Designed role-based dashboards around management, operations, logistics, and supplier workflows",
+        "Built a Node.js and Express API with Prisma-managed relational data models",
+        "Packaged the interface for both web usage and desktop access through Electron",
+      ],
+      decisions: [
+        "Used role-based access boundaries to keep complex business workflows easier to reason about",
+        "Kept reports inside the product so teams could export operational data without manual formatting",
+        "Used Lit Web Components to build a modular frontend while preserving a lightweight app shell",
+      ],
+      outcomes: [
+        "Centralized core distribution workflows into one full-stack system",
+        "Improved operational visibility across inventory, ordering, delivery, and payment states",
+        "Created a demonstrable business app with both web and desktop packaging paths",
+      ],
+      proofPoints: [
+        { label: "Domain", value: "Distribution operations" },
+        { label: "Access", value: "Role-based dashboards" },
+        { label: "Role", value: "Lead Developer" },
+      ],
+    },
     techImages: [
       "/tech/nodejs.svg",
       "/tech/express.svg",
@@ -349,6 +534,35 @@ export const projects: Project[] = [
       "Manipulates complex OpenXML schemas to generate valid PPTX files without requiring MS Office installed",
       "Greatly speeds up course asset migrations for educators",
     ],
+    caseStudy: {
+      problem:
+        "Educators needed a faster way to move image-based H5P learning assets into PowerPoint without manually extracting and placing every slide.",
+      constraints: [
+        "The tool had to work as a native Windows utility",
+        "Generated presentations needed to be valid PowerPoint files",
+        "The workflow needed to support batches instead of single-file conversions only",
+      ],
+      approach: [
+        "Built a C# desktop workflow for extracting packaged H5P media",
+        "Generated PPTX files programmatically by placing extracted images into slide layouts",
+        "Added logging so users could understand conversion progress and failures",
+      ],
+      decisions: [
+        "Generated PowerPoint files directly instead of requiring Microsoft Office automation",
+        "Kept the interface focused on conversion rather than broader course-authoring features",
+        "Optimized around batch processing to match real migration tasks",
+      ],
+      outcomes: [
+        "Reduced repetitive manual slide creation for course asset migration",
+        "Created valid PPTX output without depending on Office being installed",
+        "Turned a niche educational workflow into a repeatable desktop tool",
+      ],
+      proofPoints: [
+        { label: "Platform", value: "Windows desktop" },
+        { label: "Output", value: "OpenXML PPTX" },
+        { label: "Role", value: "Solo Developer" },
+      ],
+    },
     techImages: ["/tech/csharp.svg"],
   },
   {
@@ -376,6 +590,35 @@ export const projects: Project[] = [
       "Bridges the gap between Python ML utilities and raw OS UI integration",
       "Uses K-means clustering and Rembg for high-accuracy cutout generation",
     ],
+    caseStudy: {
+      problem:
+        "Removing backgrounds or logos from local files usually requires opening a separate editor or uploading images to a web tool.",
+      constraints: [
+        "The workflow had to feel native inside Windows Explorer",
+        "Processing needed to happen locally through Python and image-processing tools",
+        "The tool needed to handle both background removal and logo-focused cleanup tasks",
+      ],
+      approach: [
+        "Connected Windows context-menu actions to background processing scripts",
+        "Used OpenCV and K-means clustering to build image masks for cleanup workflows",
+        "Kept the user flow to a right-click action so the tool stayed lightweight and fast",
+      ],
+      decisions: [
+        "Integrated with the operating system instead of building another standalone UI",
+        "Used local processing to avoid upload friction and keep the workflow private",
+        "Focused on common image cleanup jobs rather than general-purpose editing",
+      ],
+      outcomes: [
+        "Made background removal accessible directly from the file system",
+        "Reduced the number of steps between selecting an image and getting a processed result",
+        "Demonstrated practical ML and OS integration beyond a standard web app",
+      ],
+      proofPoints: [
+        { label: "Workflow", value: "Right-click processing" },
+        { label: "Processing", value: "OpenCV + Python" },
+        { label: "Role", value: "Solo Developer" },
+      ],
+    },
     techImages: ["/tech/python.svg", "/tech/opencv.svg", "/tech/shell.svg"],
   },
 ] as const;
