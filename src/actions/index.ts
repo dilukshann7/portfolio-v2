@@ -6,6 +6,11 @@ const CONTACT_EMAIL = "info@dilukshan.dev";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CONTACT_DOMAIN = CONTACT_EMAIL.split("@")[1] ?? "dilukshan.dev";
 const DEFAULT_FROM_EMAIL = `contact@${CONTACT_DOMAIN}`;
+const HONEYPOT_FIELD = "company";
+const MAX_NAME_LENGTH = 80;
+const MAX_EMAIL_LENGTH = 254;
+const MAX_MESSAGE_LENGTH = 5000;
+const MIN_MESSAGE_LENGTH = 10;
 
 const extractEmailAddress = (value: string) => {
   const match = value.match(/<([^>]+)>/);
@@ -61,6 +66,11 @@ export const server = {
       const name = String(formData.get("name") ?? "").trim();
       const email = String(formData.get("email") ?? "").trim();
       const message = String(formData.get("message") ?? "").trim();
+      const honeypot = String(formData.get(HONEYPOT_FIELD) ?? "").trim();
+
+      if (honeypot) {
+        return { ok: true };
+      }
 
       if (!name || !email || !message) {
         throw new ActionError({
@@ -73,6 +83,30 @@ export const server = {
         throw new ActionError({
           code: "BAD_REQUEST",
           message: "Enter a valid email address.",
+        });
+      }
+
+      if (name.length > MAX_NAME_LENGTH) {
+        throw new ActionError({
+          code: "BAD_REQUEST",
+          message: "Name is too long.",
+        });
+      }
+
+      if (email.length > MAX_EMAIL_LENGTH) {
+        throw new ActionError({
+          code: "BAD_REQUEST",
+          message: "Email is too long.",
+        });
+      }
+
+      if (
+        message.length < MIN_MESSAGE_LENGTH ||
+        message.length > MAX_MESSAGE_LENGTH
+      ) {
+        throw new ActionError({
+          code: "BAD_REQUEST",
+          message: "Message length is invalid.",
         });
       }
 
