@@ -23,7 +23,7 @@ async function buildSitemap(url: URL) {
   const routes = [
     {
       loc: `${siteOrigin}/`,
-      lastmod: latestPostModified,
+      lastmod: buildModified,
       changefreq: "weekly",
       priority: "1.0",
     },
@@ -70,6 +70,8 @@ ${routes
   return new Response(body, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+      "X-Content-Type-Options": "nosniff",
     },
   });
 }

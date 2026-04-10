@@ -9,17 +9,20 @@ export function GET({ url }: { url: URL }) {
     (import.meta.env.CF_PAGES_URL
       ? `https://${import.meta.env.CF_PAGES_URL}`
       : SITE.url || url.origin);
+  const host = new URL(siteOrigin).host;
 
   return new Response(
     `User-agent: *
 Allow: /
 
 Sitemap: ${siteOrigin}/sitemap.xml
-Host: ${siteOrigin}
+Host: ${host}
 `,
     {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+        "X-Content-Type-Options": "nosniff",
       },
     },
   );
