@@ -1,5 +1,6 @@
 ---
 import LightRays from "./ui/LightRays";
+import { SITE } from "../lib/site";
 
 const techStack = [
   "Next.js",
@@ -22,6 +23,10 @@ const socialLinks = [
     label: "X / Twitter",
     href: "https://x.com/silknye",
   },
+];
+const proofSignals = [
+  { label: "Based", value: SITE.location },
+  { label: "Available", value: "Freelance / Contract" },
 ];
 ---
 
@@ -54,9 +59,21 @@ const socialLinks = [
             Fullstack Developer & AI Engineer
           </div>
           <div class="info hero-copy">
-            Building scalable web applications, grounded AI systems, and
-            polished interfaces meant to feel intuitive on first use.
+            I build AI-assisted SaaS products, internal tools, and
+            performance-focused web apps with the frontend polish to make them
+            feel finished.
           </div>
+        </div>
+
+        <div class="hero-proof" aria-label="Availability and focus">
+          {
+            proofSignals.map((item) => (
+              <span class="hero-proof-item">
+                <span>{item.label}</span>
+                {item.value}
+              </span>
+            ))
+          }
         </div>
 
         <div class="hero-actions">
@@ -76,6 +93,7 @@ const socialLinks = [
               </a>
             ))
           }
+          <a href={`mailto:${SITE.email}`}>Email</a>
         </div>
 
         <div class="divider"></div>
@@ -204,6 +222,36 @@ const socialLinks = [
     line-height: 1.5;
     color: rgba(255, 255, 255, 0.8);
     margin-top: 0.2rem;
+  }
+
+  .hero-proof {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.55rem;
+    margin-top: 1.5rem;
+    max-width: 44rem;
+  }
+
+  .hero-proof-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 34px;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.72);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .hero-proof-item span {
+    color: rgba(255, 248, 239, 0.42);
   }
 
   .landing-page.landing-copy-pending .hero-copy {
@@ -403,6 +451,16 @@ const socialLinks = [
 
     .hero-socials {
       gap: 0.6rem 0.9rem;
+    }
+
+    .hero-proof {
+      margin-top: 1.25rem;
+    }
+
+    .hero-proof-item {
+      width: 100%;
+      justify-content: center;
+      font-size: 0.62rem;
     }
 
     .divider {
