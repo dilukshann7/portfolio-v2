@@ -45,6 +45,8 @@ const publicOrigin = Astro.site?.origin ?? SITE.url ?? Astro.url.origin;
 const canonicalUrl = new URL(canonical ?? Astro.url.pathname, publicOrigin);
 const socialImageUrl = new URL(image, publicOrigin);
 const keywordList = [...new Set([...SITE.keywords, ...keywords])];
+const [profileFirstName = SITE.author, ...profileNameParts] = SITE.author.split(" ");
+const profileLastName = profileNameParts.at(-1) ?? "";
 const normalizeDate = (value?: string | Date) =>
   value ? new Date(value).toISOString() : undefined;
 const publishedTimeValue = normalizeDate(publishedTime);
@@ -115,7 +117,7 @@ const structuredDataItems = [
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={SITE.language}>
   <head>
     <ClientRouter />
     <Font cssVariable="--font-melodrame" />
@@ -125,17 +127,23 @@ const structuredDataItems = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
+    <meta name="application-name" content={SITE.name} />
     <meta name="keywords" content={keywordList.join(", ")} />
     <meta name="theme-color" content={themeColor} />
     <meta name="color-scheme" content={colorScheme} />
     <meta name="robots" content={robots} />
     <meta name="googlebot" content={robots} />
+    <meta name="bingbot" content={robots} />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
       name="format-detection"
       content="telephone=no, address=no, email=no"
     />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="canonical" href={canonicalUrl.toString()} />
+    <link rel="alternate" hreflang={SITE.language} href={canonicalUrl.toString()} />
+    <link rel="alternate" hreflang="x-default" href={canonicalUrl.toString()} />
     <link rel="sitemap" href="/sitemap.xml" type="application/xml" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
@@ -163,6 +171,7 @@ const structuredDataItems = [
     <meta property="og:image:secure_url" content={socialImageUrl.toString()} />
     <meta property="og:image:type" content={ogImageType} />
     <meta property="og:image:alt" content={imageAlt} />
+    {modifiedTimeValue && <meta property="og:updated_time" content={modifiedTimeValue} />}
     {
       publishedTimeValue && (
         <meta property="article:published_time" content={publishedTimeValue} />
@@ -178,16 +187,28 @@ const structuredDataItems = [
         <meta property="article:section" content={articleSection} />
       )
     }
+    {pageType === "article" && <meta property="article:author" content={SITE.author} />}
     {
       pageType === "article" &&
         keywordList.map((keyword) => (
           <meta property="article:tag" content={keyword} />
         ))
     }
+    {
+      pageType === "profile" && (
+        <>
+          <meta property="profile:first_name" content={profileFirstName} />
+          {profileLastName && (
+            <meta property="profile:last_name" content={profileLastName} />
+          )}
+        </>
+      )
+    }
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:url" content={canonicalUrl.toString()} />
     <meta name="twitter:image" content={socialImageUrl.toString()} />
     <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="twitter:creator" content={SITE.twitterHandle} />
