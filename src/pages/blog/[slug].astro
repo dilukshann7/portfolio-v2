@@ -3,6 +3,7 @@ export const prerender = true;
 
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import LightRays from "../../components/ui/LightRays";
 import {
   formatBlogDate,
   getAllBlogPosts,
@@ -126,27 +127,38 @@ const structuredData = [
   <div class="bp-scroll-line" id="bpScrollLine" aria-hidden="true"></div>
 
   <main class="bp">
-    <div class="bp-shell">
-      <div class="bp-breadcrumb" aria-label="Breadcrumb">
-        <a href="/blog/" class="bp-back">
-          <span class="bp-back__arrow" aria-hidden="true">←</span>
-          Journal
-        </a>
-        <span class="bp-breadcrumb__sep" aria-hidden="true">/</span>
-        <span class="bp-breadcrumb__current">{post.data.category}</span>
+    <header class="bp-page-hero" data-nav-contrast="dark">
+      <div class="bp-page-hero__bg" aria-hidden="true">
+        <LightRays
+          client:idle
+          raysOrigin="top-center"
+          raysColor="#f8f5ef"
+          raysSpeed={0.55}
+          lightSpread={0.42}
+          rayLength={1.9}
+          followMouse={true}
+          mouseInfluence={0.035}
+          noiseAmount={0}
+          distortion={0.05}
+          className="bp-page-hero__rays"
+          pulsating={false}
+          fadeDistance={0.9}
+          saturation={0.7}
+        />
       </div>
 
-      <article class="bp-article">
-        <header class="bp-hero">
-          <div class="bp-hero__left">
-            <div class="bp-hero__meta-row">
-              <span class="bp-hero__category">{post.data.category}</span>
-              <span class="bp-hero__sep" aria-hidden="true">—</span>
-              <span class="bp-hero__date"
-                >{formatBlogDate(post.data.publishDate)}</span
-              >
-            </div>
+      <div class="bp-page-hero__inner">
+        <div class="bp-breadcrumb" aria-label="Breadcrumb">
+          <a href="/blog/" class="bp-back">
+            <span class="bp-back__arrow" aria-hidden="true">←</span>
+            Journal
+          </a>
+          <span class="bp-breadcrumb__sep" aria-hidden="true">/</span>
+          <span class="bp-breadcrumb__current">{post.data.category}</span>
+        </div>
 
+        <div class="bp-hero bp-hero--single">
+          <div class="bp-hero__left">
             <h1 class="bp-hero__title">{post.data.title}</h1>
             <p class="bp-hero__dek">{post.data.description}</p>
 
@@ -171,22 +183,12 @@ const structuredData = [
               {post.data.tags.map((tag) => <span class="bp-tag">{tag}</span>)}
             </div>
           </div>
+        </div>
+      </div>
+    </header>
 
-          {
-            post.data.heroImage && (
-              <div class="bp-hero__image-wrap">
-                <img
-                  class="bp-hero__image"
-                  src={post.data.heroImage}
-                  alt={post.data.heroImageAlt ?? post.data.title}
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
-            )
-          }
-        </header>
-
+    <div class="bp-shell">
+      <article class="bp-article">
         <div class="bp-rule" aria-hidden="true"></div>
 
         <div class="bp-body">
@@ -389,6 +391,67 @@ const structuredData = [
     transition: width 60ms linear;
   }
 
+  .bp-page-hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(180deg, #020202 0%, #050505 52%, #090909 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .bp-page-hero__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0.78;
+    z-index: 0;
+  }
+
+  .bp-page-hero__bg::before {
+    content: "";
+    position: absolute;
+    inset: -24% -6% 28%;
+    background: radial-gradient(
+      circle at 50% 0%,
+      rgba(184, 147, 106, 0.26),
+      rgba(184, 147, 106, 0.08) 38%,
+      transparent 70%
+    );
+    mix-blend-mode: screen;
+    z-index: 1;
+  }
+
+  .bp-page-hero__bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.36) 54%,
+      rgba(0, 0, 0, 0.72) 100%
+    );
+    z-index: 1;
+  }
+
+  .bp-page-hero__bg :global(.bp-page-hero__rays) {
+    width: 100%;
+    height: 100%;
+    opacity: 0.92;
+  }
+
+  .bp-page-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: calc(64px + clamp(2rem, 4vw, 3rem));
+    padding-bottom: clamp(3rem, 5vw, 5rem);
+    padding-left: clamp(1.5rem, 4vw, 3.5rem);
+    padding-right: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
   .bp-nav {
     position: fixed;
     top: 0;
@@ -464,7 +527,7 @@ const structuredData = [
   }
 
   .bp-shell {
-    padding-top: calc(64px + clamp(2.5rem, 5vw, 4rem));
+    padding-top: clamp(2rem, 4vw, 3rem);
     padding-bottom: clamp(4rem, 7vw, 7rem);
     padding-left: clamp(1.5rem, 4vw, 3.5rem);
     padding-right: clamp(1.5rem, 4vw, 3.5rem);
@@ -476,7 +539,7 @@ const structuredData = [
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.25rem;
     opacity: 0;
     animation: bpUp 0.6s 0.05s forwards;
   }
@@ -491,14 +554,14 @@ const structuredData = [
     letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--ink-60);
+    color: rgba(255, 255, 255, 0.72);
     transition:
       color 200ms,
       gap 200ms;
   }
 
   .bp-back:hover {
-    color: var(--ink);
+    color: rgba(255, 255, 255, 0.98);
     gap: 0.75rem;
   }
 
@@ -512,7 +575,7 @@ const structuredData = [
   .bp-breadcrumb__sep {
     font-family: var(--f-display);
     font-style: italic;
-    color: var(--ink-30);
+    color: rgba(255, 255, 255, 0.32);
     font-size: 0.9rem;
   }
 
@@ -532,14 +595,15 @@ const structuredData = [
   }
 
   .bp-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-    border-bottom: 1px solid var(--rule);
+    display: block;
+  }
+
+  .bp-hero--single {
+    display: block;
   }
 
   .bp-hero__left {
-    padding: clamp(2.5rem, 4vw, 4rem) clamp(1.5rem, 3vw, 3rem);
-    border-right: 1px solid var(--rule);
+    padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -560,13 +624,13 @@ const structuredData = [
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--warm);
+    color: #d8b38c;
   }
 
   .bp-hero__sep {
     font-family: var(--f-display);
     font-style: italic;
-    color: var(--ink-30);
+    color: rgba(255, 255, 255, 0.32);
   }
 
   .bp-hero__date {
@@ -575,7 +639,7 @@ const structuredData = [
     font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--ink-30);
+    color: rgba(255, 255, 255, 0.5);
   }
 
   .bp-hero__title {
@@ -584,8 +648,8 @@ const structuredData = [
     font-weight: 300;
     line-height: 0.92;
     letter-spacing: -0.02em;
-    color: var(--ink);
-    max-width: 14ch;
+    color: rgba(255, 255, 255, 0.96);
+    max-width: none;
     text-wrap: balance;
     margin: 0;
     opacity: 0;
@@ -595,8 +659,8 @@ const structuredData = [
   .bp-hero__dek {
     font-size: clamp(1rem, 1.2vw, 1.1rem);
     line-height: 1.78;
-    color: var(--ink-60);
-    max-width: 46ch;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: none;
     margin: 0;
     opacity: 0;
     animation: bpUp 0.7s 0.32s forwards;
@@ -621,7 +685,7 @@ const structuredData = [
     font-size: 1.6rem;
     font-weight: 300;
     line-height: 1;
-    color: var(--ink);
+    color: rgba(255, 255, 255, 0.94);
   }
 
   .bp-stat__label {
@@ -630,13 +694,13 @@ const structuredData = [
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--ink-30);
+    color: rgba(255, 255, 255, 0.48);
   }
 
   .bp-stat__div {
     width: 1px;
     height: 2rem;
-    background: var(--rule);
+    background: rgba(255, 255, 255, 0.12);
     flex-shrink: 0;
   }
 
@@ -668,23 +732,14 @@ const structuredData = [
     color: var(--ink);
   }
 
-  .bp-hero__image-wrap {
-    overflow: hidden;
-    background: var(--paper);
-    opacity: 0;
-    animation: bpFade 1s 0.3s forwards;
+  .bp-page-hero .bp-tag {
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.72);
   }
 
-  .bp-hero__image {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .bp-hero__image-wrap:hover .bp-hero__image {
-    transform: scale(1.03);
+  .bp-page-hero .bp-tag:hover {
+    border-color: rgba(255, 255, 255, 0.32);
+    color: rgba(255, 255, 255, 0.98);
   }
 
   .bp-rule {
@@ -853,7 +908,7 @@ const structuredData = [
     padding: 0.12rem 0.38rem;
     border-radius: 4px;
     background: rgba(13, 13, 11, 0.06);
-    font-family: "Geist Variable", ui-monospace, monospace;
+    font-family: var(--f-mono);
     font-size: 0.88em;
     color: #0d0d0b;
   }
@@ -1104,14 +1159,10 @@ const structuredData = [
 
   @media (max-width: 960px) {
     .bp-hero {
-      grid-template-columns: 1fr;
+      display: block;
     }
     .bp-hero__left {
       border-right: none;
-      border-bottom: 1px solid var(--rule);
-    }
-    .bp-hero__image-wrap {
-      min-height: 280px;
     }
     .bp-body {
       grid-template-columns: 1fr;
@@ -1136,11 +1187,21 @@ const structuredData = [
   }
 
   @media (max-width: 600px) {
+    .bp-page-hero__inner {
+      width: 100%;
+      padding-top: calc(64px + 1.5rem);
+      padding-bottom: 2.5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
     .bp-nav__links {
       display: none;
     }
     .bp-hero__title {
       max-width: 100%;
+    }
+    .bp-hero__stats {
+      flex-wrap: wrap;
     }
     .bp-related__grid {
       grid-template-columns: 1fr;
