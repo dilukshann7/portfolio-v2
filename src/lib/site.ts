@@ -33,8 +33,16 @@ export const SITE = {
     "Astro portfolio",
   ],
   twitterHandle: "@dilukshann7",
-  socialImage: "/dilukshan.dev.jpg",
+  socialImage: "/fallbacks/galaxy.jpg",
   socialImageAlt: "Dilukshan Niranjan portfolio preview",
+  availability: "Open to freelance, contract, and product collaborations",
+  resumeRequestHref:
+    "mailto:info@dilukshan.dev?subject=Resume%20Request%20-%20Dilukshan%20Niranjan",
+  focusAreas: [
+    "AI-assisted SaaS products",
+    "Internal tools and dashboards",
+    "High-craft frontend systems",
+  ],
   sameAs: [
     "https://github.com/dilukshann7",
     "https://linkedin.com/in/dilukshann7",
