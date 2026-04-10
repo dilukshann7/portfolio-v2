@@ -771,6 +771,18 @@ import GlassSurface from "./ui/GlassSurface.tsx";
         const underlyingElement = document.elementFromPoint(sampleX, sampleY);
         menuToggle.style.visibility = previousVisibility;
 
+        const contrastHint = underlyingElement?.closest<HTMLElement>(
+          "[data-nav-contrast]",
+        );
+
+        if (contrastHint) {
+          menuToggle.classList.toggle(
+            "menu-toggle--dark-copy",
+            contrastHint.dataset.navContrast === "light",
+          );
+          return;
+        }
+
         const backdropColor = resolveBackdropColor(underlyingElement);
         const isLightBackdrop = getRelativeLuminance(backdropColor) > 0.42;
 
