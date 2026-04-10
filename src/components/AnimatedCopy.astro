@@ -11,17 +11,9 @@ const {
   colorFinal = "#000000",
 } = Astro.props;
 
-// Generate a unique id so multiple instances on the same page are independent.
 const uid = `ac-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<!--
-  The wrapper carries the uid and colour props as data attributes so the
-  inline <script> can read them without any module bundler involvement.
-  Astro's is:inline script runs once per page; it uses a MutationObserver /
-  DOMContentLoaded guard so it initialises every .animated-copy element it
-  finds, including ones added after the initial parse.
--->
 <div
   class="animated-copy"
   id={uid}
@@ -33,12 +25,6 @@ const uid = `ac-${Math.random().toString(36).slice(2, 9)}`;
 </div>
 
 <script>
-  /**
-   * This script is bundled once by Vite and executed on every page that
-   * includes the component.  It waits for the DOM, then initialises all
-   * `.animated-copy` containers it finds.  A WeakSet guards against double-
-   * initialisation if the component is used multiple times.
-   */
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   import { SplitText } from "gsap/SplitText";
@@ -57,7 +43,6 @@ const uid = `ac-${Math.random().toString(36).slice(2, 9)}`;
       container.getAttribute("data-color-accent") ?? "#abff02";
     const colorFinal = container.getAttribute("data-color-final") ?? "#000000";
 
-    // ── Split ──────────────────────────────────────────────────────────────
     const elements: Element[] = Array.from(container.children);
 
     const splitRefs: Array<{ wordSplit: SplitText; charSplit: SplitText }> = [];
@@ -82,7 +67,6 @@ const uid = `ac-${Math.random().toString(36).slice(2, 9)}`;
 
     gsap.set(allChars, { color: colorInitial });
 
-    // ── State ──────────────────────────────────────────────────────────────
     let lastScrollProgress = 0;
     const colorTransitionTimers = new Map<
       number,
@@ -110,7 +94,6 @@ const uid = `ac-${Math.random().toString(36).slice(2, 9)}`;
       colorTransitionTimers.set(index, timer);
     };
 
-    // ── ScrollTrigger ──────────────────────────────────────────────────────
     const st = ScrollTrigger.create({
       trigger: container as HTMLElement,
       start: "top 90%",
@@ -149,7 +132,6 @@ const uid = `ac-${Math.random().toString(36).slice(2, 9)}`;
       },
     });
 
-    // ── Cleanup (Astro View Transitions) ───────────────────────────────────
     document.addEventListener(
       "astro:before-swap",
       () => {
@@ -170,7 +152,6 @@ const uid = `ac-${Math.random().toString(36).slice(2, 9)}`;
     document.querySelectorAll(".animated-copy").forEach(initContainer);
   }
 
-  // Run on first load and after every Astro View Transition navigation.
   document.addEventListener("DOMContentLoaded", initAll);
   document.addEventListener("astro:page-load", initAll);
 </script>
