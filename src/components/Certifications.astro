@@ -4,12 +4,7 @@ import { certifications as awards } from "../data/certifications";
 
 <div class="certifications-container" id="certifications">
   <section class="intro">
-    <h1
-      style="font-family: var(--font-melodrame); font-weight: 400;"
-      class="header"
-    >
-      Certifications
-    </h1>
+    <h1 class="header">Certifications</h1>
   </section>
   <section class="awards">
     <div class="awards-list">
@@ -20,31 +15,16 @@ import { certifications as awards } from "../data/certifications";
             data-award-image={award.image}
             data-award-name={award.name}
           >
-            <div style="box-sizing: border-box;" class="award-wrapper">
-              <div style="box-sizing: border-box;" class="award-name">
-                <h1
-                  class="award-title"
-                  style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;"
-                >
-                  {award.name}
-                </h1>
+            <div class="award-wrapper">
+              <div class="award-name">
+                <h1 class="award-title">{award.name}</h1>
                 <span class="award-type-inline">{award.type}</span>
               </div>
-              <div style="box-sizing: border-box;" class="award-project">
-                <h1
-                  class="award-title"
-                  style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em;"
-                >
-                  {award.type}
-                </h1>
+              <div class="award-project">
+                <h1 class="award-title">{award.type}</h1>
               </div>
-              <div style="box-sizing: border-box;" class="award-name">
-                <h1
-                  class="award-title"
-                  style="font-family: var(--font-melodrame); font-weight: 400; letter-spacing: 0.01em"
-                >
-                  {award.name}
-                </h1>
+              <div class="award-name">
+                <h1 class="award-title">{award.name}</h1>
                 <span class="award-type-inline">{award.type}</span>
               </div>
             </div>
@@ -350,12 +330,13 @@ import { certifications as awards } from "../data/certifications";
 
   .certifications-container h1 {
     font-size: clamp(3.5rem, 5vw, 4.5rem);
-    font-weight: 600;
+    font-weight: 400;
     letter-spacing: -0.5px;
     line-height: 1;
   }
 
   .certifications-container :global(.award-title) {
+    font-family: var(--font-melodrame);
     font-size: 64px;
     font-weight: 400;
     letter-spacing: 0.01em;
@@ -363,10 +344,21 @@ import { certifications as awards } from "../data/certifications";
     margin: 0;
   }
 
+  .header {
+    font-family: var(--font-melodrame);
+    font-weight: 400;
+  }
+
+  .certifications-container :global(.award-wrapper),
+  .certifications-container :global(.award-name),
+  .certifications-container :global(.award-project) {
+    box-sizing: border-box;
+  }
+
   .certifications-container p {
     text-transform: uppercase;
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 400;
   }
 
   .certifications-container section {

@@ -1,14 +1,5 @@
----
-
----
-
 <section class="intro" id="expertise">
-  <h2
-    style="font-family: var(--font-melodrame); font-weight: 400;"
-    class="header"
-  >
-    Experienced In
-  </h2>
+  <h2 class="header">Experienced In</h2>
 </section>
 
 <section class="cards">
@@ -254,15 +245,16 @@
 </section>
 
 <section class="outro">
-  <h2
-    style="font-family: var(--font-melodrame); font-weight: 400;"
-    class="header"
-  >
-    Featured Work
-  </h2>
+  <h2 class="header">Featured Work</h2>
 </section>
 
 <style>
+  .intro,
+  .cards,
+  .outro {
+    font-family: "Space Grotesk", sans-serif;
+  }
+
   .card-content h3 {
     font-size: 4rem;
     font-weight: 600;
@@ -271,7 +263,9 @@
   }
 
   .header {
+    font-family: var(--font-melodrame);
     font-size: clamp(3.5rem, 5vw, 4.5rem);
+    font-weight: 400;
     letter-spacing: -0.5px;
   }
 
