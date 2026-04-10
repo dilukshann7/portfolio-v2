@@ -2,6 +2,7 @@
 export const prerender = true;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
+import LightRays from "../components/ui/LightRays";
 import { projects, type Project } from "../data/projects";
 import { SITE } from "../lib/site";
 import ProjectTech from "@/components/ProjectTech.astro";
@@ -73,153 +74,168 @@ const structuredData = [
 >
   <div class="pp">
     <main class="pp-main">
-      <div class="pp-shell">
-        <nav class="pp-breadcrumb" aria-label="Breadcrumb">
-          <a href="/" class="pp-back">
-            <span class="pp-back__icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M10 3L5 8L10 13"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"></path>
-              </svg>
-            </span>
-            <span>Work</span>
-          </a>
-          <span class="pp-breadcrumb__sep" aria-hidden="true">/</span>
-          <span class="pp-breadcrumb__current">{project.name}</span>
-        </nav>
+      <header class="pp-page-hero" data-nav-contrast="dark">
+        <div class="pp-page-hero__bg" aria-hidden="true">
+          <LightRays
+            client:idle
+            raysOrigin="top-center"
+            raysColor="#f8f5ef"
+            raysSpeed={0.55}
+            lightSpread={0.42}
+            rayLength={1.9}
+            followMouse={true}
+            mouseInfluence={0.035}
+            noiseAmount={0}
+            distortion={0.05}
+            className="pp-page-hero__rays"
+            pulsating={false}
+            fadeDistance={0.9}
+            saturation={0.7}
+          />
+        </div>
 
-        <article class="pp-article">
-          <header class="pp-hero">
-            <div class="pp-hero__top">
-              <div class="pp-hero__meta">
-                <span
-                  class="pp-hero__status"
-                  data-status={project.status.toLowerCase()}
-                >
-                  <span class="pp-hero__status-dot" aria-hidden="true"></span>
-                  {project.status}
-                </span>
-                <span class="pp-hero__timeline">{project.timeline}</span>
-              </div>
-              <div class="pp-hero__index" aria-hidden="true">001</div>
+        <div class="pp-page-hero__inner">
+          <nav class="pp-breadcrumb" aria-label="Breadcrumb">
+            <a href="/" class="pp-back">
+              <span class="pp-back__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M10 3L5 8L10 13"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+                </svg>
+              </span>
+              <span>Work</span>
+            </a>
+            <span class="pp-breadcrumb__sep" aria-hidden="true">/</span>
+            <span class="pp-breadcrumb__current">{project.name}</span>
+          </nav>
+
+          <div class="pp-page-hero__meta">
+            <span class="pp-page-hero__eyebrow">Case Study</span>
+            <span
+              class="pp-hero__status pp-hero__status--hero"
+              data-status={project.status.toLowerCase()}
+            >
+              <span class="pp-hero__status-dot" aria-hidden="true"></span>
+              {project.status}
+            </span>
+            <span class="pp-page-hero__timeline">{project.timeline}</span>
+          </div>
+
+          <h1 class="pp-page-hero__title">{project.name}</h1>
+          <p class="pp-page-hero__dek">{project.fullDescription}</p>
+
+          <div class="pp-page-hero__footer">
+            <div class="pp-page-hero__role">
+              <span class="pp-page-hero__role-label">Role</span>
+              <span class="pp-page-hero__role-value">{project.role}</span>
             </div>
 
-            <div class="pp-hero__body">
-              <div class="pp-hero__left">
-                <h1 class="pp-hero__title">{project.name}</h1>
+            <div class="pp-hero__actions pp-hero__actions--hero">
+              {
+                project.links.demo && (
+                  <a
+                    href={project.links.demo}
+                    class="pp-btn pp-btn--primary"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <span>View Live</span>
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </a>
+                )
+              }
+              {
+                project.links.github && (
+                  <a
+                    href={project.links.github}
+                    class="pp-btn pp-btn--ghost"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <span>GitHub</span>
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </a>
+                )
+              }
+              {
+                project.links.website && !project.links.demo && (
+                  <a
+                    href={project.links.website}
+                    class="pp-btn pp-btn--primary"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <span>Visit Website</span>
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </a>
+                )
+              }
+            </div>
+          </div>
+        </div>
+      </header>
 
-                <div class="pp-hero__image-wrap">
-                  <img
-                    class="pp-hero__image"
-                    src={project.img}
-                    alt={`Screenshot of ${project.name}`}
-                    loading="eager"
-                    decoding="async"
-                  />
-                  <div class="pp-hero__image-overlay" aria-hidden="true"></div>
-                </div>
-              </div>
-
-              <div class="pp-hero__right">
-                <p class="pp-hero__dek">{project.fullDescription}</p>
-
-                <div class="pp-hero__role">
-                  <span class="pp-hero__role-label">Role</span>
-                  <span class="pp-hero__role-value">{project.role}</span>
-                </div>
-
-                <div class="pp-hero__actions">
-                  {
-                    project.links.demo && (
-                      <a
-                        href={project.links.demo}
-                        class="pp-btn pp-btn--primary"
-                        target="_blank"
-                        rel="noopener"
-                      >
-                        <span>View Live</span>
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 12 12"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </a>
-                    )
-                  }
-                  {
-                    project.links.github && (
-                      <a
-                        href={project.links.github}
-                        class="pp-btn pp-btn--ghost"
-                        target="_blank"
-                        rel="noopener"
-                      >
-                        <span>GitHub</span>
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 12 12"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </a>
-                    )
-                  }
-                  {
-                    project.links.website && !project.links.demo && (
-                      <a
-                        href={project.links.website}
-                        class="pp-btn pp-btn--primary"
-                        target="_blank"
-                        rel="noopener"
-                      >
-                        <span>Visit Website</span>
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 12 12"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </a>
-                    )
-                  }
-                </div>
-              </div>
+      <div class="pp-shell">
+        <article class="pp-article">
+          <header class="pp-hero">
+            <div class="pp-hero__image-wrap">
+              <img
+                class="pp-hero__image"
+                src={project.img}
+                alt={`Screenshot of ${project.name}`}
+                loading="eager"
+                decoding="async"
+              />
+              <div class="pp-hero__image-overlay" aria-hidden="true"></div>
             </div>
           </header>
 
-          <!-- TECH STACK -->
           <div class="pp-tech-wrap">
             <ProjectTech
               technologies={project.technologies}
@@ -290,43 +306,37 @@ const structuredData = [
               <div class="pp-related__grid">
                 {relatedProjects.map((relProject, i) => (
                   <article class="pp-related-card" style={`--ri: ${i}`}>
-                    <a
-                      href={relProject.route}
-                      class="pp-related-card__link"
-                      tabindex="-1"
-                      aria-hidden="true"
-                    />
-                    <div class="pp-related-card__image">
-                      <img
-                        src={relProject.img}
-                        alt={relProject.name}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div
-                        class="pp-related-card__image-scrim"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div class="pp-related-card__content">
-                      <div class="pp-related-card__top">
-                        <span class="pp-related-card__num" aria-hidden="true">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
+                    <a href={relProject.route} class="pp-related-card__link">
+                      <div class="pp-related-card__image">
+                        <img
+                          src={relProject.img}
+                          alt={relProject.name}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <div
+                          class="pp-related-card__image-scrim"
+                          aria-hidden="true"
+                        />
                       </div>
-                      <h3 class="pp-related-card__title">
-                        <a href={relProject.route}>{relProject.name}</a>
-                      </h3>
-                      <p class="pp-related-card__desc">
-                        {relProject.description}
-                      </p>
-                      <div class="pp-related-card__footer">
-                        <span class="pp-related-card__cta">View Project</span>
-                        <span class="pp-related-card__arrow" aria-hidden="true">
-                          ↗
-                        </span>
+                      <div class="pp-related-card__content">
+                        <h3 class="pp-related-card__title">
+                          {relProject.name}
+                        </h3>
+                        <p class="pp-related-card__desc">
+                          {relProject.description}
+                        </p>
+                        <div class="pp-related-card__footer">
+                          <span class="pp-related-card__cta">View Project</span>
+                          <span
+                            class="pp-related-card__arrow"
+                            aria-hidden="true"
+                          >
+                            ↗
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </article>
                 ))}
               </div>
@@ -377,19 +387,20 @@ const structuredData = [
 
     await initTextReveal(container, [
       {
-        selector: ".pp-hero__title",
+        selector: ".pp-page-hero__title",
         mode: "lines",
         scroll: true,
         delay: TRANSITION_OFFSET,
       },
       {
-        selector: ".pp-hero__dek",
+        selector: ".pp-page-hero__dek",
         mode: "lines",
         scroll: true,
         delay: TRANSITION_OFFSET,
       },
       {
-        selector: ".pp-hero__status, .pp-hero__timeline, .pp-hero__role",
+        selector:
+          ".pp-page-hero__eyebrow, .pp-hero__status--hero, .pp-page-hero__timeline, .pp-page-hero__role-value",
         mode: "lines",
         scroll: true,
         delay: TRANSITION_OFFSET,
@@ -442,47 +453,111 @@ const structuredData = [
   }
 
   .pp-shell {
-    padding-top: clamp(2rem, 4vw, 3.5rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
     padding-bottom: clamp(5rem, 8vw, 9rem);
-    padding-left: clamp(1rem, 2vw, 1rem);
-    padding-right: clamp(1rem, 2vw, 1rem);
-    width: min(1280px, 100%);
+    padding-left: clamp(1.5rem, 4vw, 3.5rem);
+    padding-right: clamp(1.5rem, 4vw, 3.5rem);
+    width: min(1500px, 86%);
     margin: 0 auto;
+  }
+
+  .pp-page-hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(180deg, #020202 0%, #050505 52%, #090909 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .pp-page-hero__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0.78;
+    z-index: 0;
+  }
+
+  .pp-page-hero__bg::before {
+    content: "";
+    position: absolute;
+    inset: -24% -6% 28%;
+    background: radial-gradient(
+      circle at 50% 0%,
+      rgba(184, 147, 106, 0.26),
+      rgba(184, 147, 106, 0.08) 38%,
+      transparent 70%
+    );
+    mix-blend-mode: screen;
+    z-index: 1;
+  }
+
+  .pp-page-hero__bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.36) 54%,
+      rgba(0, 0, 0, 0.72) 100%
+    );
+    z-index: 1;
+  }
+
+  .pp-page-hero__bg :global(.pp-page-hero__rays) {
+    width: 100%;
+    height: 100%;
+    opacity: 0.92;
+  }
+
+  .pp-page-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: calc(64px + clamp(2rem, 4vw, 3rem));
+    padding-bottom: clamp(3rem, 5vw, 5rem);
+    padding-left: clamp(1.5rem, 4vw, 3.5rem);
+    padding-right: clamp(1.5rem, 4vw, 3.5rem);
   }
 
   .pp-breadcrumb {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+    gap: 0.75rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
   }
 
   .pp-back {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
     font-family: var(--f-ui);
-    font-size: 0.67rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--ink-55);
-    transition: color 200ms;
+    color: rgba(255, 255, 255, 0.72);
+    transition:
+      color 200ms,
+      gap 200ms;
   }
 
   .pp-back:hover {
-    color: var(--ink);
+    color: rgba(255, 255, 255, 0.98);
+    gap: 0.75rem;
   }
 
   .pp-back__icon {
     display: flex;
     align-items: center;
-    opacity: 0.6;
     transition:
       transform 200ms var(--ease-out-expo),
       opacity 200ms;
   }
+
   .pp-back:hover .pp-back__icon {
     transform: translateX(-3px);
     opacity: 1;
@@ -491,18 +566,35 @@ const structuredData = [
   .pp-breadcrumb__sep {
     font-family: var(--f-display);
     font-style: italic;
-    color: var(--ink-35);
-    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.32);
+    font-size: 0.9rem;
     line-height: 1;
   }
 
   .pp-breadcrumb__current {
     font-family: var(--f-ui);
-    font-size: 0.67rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--warm);
+  }
+
+  .pp-page-hero__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .pp-page-hero__eyebrow {
+    font-family: var(--f-ui);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #d8b38c;
   }
 
   .pp-article {
@@ -513,20 +605,6 @@ const structuredData = [
 
   .pp-hero {
     border-bottom: 1px solid var(--rule-md);
-  }
-
-  .pp-hero__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.1rem clamp(1.5rem, 3vw, 2.75rem);
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .pp-hero__meta {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
   }
 
   .pp-hero__status {
@@ -577,60 +655,93 @@ const structuredData = [
     }
   }
 
-  .pp-hero__timeline {
+  .pp-hero__status--hero {
+    border-color: rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .pp-hero__status--hero[data-status="live"] {
+    color: #8cdaaa;
+    border-color: rgba(140, 218, 170, 0.26);
+  }
+
+  .pp-hero__status--hero[data-status="completed"] {
+    color: rgba(255, 255, 255, 0.62);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .pp-hero__status--hero[data-status="in progress"] {
+    color: #8cc6da;
+    border-color: rgba(140, 198, 218, 0.24);
+  }
+
+  .pp-page-hero__timeline {
     font-family: var(--f-ui);
-    font-size: 0.67rem;
+    font-size: 0.68rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
-    color: var(--ink-35);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
   }
 
-  .pp-hero__index {
+  .pp-page-hero__title {
     font-family: var(--f-display);
-    font-size: 0.8rem;
-    font-style: italic;
-    color: var(--ink-15);
-    letter-spacing: 0.1em;
-    user-select: none;
-  }
-
-  /* Hero body — two-column */
-  .pp-hero__body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .pp-hero__left {
-    border-right: 1px solid var(--rule-md);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .pp-hero__title {
-    font-family: var(--f-display);
-    font-size: clamp(3.2rem, 6.5vw, 7rem);
+    font-size: clamp(2.8rem, 5.5vw, 5.5rem);
     font-weight: 300;
     line-height: 0.92;
-    letter-spacing: -0.03em;
-    color: var(--ink);
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.96);
     margin: 0;
-    padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.75rem);
-    border-bottom: 1px solid var(--rule);
+    text-wrap: balance;
+  }
+
+  .pp-page-hero__dek {
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    line-height: 1.78;
+    color: rgba(255, 255, 255, 0.72);
+    margin: 1rem 0 0;
+  }
+
+  .pp-page-hero__footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .pp-page-hero__role {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .pp-page-hero__role-label {
+    font-family: var(--f-ui);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  .pp-page-hero__role-value {
+    font-family: var(--f-body);
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.88);
   }
 
   .pp-hero__image-wrap {
     position: relative;
     overflow: hidden;
-    flex: 1;
-    min-height: 360px;
     background: var(--off);
   }
 
   .pp-hero__image {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
     transition: transform 700ms var(--ease-out-expo);
   }
 
@@ -647,45 +758,6 @@ const structuredData = [
       transparent 50%
     );
     pointer-events: none;
-  }
-
-  /* Right side */
-  .pp-hero__right {
-    display: flex;
-    flex-direction: column;
-    padding: clamp(2rem, 3vw, 3rem) clamp(1.5rem, 3vw, 2.75rem);
-    gap: 2.25rem;
-    justify-content: space-between;
-  }
-
-  .pp-hero__dek {
-    font-size: clamp(1rem, 1.3vw, 1.2rem);
-    line-height: 1.75;
-    color: var(--ink-55);
-    margin: 0;
-    max-width: 42ch;
-  }
-
-  .pp-hero__role {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-
-  .pp-hero__role-label {
-    font-family: var(--f-ui);
-    font-size: 0.58rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink-35);
-  }
-
-  .pp-hero__role-value {
-    font-family: var(--f-body);
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--ink-80);
   }
 
   .pp-hero__actions {
@@ -745,6 +817,34 @@ const structuredData = [
     background: var(--ink);
     color: var(--white);
     border-color: var(--ink);
+  }
+
+  .pp-hero__actions--hero {
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .pp-hero__actions--hero .pp-btn--primary {
+    background: rgba(255, 255, 255, 0.94);
+    color: #050505;
+    border-color: rgba(255, 255, 255, 0.94);
+  }
+
+  .pp-hero__actions--hero .pp-btn--primary:hover {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.96);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .pp-hero__actions--hero .pp-btn--ghost {
+    color: rgba(255, 255, 255, 0.82);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .pp-hero__actions--hero .pp-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.94);
+    color: #050505;
+    border-color: rgba(255, 255, 255, 0.94);
   }
 
   .pp-tech-wrap {
@@ -993,9 +1093,11 @@ const structuredData = [
   }
 
   .pp-related-card__link {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    color: inherit;
+    text-decoration: none;
   }
 
   .pp-related-card__image {
@@ -1037,24 +1139,6 @@ const structuredData = [
     display: flex;
     flex-direction: column;
     flex: 1;
-    position: relative;
-    z-index: 1;
-  }
-
-  .pp-related-card__top {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 0.85rem;
-  }
-
-  .pp-related-card__num {
-    font-family: var(--f-display);
-    font-size: 0.72rem;
-    font-style: italic;
-    color: var(--ink-15);
-    letter-spacing: 0.08em;
-    user-select: none;
   }
 
   .pp-related-card__title {
@@ -1066,15 +1150,7 @@ const structuredData = [
     margin: 0 0 0.65rem;
   }
 
-  .pp-related-card__title a {
-    text-decoration: none;
-    color: var(--ink);
-    transition: color 200ms;
-    position: relative;
-    z-index: 1;
-  }
-
-  .pp-related-card:hover .pp-related-card__title a {
+  .pp-related-card:hover .pp-related-card__title {
     color: var(--teal);
   }
 
@@ -1168,22 +1244,16 @@ const structuredData = [
   }
 
   @media (max-width: 1024px) {
-    .pp-hero__body {
-      grid-template-columns: 1fr;
-    }
-    .pp-hero__left {
-      border-right: none;
-      border-bottom: 1px solid var(--rule-md);
-    }
-    .pp-hero__image-wrap {
-      min-height: 280px;
-    }
     .pp-body {
       grid-template-columns: 1fr;
     }
     .pp-section--features {
       border-right: none;
       border-bottom: 1px solid var(--rule-md);
+    }
+    .pp-page-hero__footer {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 
@@ -1194,8 +1264,24 @@ const structuredData = [
   }
 
   @media (max-width: 600px) {
-    .pp-hero__title {
+    .pp-shell {
+      width: min(1500px, 100%);
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .pp-page-hero__inner {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .pp-page-hero__title {
       font-size: clamp(2.8rem, 12vw, 4rem);
+    }
+    .pp-hero__actions--hero {
+      width: 100%;
+      flex-direction: column;
+    }
+    .pp-btn {
+      justify-content: center;
     }
     .pp-related-card__content {
       padding: 1.5rem;
