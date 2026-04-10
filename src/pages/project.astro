@@ -15,24 +15,9 @@ import AnimatedCopy from "../components/AnimatedCopy.astro";
 </head>
 
 <script>
-  import gsap from "gsap";
-  import Lenis from "lenis";
+  import { initGlobalMotionSystem } from "../lib/client/motion";
 
-  const lenis = new Lenis();
-
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-  });
-
-  gsap.ticker.lagSmoothing(0);
-
-  document.addEventListener(
-    "astro:before-swap",
-    () => {
-      lenis.destroy();
-    },
-    { once: true },
-  );
+  initGlobalMotionSystem();
 </script>
 
 <!-- Project Image Placeholder -->

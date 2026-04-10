@@ -216,11 +216,14 @@ const structuredDataItems = [
   </body><script>
     import gsap from "gsap";
     import CustomEase from "gsap/CustomEase";
+    import { initGlobalMotionSystem } from "../lib/client/motion";
 
     gsap.registerPlugin(CustomEase);
     CustomEase.create("hop", "0.9, 0, 0.1, 1");
 
+    initGlobalMotionSystem();
     document.addEventListener("astro:page-load", () => {
+      initGlobalMotionSystem();
       gsap.fromTo(
         ".revealerMain",
         { scaleY: 1, transformOrigin: "center top" },

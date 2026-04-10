@@ -7,6 +7,12 @@ let motionPromise:
     }>
   | undefined;
 
+declare global {
+  interface Window {
+    __portfolioMotionBooted?: boolean;
+  }
+}
+
 export function getMotionSystem() {
   if (!motionPromise) {
     motionPromise = (async () => {
@@ -58,4 +64,14 @@ export function getMotionSystem() {
   }
 
   return motionPromise;
+}
+
+export function initGlobalMotionSystem() {
+  if (typeof window === "undefined" || window.__portfolioMotionBooted) return;
+
+  window.__portfolioMotionBooted = true;
+  void getMotionSystem().catch((error) => {
+    console.error("[motion] failed to initialize global motion system", error);
+    window.__portfolioMotionBooted = false;
+  });
 }
