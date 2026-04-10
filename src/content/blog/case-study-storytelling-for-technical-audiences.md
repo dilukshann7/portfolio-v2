@@ -8,7 +8,7 @@ tags:
   - Storytelling
   - Engineering
   - Portfolio
-heroImage: "/blog/card-2.jpg"
+heroImage: "/fallbacks/color-bends.jpg"
 heroImageAlt: "Abstract neon gradient used for a portfolio case study article"
 featured: false
 draft: false
