@@ -228,9 +228,35 @@ const structuredDataItems = [
         padding: 0;
         overflow-x: hidden;
       }
+
+      .skip-link {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 10000;
+        transform: translateY(-160%);
+        padding: 0.75rem 1rem;
+        border-radius: 999px;
+        background: #fff8ef;
+        color: #0a0a0a;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: transform 180ms ease;
+      }
+
+      .skip-link:focus-visible {
+        transform: translateY(0);
+        outline: 2px solid #0a0a0a;
+        outline-offset: 3px;
+      }
     </style>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="revealerMain"></div>
     <Navigation />
     <slot />
