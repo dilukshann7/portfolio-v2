@@ -4,7 +4,12 @@ import { projects } from "../data/projects";
 const rows = [];
 
 for (let index = 0; index < projects.length; index += 3) {
-  rows.push(projects.slice(index, index + 3));
+  rows.push(
+    projects.slice(index, index + 3).map((project) => ({
+      project,
+      proofPoint: project.caseStudy.proofPoints[0],
+    })),
+  );
 }
 ---
 
@@ -12,7 +17,7 @@ for (let index = 0; index < projects.length; index += 3) {
   {
     rows.map((row) => (
       <div class="row">
-        {row.map((project) => (
+        {row.map(({ project, proofPoint }) => (
           <div class="work-item">
             <a href={project.route} class="work-item-link">
               <div class="work-item-img">
@@ -30,6 +35,11 @@ for (let index = 0; index < projects.length; index += 3) {
                 </div>
                 <h3>{project.name}</h3>
                 <p>{project.description}</p>
+                {proofPoint && (
+                  <span class="work-item-proof">
+                    {proofPoint.label}: {proofPoint.value}
+                  </span>
+                )}
                 <span class="work-item-cta">Open Case Study</span>
               </div>
             </a>
@@ -51,6 +61,7 @@ for (let index = 0; index < projects.length; index += 3) {
     display: grid;
     gap: 0.8rem;
     width: min(960px, 100%);
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(0.5rem, 1vw, 1rem);
   }
 
   .work-kicker,
@@ -151,6 +162,18 @@ for (let index = 0; index < projects.length; index += 3) {
 
   .work-item-copy p {
     color: #999;
+  }
+
+  .work-item-proof {
+    display: block;
+    margin-top: 0.85rem;
+    padding-left: 2px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(15, 15, 15, 0.62);
   }
 
   .work-item-meta {
