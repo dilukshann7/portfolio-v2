@@ -19,6 +19,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
+const { caseStudy } = project;
 const siteOrigin = Astro.site?.origin ?? Astro.url.origin;
 const projectUrl = new URL(project.route, siteOrigin).toString();
 const imageUrl = new URL(project.img, siteOrigin).toString();
@@ -223,19 +224,6 @@ const structuredData = [
 
       <div class="pp-shell">
         <article class="pp-article">
-          <header class="pp-hero">
-            <div class="pp-hero__image-wrap">
-              <img
-                class="pp-hero__image"
-                src={project.img}
-                alt={`Screenshot of ${project.name}`}
-                loading="eager"
-                decoding="async"
-              />
-              <div class="pp-hero__image-overlay" aria-hidden="true"></div>
-            </div>
-          </header>
-
           <div class="pp-tech-wrap">
             <ProjectTech
               technologies={project.technologies}
@@ -243,10 +231,51 @@ const structuredData = [
             />
           </div>
 
+          <section class="pp-proof-strip" aria-label="Project proof points">
+            {
+              caseStudy.proofPoints.map((point) => (
+                <div class="pp-proof-card">
+                  <span class="pp-proof-card__label">{point.label}</span>
+                  <span class="pp-proof-card__value">{point.value}</span>
+                </div>
+              ))
+            }
+          </section>
+
           <div class="pp-body">
-            <section class="pp-section pp-section--features">
+            <section class="pp-section pp-section--problem">
               <div class="pp-section__head">
                 <span class="pp-section__index" aria-hidden="true">01</span>
+                <h2 class="pp-section__title">Problem</h2>
+              </div>
+              <p class="pp-section__copy">{caseStudy.problem}</p>
+            </section>
+
+            <section class="pp-section pp-section--constraints">
+              <div class="pp-section__head">
+                <span class="pp-section__index" aria-hidden="true">02</span>
+                <h2 class="pp-section__title">Constraints</h2>
+              </div>
+              <ul class="pp-feature-list">
+                {
+                  caseStudy.constraints.map((constraint, i) => (
+                    <li class="pp-feature">
+                      <span class="pp-feature__num" aria-hidden="true">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span class="pp-feature__text">{constraint}</span>
+                      <span class="pp-feature__arrow" aria-hidden="true">
+                        ↗
+                      </span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </section>
+
+            <section class="pp-section pp-section--features">
+              <div class="pp-section__head">
+                <span class="pp-section__index" aria-hidden="true">03</span>
                 <h2 class="pp-section__title">Key Features</h2>
               </div>
               <ul class="pp-feature-list">
@@ -268,7 +297,7 @@ const structuredData = [
 
             <section class="pp-section pp-section--highlights">
               <div class="pp-section__head">
-                <span class="pp-section__index" aria-hidden="true">02</span>
+                <span class="pp-section__index" aria-hidden="true">04</span>
                 <h2 class="pp-section__title">Highlights</h2>
               </div>
               <ul class="pp-highlight-list">
@@ -286,6 +315,35 @@ const structuredData = [
                   ))
                 }
               </ul>
+            </section>
+
+            <section class="pp-section pp-section--deep-dive">
+              <div class="pp-section__head">
+                <span class="pp-section__index" aria-hidden="true">05</span>
+                <h2 class="pp-section__title">Approach & Decisions</h2>
+              </div>
+              <div class="pp-deep-dive-grid">
+                <div class="pp-deep-dive-card">
+                  <span>Approach</span>
+                  <ul>
+                    {
+                      caseStudy.approach.map((item) => (
+                        <li>{item}</li>
+                      ))
+                    }
+                  </ul>
+                </div>
+                <div class="pp-deep-dive-card">
+                  <span>Decisions</span>
+                  <ul>
+                    {
+                      caseStudy.decisions.map((item) => (
+                        <li>{item}</li>
+                      ))
+                    }
+                  </ul>
+                </div>
+              </div>
             </section>
           </div>
         </article>
@@ -406,8 +464,10 @@ const structuredData = [
         delay: TRANSITION_OFFSET,
       },
       { selector: ".pp-section__title", mode: "lines", scroll: true },
+      { selector: ".pp-section__copy", mode: "lines", scroll: true },
       { selector: ".pp-feature__text", mode: "lines", scroll: true },
       { selector: ".pp-highlight__text", mode: "lines", scroll: true },
+      { selector: ".pp-deep-dive-card li", mode: "lines", scroll: true },
       { selector: ".pp-related__eyebrow span", mode: "lines", scroll: true },
       { selector: ".pp-related__title", mode: "lines", scroll: true },
       {
@@ -453,11 +513,11 @@ const structuredData = [
   }
 
   .pp-shell {
-    padding-top: clamp(2rem, 4vw, 3rem);
-    padding-bottom: clamp(5rem, 8vw, 9rem);
+    padding-top: clamp(1rem, 2.5vw, 2rem);
+    padding-bottom: clamp(3rem, 5vw, 5.5rem);
     padding-left: clamp(1.5rem, 4vw, 3.5rem);
     padding-right: clamp(1.5rem, 4vw, 3.5rem);
-    width: min(1500px, 86%);
+    width: min(1500px, 92%);
     margin: 0 auto;
   }
 
@@ -516,8 +576,8 @@ const structuredData = [
     z-index: 1;
     width: 100%;
     margin: 0 auto;
-    padding-top: calc(64px + clamp(2rem, 4vw, 3rem));
-    padding-bottom: clamp(3rem, 5vw, 5rem);
+    padding-top: calc(64px + clamp(1.25rem, 3vw, 2.25rem));
+    padding-bottom: clamp(2rem, 3.5vw, 3.5rem);
     padding-left: clamp(1.5rem, 4vw, 3.5rem);
     padding-right: clamp(1.5rem, 4vw, 3.5rem);
   }
@@ -526,7 +586,7 @@ const structuredData = [
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+    margin-bottom: clamp(1rem, 2vw, 1.6rem);
   }
 
   .pp-back {
@@ -601,10 +661,6 @@ const structuredData = [
     border: 1px solid var(--rule-md);
     background: var(--white);
     overflow: hidden;
-  }
-
-  .pp-hero {
-    border-bottom: 1px solid var(--rule-md);
   }
 
   .pp-hero__status {
@@ -697,17 +753,17 @@ const structuredData = [
 
   .pp-page-hero__dek {
     font-size: clamp(1rem, 1.2vw, 1.1rem);
-    line-height: 1.78;
+    line-height: 1.65;
     color: rgba(255, 255, 255, 0.72);
-    margin: 1rem 0 0;
+    margin: 0.75rem 0 0;
   }
 
   .pp-page-hero__footer {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 1.25rem;
+    margin-top: 1.35rem;
   }
 
   .pp-page-hero__role {
@@ -730,34 +786,6 @@ const structuredData = [
     font-size: 1rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.88);
-  }
-
-  .pp-hero__image-wrap {
-    position: relative;
-    overflow: hidden;
-    background: var(--off);
-  }
-
-  .pp-hero__image {
-    display: block;
-    width: 100%;
-    height: auto;
-    transition: transform 700ms var(--ease-out-expo);
-  }
-
-  .pp-hero__image-wrap:hover .pp-hero__image {
-    transform: scale(1.04);
-  }
-
-  .pp-hero__image-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(10, 10, 9, 0.08) 0%,
-      transparent 50%
-    );
-    pointer-events: none;
   }
 
   .pp-hero__actions {
@@ -851,25 +879,66 @@ const structuredData = [
     border-bottom: 1px solid var(--rule-md);
   }
 
+  .pp-proof-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule-md);
+    border-bottom: 1px solid var(--rule-md);
+  }
+
+  .pp-proof-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem clamp(1rem, 2vw, 1.5rem);
+    background: var(--white);
+  }
+
+  .pp-proof-card__label {
+    font-family: var(--f-ui);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-35);
+  }
+
+  .pp-proof-card__value {
+    font-family: var(--f-display);
+    font-size: clamp(1.5rem, 2.3vw, 2.15rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
   .pp-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
 
   .pp-section {
-    padding: clamp(2.5rem, 4vw, 4rem) clamp(1.5rem, 3vw, 2.75rem);
+    padding: clamp(1.6rem, 2.7vw, 2.6rem) clamp(1.25rem, 2.4vw, 2rem);
+    border-bottom: 1px solid var(--rule-md);
   }
 
+  .pp-section--problem,
   .pp-section--features {
     border-right: 1px solid var(--rule-md);
+  }
+
+  .pp-section--deep-dive {
+    grid-column: 1 / -1;
+    border-bottom: none;
   }
 
   .pp-section__head {
     display: flex;
     align-items: baseline;
     gap: 0.75rem;
-    margin-bottom: 2.25rem;
-    padding-bottom: 1rem;
+    margin-bottom: 1.35rem;
+    padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--rule);
   }
 
@@ -892,6 +961,13 @@ const structuredData = [
     margin: 0;
   }
 
+  .pp-section__copy {
+    font-size: clamp(1rem, 1.25vw, 1.12rem);
+    line-height: 1.7;
+    color: var(--ink-55);
+    margin: 0;
+  }
+
   .pp-feature-list {
     list-style: none;
     margin: 0;
@@ -906,7 +982,7 @@ const structuredData = [
     grid-template-columns: 2.5rem 1fr auto;
     align-items: start;
     gap: 0.75rem;
-    padding: 1.1rem 0;
+    padding: 0.8rem 0;
     border-bottom: 1px solid var(--rule);
     cursor: default;
     transition: background 200ms;
@@ -961,11 +1037,11 @@ const structuredData = [
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .pp-highlight {
-    padding: 1.75rem;
+    padding: 1.15rem;
     border: 1px solid var(--rule);
     background: var(--white);
     transition:
@@ -987,12 +1063,12 @@ const structuredData = [
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.55rem;
   }
 
   .pp-highlight__number {
     font-family: var(--f-display);
-    font-size: 1.8rem;
+    font-size: 1.45rem;
     font-weight: 300;
     font-style: italic;
     color: var(--warm);
@@ -1014,21 +1090,71 @@ const structuredData = [
 
   .pp-highlight__text {
     font-size: 0.98rem;
-    line-height: 1.75;
+    line-height: 1.62;
     color: var(--ink-55);
     margin: 0;
   }
 
+  .pp-deep-dive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+
+  .pp-deep-dive-card {
+    padding: 1.1rem;
+    border: 1px solid var(--rule);
+    background: var(--off);
+  }
+
+  .pp-deep-dive-card span {
+    display: block;
+    margin-bottom: 0.7rem;
+    font-family: var(--f-ui);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--warm);
+  }
+
+  .pp-deep-dive-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .pp-deep-dive-card li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.95rem;
+    line-height: 1.58;
+    color: var(--ink-55);
+  }
+
+  .pp-deep-dive-card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 0.36rem;
+    height: 0.36rem;
+    border-radius: 999px;
+    background: var(--warm);
+  }
+
   .pp-related {
-    margin-top: clamp(4rem, 7vw, 7rem);
+    margin-top: clamp(2.5rem, 4.5vw, 4.5rem);
   }
 
   .pp-related__header {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: clamp(2rem, 3vw, 3rem);
-    padding-bottom: 1.75rem;
+    gap: 0.55rem;
+    margin-bottom: clamp(1.35rem, 2.25vw, 2rem);
+    padding-bottom: 1.1rem;
     border-bottom: 1px solid var(--rule-md);
   }
 
@@ -1103,15 +1229,15 @@ const structuredData = [
   .pp-related-card__image {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 16 / 9;
-    background: var(--off);
+    aspect-ratio: 1920 / 1279;
   }
 
   .pp-related-card__image img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     transition:
       transform 700ms var(--ease-out-expo),
       filter 400ms;
@@ -1135,7 +1261,7 @@ const structuredData = [
   }
 
   .pp-related-card__content {
-    padding: 1.75rem 2rem;
+    padding: 1.35rem 1.5rem;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -1166,8 +1292,8 @@ const structuredData = [
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1.25rem;
-    margin-top: 1.25rem;
+    padding-top: 0.9rem;
+    margin-top: 0.9rem;
     border-top: 1px solid var(--rule);
     transition: border-color 200ms;
   }
@@ -1247,9 +1373,13 @@ const structuredData = [
     .pp-body {
       grid-template-columns: 1fr;
     }
+    .pp-proof-strip,
+    .pp-deep-dive-grid {
+      grid-template-columns: 1fr;
+    }
+    .pp-section--problem,
     .pp-section--features {
       border-right: none;
-      border-bottom: 1px solid var(--rule-md);
     }
     .pp-page-hero__footer {
       flex-direction: column;
@@ -1266,6 +1396,8 @@ const structuredData = [
   @media (max-width: 600px) {
     .pp-shell {
       width: min(1500px, 100%);
+      padding-top: 0.75rem;
+      padding-bottom: 3rem;
       padding-left: 1rem;
       padding-right: 1rem;
     }
