@@ -5,8 +5,10 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
+  "frame-src 'none'",
   "object-src 'none'",
   "manifest-src 'self'",
+  "media-src 'self'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data: https://fonts.gstatic.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
@@ -24,7 +26,10 @@ export const onRequest = defineMiddleware(async (_, next) => {
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("X-Frame-Options", "DENY");
+  headers.set("X-DNS-Prefetch-Control", "off");
+  headers.set("X-Permitted-Cross-Domain-Policies", "none");
   headers.set("Permissions-Policy", "camera=(), geolocation=(), microphone=()");
+  headers.set("Origin-Agent-Cluster", "?1");
   headers.set("Cross-Origin-Opener-Policy", "same-origin");
   headers.set("Cross-Origin-Resource-Policy", "same-origin");
   headers.set(
