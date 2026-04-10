@@ -416,8 +416,8 @@ const socialLinks = [
   import { gsap } from "gsap";
   import { runPageScript } from "../lib/client/spa";
 
-  const initLandingPage = () =>
-    runPageScript("landing-page", ({ onCleanup }) => {
+  const initHomeHero = () =>
+    runPageScript("home-hero", ({ onCleanup }) => {
       const isMobile = window.matchMedia("(max-width: 900px)").matches;
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -613,31 +613,31 @@ const socialLinks = [
       });
     });
 
-  let hasBootedLandingPage = false;
+  let hasBootedHomeHero = false;
   let hasSeenInitialAstroPageLoad = false;
 
-  const bootLandingPage = () => {
-    hasBootedLandingPage = true;
-    void initLandingPage();
+  const bootHomeHero = () => {
+    hasBootedHomeHero = true;
+    void initHomeHero();
   };
 
   document.addEventListener("astro:page-load", () => {
     if (!hasSeenInitialAstroPageLoad) {
       hasSeenInitialAstroPageLoad = true;
-      if (hasBootedLandingPage) return;
+      if (hasBootedHomeHero) return;
     }
-    bootLandingPage();
+    bootHomeHero();
   });
 
   if (document.readyState === "loading") {
     document.addEventListener(
       "DOMContentLoaded",
       () => {
-        if (!hasBootedLandingPage) bootLandingPage();
+        if (!hasBootedHomeHero) bootHomeHero();
       },
       { once: true },
     );
   } else {
-    bootLandingPage();
+    bootHomeHero();
   }
 </script>

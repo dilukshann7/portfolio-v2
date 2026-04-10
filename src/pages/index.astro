@@ -2,11 +2,11 @@
 export const prerender = true;
 
 import AboutCards from "../components/AboutCards.astro";
-import LandingPage from "../components/LandingPage.astro";
-import ProjectsSection from "../components/Projects.astro";
+import HomeHero from "../components/HomeHero.astro";
+import HomeProjectsSection from "../components/HomeProjectsSection.astro";
 import Certifications from "../components/Certifications.astro";
-import Footer from "../components/Footer.astro";
-import Blog from "../components/Blog.astro";
+import HomeBlogSection from "../components/HomeBlogSection.astro";
+import SiteFooter from "../components/SiteFooter.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE } from "../lib/site";
 import { projects } from "../data/projects";
@@ -46,11 +46,11 @@ const structuredData = [
   structuredData={structuredData}
 >
   <main id="main-content">
-    <LandingPage />
+    <HomeHero />
     <AboutCards />
-    <ProjectsSection />
+    <HomeProjectsSection />
     <Certifications />
-    <Blog />
-    <Footer />
+    <HomeBlogSection />
+    <SiteFooter />
   </main>
 </BaseLayout>

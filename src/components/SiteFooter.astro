@@ -252,8 +252,8 @@ import Galaxy from "./ui/Galaxy";
 <script>
   import { runPageScript } from "../lib/client/spa";
 
-  const initFooter = () =>
-    runPageScript("footer", ({ signal, onCleanup }) => {
+  const initSiteFooter = () =>
+    runPageScript("site-footer", ({ signal, onCleanup }) => {
       const footer = document.querySelector("footer");
       if (!footer) return;
 
@@ -490,5 +490,5 @@ import Galaxy from "./ui/Galaxy";
       onCleanup(() => observer.disconnect());
     });
 
-  document.addEventListener("astro:page-load", initFooter);
+  document.addEventListener("astro:page-load", initSiteFooter);
 </script>
