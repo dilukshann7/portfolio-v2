@@ -321,7 +321,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     transform: translateY(0) rotate(-45deg) scaleX(1.05);
   }
 
-  /* menu */
+  /* ── Full-screen menu — stays dark ── */
   .menu {
     position: fixed;
     top: 0;
@@ -329,7 +329,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     width: 100vw;
     height: 100vh;
     display: flex;
-    background-color: #0f0f0f;
+    background-color: #0a0a0a;
     z-index: 115;
     clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
     pointer-events: none;
@@ -340,7 +340,6 @@ import GlassSurface from "./ui/GlassSurface.tsx";
   .col-1 {
     flex: 1;
   }
-
   .col-2 {
     flex: 2;
   }
@@ -348,13 +347,14 @@ import GlassSurface from "./ui/GlassSurface.tsx";
   .col {
     position: relative;
     height: 100%;
-    padding: 10em 2em 2em 2em;
+    padding: 8rem 2rem 2rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
   }
 
+  /* Nav links */
   .link {
     position: relative;
     transform: translateY(30px);
