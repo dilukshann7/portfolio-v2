@@ -132,6 +132,7 @@ export const projects: Project[] = [
       "Tool-based agentic reasoning",
       "Tier-based rate limits and Stripe billing integration",
       "Shareable public links for individual conversations",
+      "Used Reciprocal Rank Fusion to balance retrieval results from multiple strategies",
     ],
     links: {
       demo: "https://legisdex.com",
@@ -168,8 +169,8 @@ export const projects: Project[] = [
       ],
       proofPoints: [
         { label: "System type", value: "Agentic RAG SaaS" },
-        { label: "Retrieval", value: "Vector + BM25 + clause match" },
-        { label: "Role", value: "Lead Developer & AI Engineer" },
+        { label: "Retrieval", value: "Vector + BM25 + RRF" },
+        { label: "Role", value: "Lead Developer" },
       ],
     },
     techImages: [
