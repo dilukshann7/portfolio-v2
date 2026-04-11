@@ -2,7 +2,6 @@
 export const prerender = true;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import LightRays from "../components/ui/LightRays";
 import { projects, type Project } from "../data/projects";
 import { SITE } from "../lib/site";
 import ProjectTech from "@/components/ProjectTech.astro";
@@ -76,25 +75,6 @@ const structuredData = [
   <div class="pp">
     <main class="pp-main" id="main-content">
       <header class="pp-page-hero" data-nav-contrast="dark">
-        <div class="pp-page-hero__bg" aria-hidden="true">
-          <LightRays
-            client:idle
-            raysOrigin="top-center"
-            raysColor="#f8f5ef"
-            raysSpeed={0.55}
-            lightSpread={0.42}
-            rayLength={1.9}
-            followMouse={true}
-            mouseInfluence={0.035}
-            noiseAmount={0}
-            distortion={0.05}
-            className="pp-page-hero__rays"
-            pulsating={false}
-            fadeDistance={0.9}
-            saturation={0.7}
-          />
-        </div>
-
         <div class="pp-page-hero__inner">
           <nav class="pp-breadcrumb" aria-label="Breadcrumb">
             <a href="/" class="pp-back">
@@ -224,13 +204,6 @@ const structuredData = [
 
       <div class="pp-shell">
         <article class="pp-article">
-          <div class="pp-tech-wrap">
-            <ProjectTech
-              technologies={project.technologies}
-              techImages={project.techImages}
-            />
-          </div>
-
           <section class="pp-proof-strip" aria-label="Project proof points">
             {
               caseStudy.proofPoints.map((point) => (
@@ -241,6 +214,12 @@ const structuredData = [
               ))
             }
           </section>
+          <div class="pp-tech-wrap">
+            <ProjectTech
+              technologies={project.technologies}
+              techImages={project.techImages}
+            />
+          </div>
 
           <div class="pp-body">
             <section class="pp-section pp-section--problem">
