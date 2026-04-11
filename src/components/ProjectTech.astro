@@ -87,9 +87,16 @@ const { technologies = [], techImages = [] } = Astro.props;
       const profileImagesContainer = document.querySelector(".profile-images");
       const profileImages = document.querySelectorAll(".profile-images .img");
       const nameElements = document.querySelectorAll(".profile-names .name");
-      const nameHeadings = document.querySelectorAll(".profile-names .name .name-label");
+      const nameHeadings = document.querySelectorAll(
+        ".profile-names .name .name-label",
+      );
 
-      if (!profileImagesContainer || !profileImages.length || !nameElements.length) return;
+      if (
+        !profileImagesContainer ||
+        !profileImages.length ||
+        !nameElements.length
+      )
+        return;
 
       const splitRefs: SplitText[] = [];
       nameHeadings.forEach((heading) => {
@@ -166,7 +173,12 @@ const { technologies = [], techImages = [] } = Astro.props;
             () => {
               const brandColor = getDominantColor(actualImg);
               gsap.set(letters, { color: brandColor });
-              gsap.to(imgWrapper, { width: 140, height: 140, duration: 0.5, ease: "power4.out" });
+              gsap.to(imgWrapper, {
+                width: 140,
+                height: 140,
+                duration: 0.5,
+                ease: "power4.out",
+              });
               gsap.to(letters, {
                 y: "-100%",
                 ease: "power4.out",
@@ -180,13 +192,20 @@ const { technologies = [], techImages = [] } = Astro.props;
           imgWrapper.addEventListener(
             "mouseleave",
             () => {
-              gsap.to(imgWrapper, { width: 70, height: 70, duration: 0.5, ease: "power4.out" });
+              gsap.to(imgWrapper, {
+                width: 70,
+                height: 70,
+                duration: 0.5,
+                ease: "power4.out",
+              });
               gsap.to(letters, {
                 y: "0%",
                 ease: "power4.out",
                 duration: 0.75,
                 stagger: { each: 0.025, from: "center" },
-                onComplete: () => { gsap.set(letters, { color: "#000000" }); },
+                onComplete: () => {
+                  gsap.set(letters, { color: "#000000" });
+                },
               });
             },
             { signal },

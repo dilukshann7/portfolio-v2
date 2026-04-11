@@ -326,21 +326,13 @@ const structuredData = [
                 <div class="pp-deep-dive-card">
                   <span>Approach</span>
                   <ul>
-                    {
-                      caseStudy.approach.map((item) => (
-                        <li>{item}</li>
-                      ))
-                    }
+                    {caseStudy.approach.map((item) => <li>{item}</li>)}
                   </ul>
                 </div>
                 <div class="pp-deep-dive-card">
                   <span>Decisions</span>
                   <ul>
-                    {
-                      caseStudy.decisions.map((item) => (
-                        <li>{item}</li>
-                      ))
-                    }
+                    {caseStudy.decisions.map((item) => <li>{item}</li>)}
                   </ul>
                 </div>
               </div>
