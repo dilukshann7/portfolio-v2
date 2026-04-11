@@ -464,8 +464,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     :global(.menu-toggle .menu-bar) {
-      width: 12px;
-      height: 1.5px;
+      width: 11px;
     }
 
     .menu {
@@ -474,7 +473,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .col {
-      padding: 7em 1.25em 1.5em 1.25em;
+      padding: 7rem 1.25rem 1.5rem;
       align-items: flex-start;
     }
 
@@ -484,24 +483,22 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
     .col-2 {
       justify-content: flex-start;
-      padding-top: 1.5em;
-      padding-bottom: 2.5em;
+      padding-top: 1.5rem;
+      padding-bottom: 2.5rem;
     }
 
     .menu-logo {
-      top: 1em;
-      left: 1em;
+      top: 0.9rem;
+      left: 1rem;
     }
-
     .menu-logo a {
-      font-size: 60px;
-      line-height: 0.9;
+      font-size: 0.95rem;
     }
 
     .links {
       display: flex;
       flex-direction: column;
-      gap: 0.4em;
+      gap: 0.35rem;
     }
 
     .link {
@@ -509,9 +506,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .link a {
-      font-size: 2.45rem;
-      letter-spacing: -0.5px;
-      line-height: 1.08;
+      font-size: 2.2rem;
+      letter-spacing: -0.03em;
     }
 
     .socials-left {
@@ -520,39 +516,38 @@ import GlassSurface from "./ui/GlassSurface.tsx";
 
     .socials {
       width: 100%;
-      gap: 0.75em;
+      gap: 0.75rem;
     }
 
     .socials .sub-col p {
-      font-size: 16px;
-      line-height: 1.6;
+      font-size: 0.65rem;
+      line-height: 2;
       transform: translateY(16px);
     }
 
     .col-2 .socials .sub-col p:first-child {
-      font-size: 2.4rem;
-      line-height: 0.98;
-      letter-spacing: 0.01em;
+      font-family: "Inter", system-ui, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 660;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: rgba(255, 255, 255, 0.88);
+      text-transform: none;
     }
 
     .col-2 .socials .sub-col p:not(:first-child) {
-      font-size: 1.35rem;
-      line-height: 1.38;
-    }
-
-    .socials .sub-col p br {
-      display: none;
+      font-size: 0.7rem;
+      line-height: 1.8;
     }
 
     .header h1 {
-      font-size: 18vw;
-      height: auto;
-      min-height: 70px;
-      margin-top: 0.25em;
+      font-size: 22vw;
+      min-height: 60px;
+      margin-top: 0.25rem;
     }
 
     .header {
-      margin-top: 0.5em;
+      margin-top: 0.5rem;
       align-self: flex-start;
     }
   }
@@ -568,80 +563,72 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     :global(.menu-toggle .menu-toggle-icon) {
-      transform: scale(0.56);
+      transform: scale(0.58);
     }
 
     :global(.menu-toggle.opened .menu-toggle-icon) {
-      transform: scale(1.125);
+      transform: scale(1.1);
     }
   }
 
   @media (max-width: 480px) {
     :global(.menu-toggle) {
-      --menu-toggle-width: 104px;
-      --menu-toggle-height: 52px;
-      --menu-toggle-open-width: 52px;
-      --menu-toggle-icon-size: 52px;
-      top: 0.75em;
-      right: 0.75em;
+      --menu-toggle-width: 96px;
+      --menu-toggle-height: 34px;
+      --menu-toggle-open-width: 34px;
+      --menu-toggle-icon-size: 34px;
+      top: 0.75rem;
+      right: 0.75rem;
     }
 
     :global(.menu-toggle .menu-copy) {
-      left: 16px;
+      left: 12px;
     }
-
     :global(.menu-toggle .menu-copy p) {
-      font-size: 10.5px;
-      letter-spacing: 0.11em;
+      font-size: 9px;
     }
 
     .col {
-      padding: 8em 1rem 1.25em 1rem;
+      padding: 7.5rem 1rem 1.25rem;
     }
 
     .menu-logo {
-      top: 0.75em;
-      left: 0.75em;
+      top: 0.75rem;
+      left: 0.75rem;
     }
-
     .menu-logo a {
-      font-size: 52px;
-      line-height: 0.9;
+      font-size: 0.9rem;
     }
 
     .link a {
-      font-size: 2.15rem;
+      font-size: 1.9rem;
     }
-
     .links {
-      gap: 0.6em;
+      gap: 0.5rem;
     }
 
     .socials .sub-col p {
-      font-size: 15px;
+      font-size: 0.6rem;
     }
 
     .col-2 .socials .sub-col p:first-child {
-      font-size: 2rem;
+      font-size: 1.35rem;
     }
-
     .col-2 .socials .sub-col p:not(:first-child) {
-      font-size: 1.2rem;
-      line-height: 1.36;
+      font-size: 0.65rem;
     }
 
     .col-2 {
-      padding-top: 1.25em;
-      padding-bottom: 2em;
+      padding-top: 1.25rem;
+      padding-bottom: 2rem;
     }
 
     .header {
       margin-top: 0;
     }
-
     .header h1 {
-      font-size: 22vw;
-      min-height: 60px;
+      font-size: 26vw;
+      min-height: 50px;
     }
   }
 </style>
