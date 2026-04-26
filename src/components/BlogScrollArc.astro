@@ -678,8 +678,8 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
         const getRadius = () =>
           window.innerWidth < 900
             ? window.innerWidth < 480
-              ? window.innerWidth * 4.2
-              : window.innerWidth * 5.2
+              ? window.innerWidth * 2.0
+              : window.innerWidth * 2.5
             : window.innerWidth * 3.0;
 
         const getCountStep = () => {

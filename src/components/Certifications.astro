@@ -337,7 +337,7 @@ import { certifications as awards } from "../data/certifications";
 
   .certifications-container :global(.award-title) {
     font-family: var(--font-melodrame);
-    font-size: 64px;
+    font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 400;
     letter-spacing: 0.01em;
     line-height: 1;
@@ -535,7 +535,7 @@ import { certifications as awards } from "../data/certifications";
     }
 
     .header {
-      font-size: 4rem !important;
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
     }
 
     .certifications-container :global(.award-type-inline) {

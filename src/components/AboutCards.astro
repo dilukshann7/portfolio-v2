@@ -253,10 +253,10 @@
   }
 
   .card-content h3 {
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 600;
     line-height: 1;
-    margin-bottom: 2.5em;
+    margin-bottom: 2.5rem;
   }
 
   .header {
@@ -423,7 +423,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: white;
+    background: transparent;
     pointer-events: none;
     transition:
       transform 0.25s ease,
