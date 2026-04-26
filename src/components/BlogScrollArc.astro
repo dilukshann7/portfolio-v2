@@ -136,10 +136,10 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
   .fancy {
     background-color: transparent;
-    border: 2px solid #000;
+    border: 2px solid #0a0a0a;
     border-radius: 0;
     box-sizing: border-box;
-    color: #fff;
+    color: #0a0a0a;
     cursor: pointer;
     display: inline-block;
     float: right;
@@ -162,7 +162,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     content: " ";
     width: 1.5625rem;
     height: 2px;
-    background: black;
+    background: #0a0a0a;
     top: 50%;
     left: 1.5em;
     position: absolute;
@@ -222,17 +222,17 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
   }
 
   .fancy:hover {
-    color: white;
-    background: black;
+    color: #fff8ef;
+    background: #0a0a0a;
   }
 
   .fancy:hover::before {
     width: 0.9375rem;
-    background: white;
+    background: #fff8ef;
   }
 
   .fancy:hover .text {
-    color: white;
+    color: #fff8ef;
     padding-left: 1.5em;
   }
 
@@ -270,12 +270,12 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
   .blog-template__nav a {
     border: none;
     outline: none;
-    color: #000;
+    color: #1a1a1e;
     text-decoration: none;
     font-family: "Space Grotesk", sans-serif;
     font-weight: 500;
     padding: 0.75rem 1rem;
-    background-color: #fff;
+    background-color: #faf9f7;
     border-radius: 0.35rem;
   }
 
@@ -312,7 +312,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
   .blog-template__intro-copy h2 {
     margin: 0.9rem 0 1rem;
-    color: #000000;
+    color: #1a1a1e;
     font-family: var(--font-melodrame);
     font-weight: 400;
     font-size: clamp(3.2rem, 8vw, 7rem);
@@ -341,7 +341,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     justify-content: center;
     align-items: center;
     padding: 1.5rem;
-    background: linear-gradient(180deg, #000000, #202d33);
+    background: linear-gradient(180deg, #0a0a0a, #202d33);
     background-size: 200% 200%;
   }
 
@@ -355,7 +355,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
   }
 
   .blog-template__outro p span {
-    color: #75e1ff;
+    color: #fff8ef;
   }
 
   .blog-template__cards {

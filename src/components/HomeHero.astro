@@ -120,7 +120,7 @@ const proofSignals = [
     height: 100dvh;
     max-height: 100dvh;
     overflow: hidden;
-    background-color: #000;
+    background-color: #0a0a0a;
   }
 
   .landing-page .container {
@@ -211,7 +211,7 @@ const proofSignals = [
     font-weight: 500;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.68);
+    color: rgba(255, 248, 239, 0.68);
   }
 
   :global(.central-glass .info) {
@@ -220,7 +220,7 @@ const proofSignals = [
     font-size: clamp(1.05rem, 1.35vw, 1.25rem);
     font-weight: 400;
     line-height: 1.5;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 248, 239, 0.8);
     margin-top: 0.2rem;
   }
 
@@ -240,9 +240,9 @@ const proofSignals = [
     min-height: 34px;
     padding: 0.45rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 248, 239, 0.1);
+    background: rgba(255, 248, 239, 0.04);
+    color: rgba(255, 248, 239, 0.72);
     font-family: "Space Grotesk", sans-serif;
     font-size: 0.68rem;
     font-weight: 700;
@@ -335,7 +335,7 @@ const proofSignals = [
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.1),
+      rgba(255, 248, 239, 0.1),
       transparent
     );
     margin: 1rem 0;
@@ -362,9 +362,9 @@ const proofSignals = [
     align-items: center;
     padding: 0.35rem 0.7rem;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 248, 239, 0.04);
+    border: 1px solid rgba(255, 248, 239, 0.08);
+    color: rgba(255, 248, 239, 0.6);
     font-family: "Space Grotesk", sans-serif;
     font-size: 0.68rem;
     font-weight: 600;
@@ -374,19 +374,19 @@ const proofSignals = [
   }
 
   .tag:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 248, 239, 0.08);
   }
 
   .scroll-hint {
     position: absolute;
-    bottom: 1.5rem;
+    bottom: max(1.5rem, env(safe-area-inset-bottom));
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.4rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 248, 239, 0.3);
     font-family: "Space Grotesk", sans-serif;
     font-size: 0.62rem;
     font-weight: 600;
