@@ -136,8 +136,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
   .logo,
   .menu-logo {
     position: absolute;
-    top: 1.75rem;
-    left: 2rem;
+    top: max(1.75rem, env(safe-area-inset-top));
+    left: max(2rem, env(safe-area-inset-left));
     z-index: 110;
   }
 
@@ -165,8 +165,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     width: var(--menu-toggle-width);
     height: var(--menu-toggle-height);
     border-radius: 999px;
-    top: 1.1rem;
-    right: 1.5rem;
+    top: max(1.1rem, env(safe-area-inset-top));
+    right: max(1.5rem, env(safe-area-inset-right));
     padding: 0;
     border: 0;
     background: transparent;
@@ -327,7 +327,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     background-color: #0a0a0a;
     z-index: 115;
@@ -448,8 +448,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       --menu-toggle-height: 36px;
       --menu-toggle-open-width: 36px;
       --menu-toggle-icon-size: 36px;
-      top: 0.9rem;
-      right: 1rem;
+      top: max(0.9rem, env(safe-area-inset-top));
+      right: max(1rem, env(safe-area-inset-right));
     }
 
     :global(.menu-toggle .menu-copy) {
@@ -479,7 +479,7 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .col {
-      padding: 7rem 1.25rem 1.5rem;
+      padding: max(7rem, calc(env(safe-area-inset-top) + 5rem)) max(1.25rem, env(safe-area-inset-right)) max(1.5rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
       align-items: flex-start;
     }
 
@@ -490,12 +490,12 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     .col-2 {
       justify-content: flex-start;
       padding-top: 1.5rem;
-      padding-bottom: 2.5rem;
+      padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
     }
 
     .menu-logo {
-      top: 0.9rem;
-      left: 1rem;
+      top: max(0.9rem, env(safe-area-inset-top));
+      left: max(1rem, env(safe-area-inset-left));
     }
     .menu-logo a {
       font-size: 0.95rem;
@@ -583,8 +583,8 @@ import GlassSurface from "./ui/GlassSurface.tsx";
       --menu-toggle-height: 34px;
       --menu-toggle-open-width: 34px;
       --menu-toggle-icon-size: 34px;
-      top: 0.75rem;
-      right: 0.75rem;
+      top: max(0.75rem, env(safe-area-inset-top));
+      right: max(0.75rem, env(safe-area-inset-right));
     }
 
     :global(.menu-toggle .menu-copy) {
@@ -595,12 +595,12 @@ import GlassSurface from "./ui/GlassSurface.tsx";
     }
 
     .col {
-      padding: 7.5rem 1rem 1.25rem;
+      padding: max(7.5rem, calc(env(safe-area-inset-top) + 5.5rem)) max(1rem, env(safe-area-inset-right)) max(1.25rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
     }
 
     .menu-logo {
-      top: 0.75rem;
-      left: 0.75rem;
+      top: max(0.75rem, env(safe-area-inset-top));
+      left: max(0.75rem, env(safe-area-inset-left));
     }
     .menu-logo a {
       font-size: 0.9rem;
