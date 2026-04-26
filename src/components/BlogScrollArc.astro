@@ -391,9 +391,15 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     text-decoration: none;
   }
 
+  .blog-template__card-link:focus-visible {
+    outline: 2px solid rgba(26, 26, 30, 0.4);
+    outline-offset: 4px;
+    border-radius: 0.5rem;
+  }
+
   .blog-template__card-image {
     flex: 1;
-    background-color: #fff;
+    background-color: #faf9f7;
     border-radius: 0.5rem;
     overflow: hidden;
   }

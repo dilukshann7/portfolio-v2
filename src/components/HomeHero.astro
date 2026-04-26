@@ -290,28 +290,38 @@ const proofSignals = [
     transform: translateY(-2px);
   }
 
+  :global(.central-glass .hero-link:focus-visible) {
+    outline: 2px solid rgba(255, 248, 239, 0.6);
+    outline-offset: 3px;
+  }
+
   :global(.central-glass .hero-link-primary) {
     background: rgba(255, 247, 238, 0.94);
-    color: #111;
+    color: #1a1a1e;
     box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.15);
   }
 
   :global(.central-glass .hero-link-secondary) {
     color: rgba(255, 248, 239, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 248, 239, 0.18);
+    background: rgba(255, 248, 239, 0.06);
   }
 
   .hero-socials {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.7rem 1rem;
+    gap: 0.25rem 0.35rem;
     margin-top: 1.5rem;
   }
 
   .hero-socials a {
-    color: rgba(255, 255, 255, 0.68);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.35rem 0.6rem;
+    color: rgba(255, 248, 239, 0.68);
     text-decoration: none;
     font-family: "Space Grotesk", sans-serif;
     font-size: 0.8rem;
@@ -321,11 +331,17 @@ const proofSignals = [
     transition:
       color 220ms ease,
       transform 220ms ease;
+    border-radius: 6px;
   }
 
   .hero-socials a:hover {
     color: rgba(255, 248, 239, 0.94);
     transform: translateY(-1px);
+  }
+
+  .hero-socials a:focus-visible {
+    outline: 2px solid rgba(255, 248, 239, 0.5);
+    outline-offset: 2px;
   }
 
   .divider {

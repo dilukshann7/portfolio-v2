@@ -136,6 +136,11 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  a,
+  button {
+    touch-action: manipulation;
+  }
+
   img,
   video,
   canvas,

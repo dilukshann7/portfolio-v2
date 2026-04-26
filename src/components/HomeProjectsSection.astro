@@ -219,6 +219,17 @@ for (let index = 0; index < projects.length; index += 3) {
     text-underline-offset: 0.22em;
   }
 
+  .work-item-link:focus-visible {
+    outline: 2px solid rgba(15, 15, 15, 0.4);
+    outline-offset: 4px;
+    border-radius: 0.7rem;
+  }
+
+  .work-item-link:focus-visible .work-item-cta {
+    text-decoration: underline;
+    text-underline-offset: 0.22em;
+  }
+
   @media (max-width: 1000px) {
     .work,
     .row {

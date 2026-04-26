@@ -413,20 +413,25 @@ import { certifications as awards } from "../data/certifications";
     height: 80px;
     padding: 5px 20px;
     cursor: pointer;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #0a0a0a;
   }
 
   .certifications-container :global(.award-name) {
     font-family: var(--font-melodrame);
     font-weight: 300;
-    color: #000;
+    color: #0a0a0a;
   }
 
   .certifications-container :global(.award-project) {
-    background-color: #000;
+    background-color: #0a0a0a;
     font-family: var(--font-melodrame);
     font-weight: 300;
-    color: #e3e3db;
+    color: rgba(255, 248, 239, 0.9);
+  }
+
+  .certifications-container :global(.award):focus-visible {
+    outline: 2px solid rgba(10, 10, 10, 0.4);
+    outline-offset: -2px;
   }
 
   .award-preview {
