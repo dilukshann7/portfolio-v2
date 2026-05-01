@@ -240,6 +240,72 @@ for (let index = 0; index < projects.length; index += 3) {
       flex-direction: column;
     }
   }
+
+  @media (max-width: 640px) {
+    .work {
+      padding: 1rem;
+      gap: 1.5rem;
+    }
+
+    .work-item-meta span {
+      font-size: 0.65rem;
+      padding: 0.3rem 0.5rem;
+      min-height: 28px;
+    }
+
+    .work-item-proof {
+      font-size: 0.72rem;
+    }
+
+    .work-item-cta {
+      font-size: 0.72rem;
+      margin-top: 0.75rem;
+    }
+
+    .work h3 {
+      font-size: 1.15rem;
+    }
+
+    .work p {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .work {
+      padding: 0.75rem;
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .work-item-img {
+      border-radius: 0.5rem;
+    }
+
+    .work-item-meta span {
+      font-size: 0.6rem;
+      padding: 0.25rem 0.45rem;
+      min-height: 26px;
+    }
+
+    .work h3 {
+      font-size: 1.05rem;
+    }
+
+    .work p {
+      font-size: 0.9rem;
+    }
+
+    .work-item-proof {
+      font-size: 0.7rem;
+      margin-top: 0.6rem;
+    }
+
+    .work-item-cta {
+      font-size: 0.7rem;
+      margin-top: 0.6rem;
+    }
+  }
 </style>
 
 <script>
