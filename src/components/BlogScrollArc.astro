@@ -492,48 +492,72 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
   @media (max-width: 900px) {
     .blog-template {
-      padding-top: 4.5em !important;
+      padding-top: 3em !important;
+      padding-bottom: 2em;
     }
 
     .blog-template__nav {
       padding: 1rem;
     }
 
-    .blog-template__intro,
-    .blog-template__steps,
-    .blog-template__outro {
-      height: 100dvh;
+    .blog-template__steps {
+      height: auto;
+      min-height: auto;
+      overflow: visible;
+      padding-bottom: 1rem;
     }
 
     .blog-template__step-counter {
+      position: relative;
       margin: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    .blog-template__counter-title,
+    .blog-template__count {
+      height: auto;
+      clip-path: none;
+      font-size: clamp(2rem, 7vw, 3rem);
     }
 
     .blog-template__count {
-      top: 0;
-    }
-
-    .blog-template__summary {
-      width: min(24rem, calc(100vw - 2rem));
-      font-size: 0.88rem;
-      margin-top: 0.75rem;
+      display: none;
     }
 
     .blog-template__cards {
-      top: 30%;
-      width: 100vw;
-      height: 470px;
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 0 1.25rem;
+      margin-top: 1.5rem;
+      will-change: auto;
     }
 
     .blog-template__card {
-      width: min(360px, calc(100vw - 2rem));
-      height: 400px;
-      margin-left: calc(min(360px, calc(100vw - 2rem)) / -2);
-      gap: 0.8rem;
+      position: relative;
+      width: 100%;
+      height: auto;
+      left: auto;
+      top: auto;
+      margin-left: 0;
+      gap: 1rem;
+      transform: none;
+      will-change: auto;
     }
 
-    .blog-template__card-copy {
-      min-height: 0;
+    .blog-template__card--empty {
+      display: none;
+    }
+
+    .blog-template__card-image {
+      aspect-ratio: 16 / 10;
+      flex: none;
     }
 
     .blog-template__card-copy h4 {
@@ -551,12 +575,25 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     }
 
     .blog-template__cta {
-      top: 82%;
-      width: calc(100vw - 2rem);
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      opacity: 1;
+      pointer-events: auto;
+      width: auto;
+      margin: 2rem 1.25rem 0;
+      display: flex;
+      justify-content: center;
+      z-index: 10;
     }
   }
 
   @media (max-width: 480px) {
+    .blog-template {
+      padding-top: 2.5em !important;
+    }
+
     .blog-template__step-counter {
       margin: 1rem;
     }
@@ -567,14 +604,8 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
     }
 
     .blog-template__cards {
-      top: 31%;
-      height: 430px;
-    }
-
-    .blog-template__card {
-      width: min(320px, calc(100vw - 1.5rem));
-      height: 360px;
-      margin-left: calc(min(320px, calc(100vw - 1.5rem)) / -2);
+      padding: 0 1rem;
+      gap: 1.25rem;
     }
 
     .blog-template__card-copy h4 {
@@ -664,6 +695,74 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
 
         if (!stickySection || !cards.length || !countContainer) return;
 
+        const isMobile = window.innerWidth < 900;
+
+        // Mobile: simple vertical stack with entrance animations, no arc
+        if (isMobile) {
+          const mobileTriggers: Array<ReturnType<typeof ScrollTrigger.create>> =
+            [];
+
+          gsap.set(cards, { clearProps: "all" });
+
+          visibleCards.forEach((card) => {
+            gsap.set(card, { opacity: 0, y: 40 });
+          });
+
+          if (cta) {
+            gsap.set(cta, { opacity: 0, y: 20 });
+          }
+
+          if (reducedMotion) {
+            gsap.set(visibleCards, { opacity: 1, y: 0 });
+            if (cta) gsap.set(cta, { opacity: 1, y: 0 });
+            return;
+          }
+
+          visibleCards.forEach((card, index) => {
+            mobileTriggers.push(
+              ScrollTrigger.create({
+                trigger: card,
+                start: "top 88%",
+                once: true,
+                onEnter: () => {
+                  gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    ease: "power3.out",
+                    delay: index * 0.06,
+                  });
+                },
+              }),
+            );
+          });
+
+          if (cta) {
+            mobileTriggers.push(
+              ScrollTrigger.create({
+                trigger: cta,
+                start: "top 92%",
+                once: true,
+                onEnter: () => {
+                  gsap.to(cta, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "power3.out",
+                  });
+                },
+              }),
+            );
+          }
+
+          onCleanup(() => {
+            mobileTriggers.forEach((t) => t.kill());
+          });
+
+          return;
+        }
+
+        // Desktop: arc scroll effect
         const getStickyHeight = () => {
           if (window.innerWidth < 480) return window.innerHeight * 1.5;
           if (window.innerWidth < 900) return window.innerHeight * 2.0;
@@ -709,7 +808,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
               y: -y + radius,
               rotation: -rotation,
               transformOrigin: "center center",
-              force3D: true, // Forces hardware acceleration on mobile
+              force3D: true,
             });
           });
         }
@@ -752,8 +851,7 @@ const stackCards: Array<(BlogArcCard & { empty: false }) | { empty: true }> = [
             if (cta) {
               const ctaOpacity = Math.max(
                 0,
-                (self.progress - (window.innerWidth < 900 ? 0.72 : 0.8)) /
-                  (window.innerWidth < 900 ? 0.12 : 0.15),
+                (self.progress - 0.8) / 0.15,
               );
               gsap.set(cta, {
                 opacity: ctaOpacity,
