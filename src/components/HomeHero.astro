@@ -107,712 +107,718 @@ const proofSignals = [
     </div>
   </div>
 
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</div>
-
-<style>
-  .landing-page {
-    position: relative;
-    width: 100%;
-    height: 100dvh;
-    max-height: 100dvh;
-    overflow: hidden;
-    background-color: #0a0a0a;
-  }
-
-  .landing-page .container {
-    position: absolute;
-    inset: 0;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    z-index: 10;
-  }
-
-  .landing-page .hero-img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .landing-page .hero-img :global(.color-bends-container) {
-    width: 100%;
-    height: 100%;
-  }
-
-  .central-layout {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    min-width: 100%;
-    padding: 1.5rem;
-    box-sizing: border-box;
-    will-change: transform, opacity;
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
-
-  .central-layout::-webkit-scrollbar {
-    display: none;
-  }
-
-  :global(.central-glass) {
-    position: relative;
-    width: 100%;
-    max-width: min(calc(100vw - 3rem), 52rem);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 3rem 2.5rem;
-    border-radius: 2rem;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 248, 239, 0.04) 0%,
-      rgba(255, 248, 239, 0.01) 100%
-    );
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
-    border: 1px solid rgba(255, 248, 239, 0.08);
-    border-top: 1px solid rgba(255, 248, 239, 0.15);
-    box-shadow:
-      inset 0 1px 1px rgba(255, 248, 239, 0.15),
-      0 2rem 5rem rgba(0, 0, 0, 0.4);
-    will-change: transform, opacity, filter;
-  }
-
-  @media (max-width: 900px) {
-    :global(.central-glass) {
-      backdrop-filter: blur(12px) saturate(120%);
-      -webkit-backdrop-filter: blur(12px) saturate(120%);
+  <style>
+    .landing-page {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      max-height: 100dvh;
+      overflow: hidden;
+      background-color: #0a0a0a;
     }
-  }
 
-  :global(.central-glass .copy) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    max-width: 42rem;
-  }
-
-  :global(.central-glass .header) {
-    font-family: var(--font-melodrame);
-    font-size: clamp(3.5rem, 6.5vw, 6rem);
-    line-height: 0.9;
-    letter-spacing: 0.015em;
-    text-transform: none;
-    color: rgba(255, 248, 239, 0.96);
-    padding: 0;
-    margin: 0;
-    text-shadow: 0 0.04em 0.16em rgba(0, 0, 0, 0.18);
-  }
-
-  :global(.central-glass .sub-header) {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: rgba(255, 248, 239, 0.68);
-  }
-
-  :global(.central-glass .info) {
-    max-width: 46ch;
-    font-family: "Space Grotesk", sans-serif;
-    font-size: clamp(1.05rem, 1.35vw, 1.25rem);
-    font-weight: 400;
-    line-height: 1.5;
-    color: rgba(255, 248, 239, 0.8);
-    margin-top: 0.2rem;
-  }
-
-  .hero-proof {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.55rem;
-    margin-top: 1.5rem;
-    max-width: 44rem;
-  }
-
-  .hero-proof-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    min-height: 34px;
-    padding: 0.45rem 0.75rem;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 248, 239, 0.1);
-    background: rgba(255, 248, 239, 0.04);
-    color: rgba(255, 248, 239, 0.72);
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .hero-proof-item span {
-    color: rgba(255, 248, 239, 0.42);
-  }
-
-  .landing-page.landing-copy-pending .hero-copy {
-    opacity: 0;
-  }
-
-  :global(.central-glass .hero-actions) {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  :global(.central-glass .hero-link) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0.8rem 1.6rem;
-    border-radius: 999px;
-    text-decoration: none;
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    transition:
-      transform 220ms ease,
-      background-color 220ms ease,
-      border-color 220ms ease,
-      color 220ms ease;
-  }
-
-  :global(.central-glass .hero-link:hover) {
-    transform: translateY(-2px);
-  }
-
-  :global(.central-glass .hero-link:focus-visible) {
-    outline: 2px solid rgba(255, 248, 239, 0.6);
-    outline-offset: 3px;
-  }
-
-  :global(.central-glass .hero-link-primary) {
-    background: rgba(255, 247, 238, 0.94);
-    color: #1a1a1e;
-    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.15);
-  }
-
-  :global(.central-glass .hero-link-secondary) {
-    color: rgba(255, 248, 239, 0.94);
-    border: 1px solid rgba(255, 248, 239, 0.18);
-    background: rgba(255, 248, 239, 0.06);
-  }
-
-  .hero-socials {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.25rem 0.35rem;
-    margin-top: 1.5rem;
-  }
-
-  .hero-socials a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0.35rem 0.6rem;
-    color: rgba(255, 248, 239, 0.68);
-    text-decoration: none;
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    transition:
-      color 220ms ease,
-      transform 220ms ease;
-    border-radius: 6px;
-  }
-
-  .hero-socials a:hover {
-    color: rgba(255, 248, 239, 0.94);
-    transform: translateY(-1px);
-  }
-
-  .hero-socials a:focus-visible {
-    outline: 2px solid rgba(255, 248, 239, 0.5);
-    outline-offset: 2px;
-  }
-
-  .divider {
-    width: 100%;
-    max-width: 80%;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 248, 239, 0.1),
-      transparent
-    );
-    margin: 1rem 0;
-  }
-
-  .bottom-stats-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    width: 100%;
-  }
-
-  .stack-tags {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.4rem;
-    max-width: 36rem;
-  }
-
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.35rem 0.7rem;
-    border-radius: 6px;
-    background: rgba(255, 248, 239, 0.04);
-    border: 1px solid rgba(255, 248, 239, 0.08);
-    color: rgba(255, 248, 239, 0.6);
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    transition: background 200ms ease;
-  }
-
-  .tag:hover {
-    background: rgba(255, 248, 239, 0.08);
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: max(1.5rem, env(safe-area-inset-bottom));
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    color: rgba(255, 248, 239, 0.3);
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    z-index: 20;
-    pointer-events: none;
-  }
-
-  .scroll-line {
-    width: 1px;
-    height: 2rem;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 248, 239, 0.45) 0%,
-      rgba(255, 248, 239, 0) 100%
-    );
-    transform-origin: top;
-    animation: scrollDrop 2s ease-in-out infinite;
-  }
-
-  @keyframes scrollDrop {
-    0% {
-      transform: scaleY(0);
-      opacity: 1;
+    .landing-page .container {
+      position: absolute;
+      inset: 0;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      z-index: 10;
     }
-    50% {
-      transform: scaleY(1);
-      opacity: 1;
-    }
-    100% {
-      transform: scaleY(1);
-      transform-origin: bottom;
-      opacity: 0;
-    }
-  }
 
-  @media (max-width: 900px) {
+    .landing-page .hero-img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .landing-page .hero-img :global(.color-bends-container) {
+      width: 100%;
+      height: 100%;
+    }
+
     .central-layout {
-      padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
-    }
-
-    :global(.central-glass) {
-      padding: 2.5rem 1.5rem;
-      border-radius: 1.5rem;
-    }
-
-    :global(.central-glass .header) {
-      font-size: clamp(3rem, 10vw, 4.4rem);
-    }
-  }
-
-  @media (max-width: 640px) {
-    :global(.central-glass .hero-actions) {
-      flex-direction: column;
-      width: 100%;
-    }
-
-    :global(.central-glass .hero-link) {
-      width: 100%;
-    }
-
-    .hero-socials {
-      gap: 0.6rem 0.9rem;
-    }
-
-    .hero-proof {
-      margin-top: 1.25rem;
-    }
-
-    .hero-proof-item {
-      width: 100%;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      font-size: 0.62rem;
+      min-height: 100%;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      overflow-y: auto;
+      min-width: 100vw;
+      scrollbar-width: none;
     }
 
-    .divider {
-      margin: 1.5rem 0;
-      max-width: 100%;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .central-layout {
-      padding: max(0.75rem, env(safe-area-inset-top)) 0.75rem max(0.75rem, env(safe-area-inset-bottom));
+    .central-layout::-webkit-scrollbar {
+      display: none;
     }
 
     :global(.central-glass) {
-      padding: 2rem 1.25rem;
-      border-radius: 1.25rem;
+      position: relative;
+      width: 100%;
+      max-width: min(calc(100vw - 3rem), 52rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 2.5rem;
+      border-radius: 2rem;
+      margin: auto;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 248, 239, 0.04) 0%,
+        rgba(255, 248, 239, 0.01) 100%
+      );
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      border: 1px solid rgba(255, 248, 239, 0.08);
+      border-top: 1px solid rgba(255, 248, 239, 0.15);
+      box-shadow:
+        inset 0 1px 1px rgba(255, 248, 239, 0.15),
+        0 2rem 5rem rgba(0, 0, 0, 0.4);
+      will-change: transform, opacity, filter;
+    }
+
+    @media (max-width: 900px) {
+      :global(.central-glass) {
+        backdrop-filter: blur(12px) saturate(120%);
+        -webkit-backdrop-filter: blur(12px) saturate(120%);
+      }
     }
 
     :global(.central-glass .copy) {
-      gap: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      max-width: 42rem;
     }
 
     :global(.central-glass .header) {
-      font-size: clamp(2.4rem, 9vw, 3.2rem);
-      letter-spacing: 0.01em;
+      font-family: var(--font-melodrame);
+      font-size: clamp(3.5rem, 6.5vw, 6rem);
+      line-height: 0.9;
+      letter-spacing: 0.015em;
+      text-transform: none;
+      color: rgba(255, 248, 239, 0.96);
+      padding: 0;
+      margin: 0;
+      text-shadow: 0 0.04em 0.16em rgba(0, 0, 0, 0.18);
     }
 
     :global(.central-glass .sub-header) {
-      font-size: 0.82rem;
-      letter-spacing: 0.16em;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(255, 248, 239, 0.68);
     }
 
     :global(.central-glass .info) {
-      font-size: 1rem;
-      line-height: 1.6;
+      max-width: 46ch;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+      font-weight: 400;
+      line-height: 1.5;
+      color: rgba(255, 248, 239, 0.8);
+      margin-top: 0.2rem;
     }
 
     .hero-proof {
-      margin-top: 1rem;
-      gap: 0.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.55rem;
+      margin-top: 1.5rem;
+      max-width: 44rem;
     }
 
     .hero-proof-item {
-      padding: 0.4rem 0.6rem;
-      font-size: 0.6rem;
-      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-height: 34px;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 248, 239, 0.1);
+      background: rgba(255, 248, 239, 0.04);
+      color: rgba(255, 248, 239, 0.72);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-proof-item span {
+      color: rgba(255, 248, 239, 0.42);
+    }
+
+    .landing-page.landing-copy-pending .hero-copy {
+      opacity: 0;
     }
 
     :global(.central-glass .hero-actions) {
-      margin-top: 1.5rem;
-      gap: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
     }
 
     :global(.central-glass .hero-link) {
-      padding: 0.7rem 1.2rem;
-      font-size: 0.72rem;
-      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0.8rem 1.6rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition:
+        transform 220ms ease,
+        background-color 220ms ease,
+        border-color 220ms ease,
+        color 220ms ease;
+    }
+
+    :global(.central-glass .hero-link:hover) {
+      transform: translateY(-2px);
+    }
+
+    :global(.central-glass .hero-link:focus-visible) {
+      outline: 2px solid rgba(255, 248, 239, 0.6);
+      outline-offset: 3px;
+    }
+
+    :global(.central-glass .hero-link-primary) {
+      background: rgba(255, 247, 238, 0.94);
+      color: #1a1a1e;
+      box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.15);
+    }
+
+    :global(.central-glass .hero-link-secondary) {
+      color: rgba(255, 248, 239, 0.94);
+      border: 1px solid rgba(255, 248, 239, 0.18);
+      background: rgba(255, 248, 239, 0.06);
     }
 
     .hero-socials {
-      margin-top: 1rem;
-      gap: 0.4rem 0.6rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.25rem 0.35rem;
+      margin-top: 1.5rem;
     }
 
     .hero-socials a {
-      font-size: 0.72rem;
-      min-height: 40px;
-      padding: 0.3rem 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0.35rem 0.6rem;
+      color: rgba(255, 248, 239, 0.68);
+      text-decoration: none;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition:
+        color 220ms ease,
+        transform 220ms ease;
+      border-radius: 6px;
+    }
+
+    .hero-socials a:hover {
+      color: rgba(255, 248, 239, 0.94);
+      transform: translateY(-1px);
+    }
+
+    .hero-socials a:focus-visible {
+      outline: 2px solid rgba(255, 248, 239, 0.5);
+      outline-offset: 2px;
     }
 
     .divider {
-      margin: 0.75rem 0;
+      width: 100%;
+      max-width: 80%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 248, 239, 0.1),
+        transparent
+      );
+      margin: 1rem 0;
     }
 
     .bottom-stats-container {
-      gap: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      width: 100%;
     }
 
     .stack-tags {
-      gap: 0.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem;
+      max-width: 36rem;
     }
 
     .tag {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      background: rgba(255, 248, 239, 0.04);
+      border: 1px solid rgba(255, 248, 239, 0.08);
+      color: rgba(255, 248, 239, 0.6);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: background 200ms ease;
+    }
+
+    .tag:hover {
+      background: rgba(255, 248, 239, 0.08);
     }
 
     .scroll-hint {
-      bottom: max(0.75rem, env(safe-area-inset-bottom));
+      position: absolute;
+      bottom: max(1.5rem, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: rgba(255, 248, 239, 0.3);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      z-index: 20;
+      pointer-events: none;
     }
 
     .scroll-line {
-      height: 1.5rem;
+      width: 1px;
+      height: 2rem;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 248, 239, 0.45) 0%,
+        rgba(255, 248, 239, 0) 100%
+      );
+      transform-origin: top;
+      animation: scrollDrop 2s ease-in-out infinite;
     }
-  }
-</style>
 
-<script>
-  import { gsap } from "gsap";
-  import { runPageScript } from "../lib/client/spa";
+    @keyframes scrollDrop {
+      0% {
+        transform: scaleY(0);
+        opacity: 1;
+      }
+      50% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scaleY(1);
+        transform-origin: bottom;
+        opacity: 0;
+      }
+    }
 
-  const initHomeHero = () =>
-    runPageScript("home-hero", ({ onCleanup }) => {
-      const isMobile = window.matchMedia("(max-width: 900px)").matches;
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      const heroScope = document.querySelector(".landing-page");
-      const textWrapper = document.querySelector(".landing-page .loader-text");
-      let revealCleanup: (() => void) | undefined;
+    @media (max-width: 900px) {
+      .central-layout {
+        padding: max(1rem, env(safe-area-inset-top)) 1rem
+          max(1rem, env(safe-area-inset-bottom));
+      }
 
-      const waitForStableHero = async () => {
-        const fontReady =
-          "fonts" in document
-            ? document.fonts.ready.catch(() => undefined)
-            : Promise.resolve();
-        const settleDelay = new Promise((resolve) =>
-          window.setTimeout(
-            resolve,
-            prefersReducedMotion ? 80 : isMobile ? 420 : 560,
-          ),
+      :global(.central-glass) {
+        padding: 2.5rem 1.5rem;
+        border-radius: 1.5rem;
+      }
+
+      :global(.central-glass .header) {
+        font-size: clamp(3rem, 10vw, 4.4rem);
+      }
+    }
+
+    @media (max-width: 640px) {
+      :global(.central-glass .hero-actions) {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      :global(.central-glass .hero-link) {
+        width: 100%;
+      }
+
+      .hero-socials {
+        gap: 0.6rem 0.9rem;
+      }
+
+      .hero-proof {
+        margin-top: 1.25rem;
+      }
+
+      .hero-proof-item {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.62rem;
+      }
+
+      .divider {
+        margin: 1.5rem 0;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .central-layout {
+        padding: max(0.75rem, env(safe-area-inset-top)) 0.75rem
+          max(0.75rem, env(safe-area-inset-bottom));
+      }
+
+      :global(.central-glass) {
+        padding: 2rem 1.25rem;
+        border-radius: 1.25rem;
+      }
+
+      :global(.central-glass .copy) {
+        gap: 0.75rem;
+      }
+
+      :global(.central-glass .header) {
+        font-size: clamp(2.4rem, 9vw, 3.2rem);
+        letter-spacing: 0.01em;
+      }
+
+      :global(.central-glass .sub-header) {
+        font-size: 0.82rem;
+        letter-spacing: 0.16em;
+      }
+
+      :global(.central-glass .info) {
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .hero-proof {
+        margin-top: 1rem;
+        gap: 0.4rem;
+      }
+
+      .hero-proof-item {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.6rem;
+        min-height: 30px;
+      }
+
+      :global(.central-glass .hero-actions) {
+        margin-top: 1.5rem;
+        gap: 0.75rem;
+      }
+
+      :global(.central-glass .hero-link) {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.72rem;
+        min-height: 40px;
+      }
+
+      .hero-socials {
+        margin-top: 1rem;
+        gap: 0.4rem 0.6rem;
+      }
+
+      .hero-socials a {
+        font-size: 0.72rem;
+        min-height: 40px;
+        padding: 0.3rem 0.5rem;
+      }
+
+      .divider {
+        margin: 0.75rem 0;
+      }
+
+      .bottom-stats-container {
+        gap: 1rem;
+      }
+
+      .stack-tags {
+        gap: 0.3rem;
+      }
+
+      .tag {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.6rem;
+      }
+
+      .scroll-hint {
+        bottom: max(0.75rem, env(safe-area-inset-bottom));
+      }
+
+      .scroll-line {
+        height: 1.5rem;
+      }
+    }
+  </style>
+
+  <script>
+    import { gsap } from "gsap";
+    import { runPageScript } from "../lib/client/spa";
+
+    const initHomeHero = () =>
+      runPageScript("home-hero", ({ onCleanup }) => {
+        const isMobile = window.matchMedia("(max-width: 900px)").matches;
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        const heroScope = document.querySelector(".landing-page");
+        const textWrapper = document.querySelector(
+          ".landing-page .loader-text",
         );
-        await Promise.race([
-          Promise.all([fontReady, settleDelay]),
-          new Promise((resolve) =>
+        let revealCleanup: (() => void) | undefined;
+
+        const waitForStableHero = async () => {
+          const fontReady =
+            "fonts" in document
+              ? document.fonts.ready.catch(() => undefined)
+              : Promise.resolve();
+          const settleDelay = new Promise((resolve) =>
             window.setTimeout(
               resolve,
-              prefersReducedMotion ? 180 : isMobile ? 950 : 1400,
+              prefersReducedMotion ? 80 : isMobile ? 420 : 560,
             ),
-          ),
-        ]);
-      };
-
-      const runHeroTextReveal = async () => {
-        if (!heroScope) return;
-
-        try {
-          const { initTextReveal } = await import("../lib/client/textReveal");
-
-          revealCleanup = await initTextReveal(heroScope, [
-            {
-              selector: ".central-glass .header",
-              mode: "lines",
-              scroll: false,
-              duration: isMobile ? 0.92 : 1.08,
-              stagger: isMobile ? 0.1 : 0.12,
-            },
-            {
-              selector: ".central-glass .sub-header",
-              mode: "fade",
-              scroll: false,
-              delay: isMobile ? 0.1 : 0.14,
-              duration: isMobile ? 0.7 : 0.8,
-              y: 18,
-            },
-            {
-              selector: ".central-glass .info",
-              mode: "fade",
-              scroll: false,
-              delay: isMobile ? 0.2 : 0.26,
-              duration: isMobile ? 0.82 : 0.95,
-              y: 22,
-            },
+          );
+          await Promise.race([
+            Promise.all([fontReady, settleDelay]),
+            new Promise((resolve) =>
+              window.setTimeout(
+                resolve,
+                prefersReducedMotion ? 180 : isMobile ? 950 : 1400,
+              ),
+            ),
           ]);
-        } finally {
-          heroScope.classList.remove("landing-copy-pending");
-        }
-      };
+        };
 
-      if (!prefersReducedMotion) {
-        heroScope?.classList.add("landing-copy-pending");
-        gsap.set(".central-glass", { visibility: "hidden" });
-      }
+        const runHeroTextReveal = async () => {
+          if (!heroScope) return;
 
-      if (textWrapper) {
-        textWrapper.innerHTML =
-          textWrapper.textContent?.replace(
-            /\S/g,
-            "<span class='letter'>$&</span>",
-          ) || "";
+          try {
+            const { initTextReveal } = await import("../lib/client/textReveal");
+
+            revealCleanup = await initTextReveal(heroScope, [
+              {
+                selector: ".central-glass .header",
+                mode: "lines",
+                scroll: false,
+                duration: isMobile ? 0.92 : 1.08,
+                stagger: isMobile ? 0.1 : 0.12,
+              },
+              {
+                selector: ".central-glass .sub-header",
+                mode: "fade",
+                scroll: false,
+                delay: isMobile ? 0.1 : 0.14,
+                duration: isMobile ? 0.7 : 0.8,
+                y: 18,
+              },
+              {
+                selector: ".central-glass .info",
+                mode: "fade",
+                scroll: false,
+                delay: isMobile ? 0.2 : 0.26,
+                duration: isMobile ? 0.82 : 0.95,
+                y: 22,
+              },
+            ]);
+          } finally {
+            heroScope.classList.remove("landing-copy-pending");
+          }
+        };
+
         if (!prefersReducedMotion) {
-          gsap.fromTo(
-            ".landing-page .loader-text .letter",
-            { x: isMobile ? 20 : 40, opacity: 0 },
-            {
+          heroScope?.classList.add("landing-copy-pending");
+          gsap.set(".central-glass", { visibility: "hidden" });
+        }
+
+        if (textWrapper) {
+          textWrapper.innerHTML =
+            textWrapper.textContent?.replace(
+              /\S/g,
+              "<span class='letter'>$&</span>",
+            ) || "";
+          if (!prefersReducedMotion) {
+            gsap.fromTo(
+              ".landing-page .loader-text .letter",
+              { x: isMobile ? 20 : 40, opacity: 0 },
+              {
+                x: 0,
+                opacity: 1,
+                ease: "expo.out",
+                duration: isMobile ? 0.7 : 1.2,
+                delay: isMobile ? 0.6 : 2.4,
+                stagger: 0.024,
+                overwrite: "auto",
+              },
+            );
+          } else {
+            gsap.set(".landing-page .loader-text .letter", {
               x: 0,
               opacity: 1,
-              ease: "expo.out",
-              duration: isMobile ? 0.7 : 1.2,
-              delay: isMobile ? 0.6 : 2.4,
-              stagger: 0.024,
-              overwrite: "auto",
-            },
-          );
-        } else {
-          gsap.set(".landing-page .loader-text .letter", { x: 0, opacity: 1 });
+            });
+          }
         }
+
+        gsap.from(".landing-page .loader-wrapper", {
+          scale: 0.8,
+          ease: "power1.inOut",
+          duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
+        });
+        gsap.from(".landing-page .loader", {
+          top: "100%",
+          ease: "power2.inOut",
+          duration: prefersReducedMotion ? 0.2 : isMobile ? 1.2 : 2,
+        });
+
+        void (async () => {
+          await waitForStableHero();
+
+          const loaderDelay = prefersReducedMotion
+            ? 0.05
+            : isMobile
+              ? 0.12
+              : 0.2;
+          const revealDelay = prefersReducedMotion
+            ? 0.14
+            : isMobile
+              ? 0.28
+              : 0.45;
+          const contentDelay = prefersReducedMotion
+            ? 0.24
+            : isMobile
+              ? 0.54
+              : 0.8;
+
+          gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
+            scale: 1.5,
+            opacity: 0,
+            display: "none",
+            ease: "power2.inOut",
+            delay: loaderDelay,
+            duration: prefersReducedMotion ? 0.15 : isMobile ? 0.45 : 0.7,
+          });
+
+          gsap.from(".landing-page .revealer", {
+            width: "0%",
+            ease: "power2.inOut",
+            delay: revealDelay,
+            duration: prefersReducedMotion ? 0.15 : isMobile ? 0.42 : 0.72,
+          });
+          gsap.to(".landing-page .revealer", {
+            left: "100%",
+            ease: "power2.inOut",
+            delay: revealDelay + (isMobile ? 0.38 : 0.65),
+            duration: prefersReducedMotion ? 0.15 : isMobile ? 0.38 : 0.56,
+          });
+          gsap.to(".landing-page .loader-text-wrapper", {
+            opacity: 0,
+            display: "none",
+            ease: "power3.inOut",
+            delay: revealDelay + (isMobile ? 0.26 : 0.5),
+            duration: 0.2,
+          });
+
+          gsap.set(".central-glass", { visibility: "visible" });
+          gsap.from(".central-layout", {
+            y: 40,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power3.out",
+            delay: contentDelay,
+            duration: prefersReducedMotion ? 0.2 : isMobile ? 0.6 : 1,
+          });
+
+          gsap.from(".central-glass > *:not(.copy)", {
+            y: 20,
+            opacity: 0,
+            filter: "blur(8px)",
+            ease: "power3.out",
+            stagger: 0.1,
+            delay: contentDelay + 0.2,
+            duration: prefersReducedMotion ? 0.24 : isMobile ? 0.56 : 0.82,
+          });
+
+          gsap.from(".landing-page .scroll-hint", {
+            opacity: 0,
+            y: 12,
+            ease: "power2.out",
+            delay: contentDelay + 0.6,
+            duration: 0.6,
+          });
+
+          if (prefersReducedMotion) return;
+
+          const delayedReveal = gsap.delayedCall(contentDelay + 0.14, () => {
+            void runHeroTextReveal();
+          });
+
+          onCleanup(() => delayedReveal.kill());
+        })();
+
+        onCleanup(() => {
+          heroScope?.classList.remove("landing-copy-pending");
+          revealCleanup?.();
+          gsap.killTweensOf(".landing-page *");
+        });
+      });
+
+    let hasBootedHomeHero = false;
+    let hasSeenInitialAstroPageLoad = false;
+
+    const bootHomeHero = () => {
+      hasBootedHomeHero = true;
+      void initHomeHero();
+    };
+
+    document.addEventListener("astro:page-load", () => {
+      if (!hasSeenInitialAstroPageLoad) {
+        hasSeenInitialAstroPageLoad = true;
+        if (hasBootedHomeHero) return;
       }
-
-      gsap.from(".landing-page .loader-wrapper", {
-        scale: 0.8,
-        ease: "power1.inOut",
-        duration: prefersReducedMotion ? 0.2 : isMobile ? 1 : 2,
-      });
-      gsap.from(".landing-page .loader", {
-        top: "100%",
-        ease: "power2.inOut",
-        duration: prefersReducedMotion ? 0.2 : isMobile ? 1.2 : 2,
-      });
-
-      void (async () => {
-        await waitForStableHero();
-
-        const loaderDelay = prefersReducedMotion ? 0.05 : isMobile ? 0.12 : 0.2;
-        const revealDelay = prefersReducedMotion
-          ? 0.14
-          : isMobile
-            ? 0.28
-            : 0.45;
-        const contentDelay = prefersReducedMotion
-          ? 0.24
-          : isMobile
-            ? 0.54
-            : 0.8;
-
-        gsap.to(".landing-page .loader-wrapper, .landing-page .pre-loader", {
-          scale: 1.5,
-          opacity: 0,
-          display: "none",
-          ease: "power2.inOut",
-          delay: loaderDelay,
-          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.45 : 0.7,
-        });
-
-        gsap.from(".landing-page .revealer", {
-          width: "0%",
-          ease: "power2.inOut",
-          delay: revealDelay,
-          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.42 : 0.72,
-        });
-        gsap.to(".landing-page .revealer", {
-          left: "100%",
-          ease: "power2.inOut",
-          delay: revealDelay + (isMobile ? 0.38 : 0.65),
-          duration: prefersReducedMotion ? 0.15 : isMobile ? 0.38 : 0.56,
-        });
-        gsap.to(".landing-page .loader-text-wrapper", {
-          opacity: 0,
-          display: "none",
-          ease: "power3.inOut",
-          delay: revealDelay + (isMobile ? 0.26 : 0.5),
-          duration: 0.2,
-        });
-
-        gsap.set(".central-glass", { visibility: "visible" });
-        gsap.from(".central-layout", {
-          y: 40,
-          scale: 0.95,
-          opacity: 0,
-          ease: "power3.out",
-          delay: contentDelay,
-          duration: prefersReducedMotion ? 0.2 : isMobile ? 0.6 : 1,
-        });
-
-        gsap.from(".central-glass > *:not(.copy)", {
-          y: 20,
-          opacity: 0,
-          filter: "blur(8px)",
-          ease: "power3.out",
-          stagger: 0.1,
-          delay: contentDelay + 0.2,
-          duration: prefersReducedMotion ? 0.24 : isMobile ? 0.56 : 0.82,
-        });
-
-        gsap.from(".landing-page .scroll-hint", {
-          opacity: 0,
-          y: 12,
-          ease: "power2.out",
-          delay: contentDelay + 0.6,
-          duration: 0.6,
-        });
-
-        if (prefersReducedMotion) return;
-
-        const delayedReveal = gsap.delayedCall(contentDelay + 0.14, () => {
-          void runHeroTextReveal();
-        });
-
-        onCleanup(() => delayedReveal.kill());
-      })();
-
-      onCleanup(() => {
-        heroScope?.classList.remove("landing-copy-pending");
-        revealCleanup?.();
-        gsap.killTweensOf(".landing-page *");
-      });
+      bootHomeHero();
     });
 
-  let hasBootedHomeHero = false;
-  let hasSeenInitialAstroPageLoad = false;
-
-  const bootHomeHero = () => {
-    hasBootedHomeHero = true;
-    void initHomeHero();
-  };
-
-  document.addEventListener("astro:page-load", () => {
-    if (!hasSeenInitialAstroPageLoad) {
-      hasSeenInitialAstroPageLoad = true;
-      if (hasBootedHomeHero) return;
+    if (document.readyState === "loading") {
+      document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+          if (!hasBootedHomeHero) bootHomeHero();
+        },
+        { once: true },
+      );
+    } else {
+      bootHomeHero();
     }
-    bootHomeHero();
-  });
-
-  if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      () => {
-        if (!hasBootedHomeHero) bootHomeHero();
-      },
-      { once: true },
-    );
-  } else {
-    bootHomeHero();
-  }
-</script>
+  </script>
+</div>
